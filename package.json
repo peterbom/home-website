@@ -11,5 +11,14 @@
     "url": "ssh://gituser@192.168.1.225:60022/volume1/code/git/aurelia-home-website.git"
   },
   "author": "Pete",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jspm": "^0.16.39"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "public"
+    },
+    "devDependencies": {}
+  }
 }
