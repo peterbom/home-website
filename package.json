@@ -1,11 +1,12 @@
 {
+  "scripts": {
+    "start": "jspm-server ./public --no-browser",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "name": "aurelia-home-website",
   "version": "1.0.0",
   "description": "A site to provide access to home management APIs",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "ssh://gituser@192.168.1.225:60022/volume1/code/git/aurelia-home-website.git"
@@ -13,11 +14,18 @@
   "author": "Pete",
   "license": "UNLICENSED",
   "devDependencies": {
-    "jspm": "^0.16.39"
+    "jspm": "^0.16.39",
+    "jspm-server": "^1.0.1"
   },
   "jspm": {
     "directories": {
       "baseURL": "public"
+    },
+    "dependencies": {
+      "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.1",
+      "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.2",
+      "bluebird": "npm:bluebird@^3.4.1",
+      "font-awesome": "npm:font-awesome@^4.6.3"
     },
     "devDependencies": {}
   }
