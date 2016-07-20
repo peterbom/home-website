@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "bundle": "node bundler.js bundle",
-    "unbundle": "node bundler.js unbundle",
+    "bundle": "node tasks/bundle.js",
+    "unbundle": "node tasks/unbundle.js",
     "start": "jspm-server ./public --no-browser",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,6 +1,4 @@
-var bundler = require('aurelia-bundler');
-
-var config = {
+module.exports.config = {
   force: true,
   baseURL: 'public',                   // baseURL of the application
   configPath: 'public/config.js',      // config.js file. Must be within `baseURL`
@@ -37,51 +35,3 @@ var config = {
     }
   }
 };
-
-/*
-function delay(time) {
-  return new Promise(function (fulfill) {
-    setTimeout(fulfill, time);
-  });
-}
-
-console.log("hello");
-delay(1000).then(function () {
-  console.log("delayed 1000");
-  return delay(1000);
-}).then(function () {
-  console.log("delayed 2000");
-  return delay(1000);
-}).then(function () {
-  console.log("delayed 3000");
-  return delay(1000);
-}).then(function () {
-  console.log("delayed 4000");
-  return delay(1000);
-}).then(function () {
-  console.log("finished");
-});
-*/
-
-var operation = process.argv[2];
-switch (operation) {
-  case "bundle":
-    return bundler.bundle(config);
-  case "unbundle":
-    return bundler.unbundle(config);
-  default:
-    process.stderr.write("invalid argument: " + operation + "\n");
-}
-
-/*
-
-gulp.task('bundle', ['build'], function() {
-  return bundler.bundle(config);
-});
-
-gulp.task('unbundle', function() {
-  return bundler.unbundle(config);
-});
-
-
-*/
