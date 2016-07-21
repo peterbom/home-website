@@ -2,6 +2,7 @@
 // need to be included when exporting the application
 // for production.
 module.exports = {
+  "resourcePath": "public",
   "exportPath": "export",
   'list': [
     'index.html',

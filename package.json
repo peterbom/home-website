@@ -9,13 +9,17 @@
     "build": "concurrently \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "bundle": "node tasks/bundle.js",
     "unbundle": "node tasks/unbundle.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-only": "echo \"Error: no test specified\"",
+    "test": "npm run build && npm run test-only",
     "export:clean": "rimraf export && mkdirp export",
     "export:normalized-resources": "node tasks/export-normalized-resources.js",
     "export:copy": "node tasks/export-copy.js",
     "export": "npm run build && npm run bundle && npm run export:clean && npm run export:normalized-resources && npm run export:copy",
     "serve": "jspm-server ./public --no-browser",
-    "serve:export": "npm run export && jspm-server ./export --no-browser"
+    "serve:export": "npm run export && jspm-server ./export --no-browser",
+    "watch:src": "watch \"npm run build && npm run test-only\" public/src",
+    "watch:css": "watch \"npm run build:css\" public/styles",
+    "watch": ""
   },
   "babel": {
     "sourceMaps": true,
@@ -60,7 +64,8 @@
     "jspm": "^0.16.39",
     "jspm-server": "^1.0.1",
     "mkdirp": "^0.5.1",
-    "rimraf": "^2.5.3"
+    "rimraf": "^2.5.3",
+    "watch": "^0.19.1"
   },
   "jspm": {
     "directories": {
