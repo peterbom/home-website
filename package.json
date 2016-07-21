@@ -1,7 +1,7 @@
 {
   "scripts": {
     "preclean": "npm run unbundle",
-    "clean": "rimraf public/dist && mkdirp public/dist",
+    "clean": "rimraf public/dist/* && mkdirp public/dist",
     "prebuild": "npm run clean",
     "build:system": "babel public/src --out-dir public/dist",
     "build:html": "html-minifier --collapse-whitespace --input-dir public/src --output-dir public/dist",
@@ -19,7 +19,7 @@
     "serve:export": "npm run export && jspm-server ./export --no-browser",
     "watch:src": "watch \"npm run build && npm run test-only\" public/src",
     "watch:css": "watch \"npm run build:css\" public/styles",
-    "watch": ""
+    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run serve\""
   },
   "babel": {
     "sourceMaps": true,
@@ -72,10 +72,21 @@
       "baseURL": "public"
     },
     "dependencies": {
+      "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-rc.1.0.0",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.1",
+      "aurelia-fetch-client": "npm:aurelia-fetch-client@^1.0.0-rc.1.0.1",
       "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.2",
+      "aurelia-history-browser": "npm:aurelia-history-browser@^1.0.0-rc.1.0.0",
+      "aurelia-loader-default": "npm:aurelia-loader-default@^1.0.0-rc.1.0.0",
+      "aurelia-logging-console": "npm:aurelia-logging-console@^1.0.0-rc.1.0.0",
+      "aurelia-polyfills": "npm:aurelia-polyfills@^1.0.0-rc.1.0.0",
+      "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.0.0-rc.1.0.1",
+      "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.0.0-rc.1.0.1",
+      "aurelia-templating-router": "npm:aurelia-templating-router@^1.0.0-rc.1.0.1",
       "bluebird": "npm:bluebird@^3.4.1",
-      "font-awesome": "npm:font-awesome@4.6.3"
+      "bootstrap": "github:twbs/bootstrap@^3.3.6",
+      "font-awesome": "npm:font-awesome@4.6.3",
+      "text": "github:systemjs/plugin-text@^0.0.8"
     },
     "devDependencies": {}
   }

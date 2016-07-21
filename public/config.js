@@ -3,14 +3,26 @@ System.config({
   defaultJSExtensions: true,
   transpiler: false,
   paths: {
+    "*": "dist/*",
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
   map: {
+    "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0-rc.1.0.0",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0-rc.1.0.1",
+    "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0-rc.1.0.1",
     "aurelia-framework": "npm:aurelia-framework@1.0.0-rc.1.0.2",
+    "aurelia-history-browser": "npm:aurelia-history-browser@1.0.0-rc.1.0.0",
+    "aurelia-loader-default": "npm:aurelia-loader-default@1.0.0-rc.1.0.0",
+    "aurelia-logging-console": "npm:aurelia-logging-console@1.0.0-rc.1.0.0",
+    "aurelia-polyfills": "npm:aurelia-polyfills@1.0.0-rc.1.0.0",
+    "aurelia-templating-binding": "npm:aurelia-templating-binding@1.0.0-rc.1.0.1",
+    "aurelia-templating-resources": "npm:aurelia-templating-resources@1.0.0-rc.1.0.1",
+    "aurelia-templating-router": "npm:aurelia-templating-router@1.0.0-rc.1.0.1",
     "bluebird": "npm:bluebird@3.4.1",
+    "bootstrap": "github:twbs/bootstrap@3.3.6",
     "font-awesome": "npm:font-awesome@4.6.3",
+    "text": "github:systemjs/plugin-text@0.0.8",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
@@ -26,11 +38,19 @@ System.config({
     "github:jspm/nodelibs-vm@0.1.0": {
       "vm-browserify": "npm:vm-browserify@0.0.4"
     },
+    "github:twbs/bootstrap@3.3.6": {
+      "jquery": "npm:jquery@2.2.4"
+    },
     "npm:assert@1.4.1": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "util": "npm:util@0.10.3"
+    },
+    "npm:aurelia-animator-css@1.0.0-rc.1.0.0": {
+      "aurelia-metadata": "npm:aurelia-metadata@1.0.0-rc.1.0.1",
+      "aurelia-pal": "npm:aurelia-pal@1.0.0-rc.1.0.0",
+      "aurelia-templating": "npm:aurelia-templating@1.0.0-rc.1.0.1"
     },
     "npm:aurelia-binding@1.0.0-rc.1.0.3": {
       "aurelia-logging": "npm:aurelia-logging@1.0.0-rc.1.0.1",
