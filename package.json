@@ -1,10 +1,21 @@
 {
   "scripts": {
+    "preclean": "npm run unbundle",
+    "clean": "rimraf public/dist && mkdirp public/dist",
+    "prebuild": "npm run clean",
+    "build:system": "babel public/src --out-dir public/dist",
+    "build:html": "html-minifier --collapse-whitespace --input-dir public/src --output-dir public/dist",
+    "build:css": "cleancss --output public/dist/styles.css < public/styles/styles.css",
+    "build": "concurrently \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "bundle": "node tasks/bundle.js",
     "unbundle": "node tasks/unbundle.js",
-    "build:system": "babel public/src --out-dir public/dist",
-    "start": "jspm-server ./public --no-browser",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "export:clean": "rimraf export && mkdirp export",
+    "export:normalized-resources": "node tasks/export-normalized-resources.js",
+    "export:copy": "node tasks/export-copy.js",
+    "export": "npm run build && npm run bundle && npm run export:clean && npm run export:normalized-resources && npm run export:copy",
+    "serve": "jspm-server ./public --no-browser",
+    "serve:export": "npm run export && jspm-server ./export --no-browser"
   },
   "babel": {
     "sourceMaps": true,
@@ -42,8 +53,14 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-preset-stage-1": "^6.5.0",
+    "clean-css": "^3.4.18",
+    "concurrently": "^2.2.0",
+    "cp": "^0.2.0",
+    "html-minifier": "^3.0.1",
     "jspm": "^0.16.39",
-    "jspm-server": "^1.0.1"
+    "jspm-server": "^1.0.1",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.5.3"
   },
   "jspm": {
     "directories": {
@@ -53,7 +70,7 @@
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.1",
       "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.2",
       "bluebird": "npm:bluebird@^3.4.1",
-      "font-awesome": "npm:font-awesome@^4.6.3"
+      "font-awesome": "npm:font-awesome@4.6.3"
     },
     "devDependencies": {}
   }

@@ -1,4 +1,5 @@
-var bundler = require('aurelia-bundler');
-var bundleConfig = require('../bundleconfig.js');
+const bundler = require('aurelia-bundler');
+const bundleConfig = require('../bundleconfig.js');
+const errorHandler = require("./error-handler.js");
 
-bundler.unbundle(bundleConfig.config);
+return bundler.unbundle(bundleConfig.config).catch(errorHandler.handleError);
