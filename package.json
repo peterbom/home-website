@@ -10,7 +10,8 @@
     "build": "concurrently \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "bundle": "zoo node tasks/bundle.js",
     "unbundle": "zoo node tasks/unbundle.js",
-    "test": "echo \"Error: no test specified\"",
+    "test": "karma start --single-run",
+    "test:watch": "karma start",
     "test:cover": "echo \"Error: no test specified\"",
     "export:clean": "rimraf export/* && mkdirp export",
     "export:normalized-resources": "zoo node tasks/export-normalized-resources.js",
@@ -20,7 +21,7 @@
     "serve:export": "zoo NODE_ENV=production npm run export && jspm-server ./export --no-browser",
     "watch:src": "watch \"npm run build && npm run test\" public/src",
     "watch:css": "watch \"npm run build:css\" public/styles",
-    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run serve\""
+    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:watch\" \"npm run serve\""
   },
   "babel": {
     "sourceMaps": true,
@@ -69,8 +70,10 @@
     "jspm": "^0.16.39",
     "jspm-server": "^1.0.1",
     "karma": "^1.1.1",
+    "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
+    "karma-jspm": "^2.2.0",
     "mkdirp": "^0.5.1",
     "promisify-node": "^0.4.0",
     "rimraf": "^2.5.3",
@@ -90,6 +93,7 @@
       "aurelia-history-browser": "npm:aurelia-history-browser@^1.0.0-rc.1.0.0",
       "aurelia-loader-default": "npm:aurelia-loader-default@^1.0.0-rc.1.0.0",
       "aurelia-logging-console": "npm:aurelia-logging-console@^1.0.0-rc.1.0.0",
+      "aurelia-pal-browser": "npm:aurelia-pal-browser@^1.0.0-rc.1.0.1",
       "aurelia-polyfills": "npm:aurelia-polyfills@^1.0.0-rc.1.0.0",
       "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.0.0-rc.1.0.1",
       "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.0.0-rc.1.0.1",
