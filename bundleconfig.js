@@ -1,17 +1,18 @@
-module.exports.config = {
+module.exports = {
   force: true,
   baseURL: 'public',                   // baseURL of the application
   configPath: 'public/config.js',      // config.js file. Must be within `baseURL`
   bundles: {
     "dist/app-build": {           // bundle name/path. Must be within `baseURL`. Final path is: `baseURL/dist/app-build.js`.
       includes: [
-        '[*.js]',
-        '*.html!text',
-        '*.css!text',        
+        '[**/*.js]',              // Don't recursively trace dependencies (avoid pulling in Aurelia framework files)
+        '**/*.html!text',
+        '**/*.css!text',        
       ],
       options: {
         inject: true,
-        minify: true
+        minify: true,
+        rev: true
       }
     },
     "dist/vendor-build": {
@@ -31,7 +32,8 @@ module.exports.config = {
       ],
       options: {
         inject: true,
-        minify: true
+        minify: true,
+        rev: true
       }
     }
   }

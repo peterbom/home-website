@@ -1,20 +1,19 @@
-const cp = require("cp");
-const path = require('path');
 const bundleConfig = require('../bundleconfig.js');
 const resources = require('../export.js');
+const copyUtil = require("./copy-util.js");
 const errorHandler = require("./error-handler.js");
 
-function getResources() {
-	return resources.list.map(resource => path.join(resources.resourcePath, resource));
+function getExportList() {
+    let filesOrGlobs = Array.from(resources.list);
+
+    // Add bundles, expanding globs because the bundles may have revision numbers
+    for (let bundleName in bundleConfig.bundles) {
+        filesOrGlobs.push(bundleName + "*.js");
+    }
+
+    return filesOrGlobs;
 }
 
-function getBundles() {
-  let bl = [];
-  for (let b in bundleConfig.bundles) {
-    bl.push(b + '*.js');
-  }
-  return bl;
-}
-
-let exportList = getResources().concat(getBundles());
-return Promise.all(exportList.map(f => cp(f, resources.exportPath))).catch(errorHandler.handleError);
+return copyUtil
+    .copyFilesOrGlobs(getExportList(), resources.exportPath, bundleConfig.baseURL)
+    .catch(errorHandler.handleError);

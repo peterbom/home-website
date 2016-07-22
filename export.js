@@ -2,13 +2,11 @@
 // need to be included when exporting the application
 // for production.
 module.exports = {
-  "resourcePath": "public",
   "exportPath": "export",
   'list': [
     'index.html',
     'config.js',
     'favicon.ico',
-    'LICENSE',
     'jspm_packages/system.js',
     'jspm_packages/system-polyfills.js',
     'jspm_packages/system-csp-production.js',

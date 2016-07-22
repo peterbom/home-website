@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "init": "shx cp -n .env.template .env",
     "preclean": "npm run unbundle",
     "clean": "rimraf public/dist/* && mkdirp public/dist",
     "prebuild": "npm run clean",
@@ -7,16 +8,16 @@
     "build:html": "html-minifier --collapse-whitespace --input-dir public/src --output-dir public/dist",
     "build:css": "cleancss --output public/dist/styles.css < public/styles/styles.css",
     "build": "concurrently \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
-    "bundle": "node tasks/bundle.js",
-    "unbundle": "node tasks/unbundle.js",
+    "bundle": "zoo node tasks/bundle.js",
+    "unbundle": "zoo node tasks/unbundle.js",
     "test-only": "echo \"Error: no test specified\"",
     "test": "npm run build && npm run test-only",
-    "export:clean": "rimraf export && mkdirp export",
-    "export:normalized-resources": "node tasks/export-normalized-resources.js",
-    "export:copy": "node tasks/export-copy.js",
+    "export:clean": "rimraf export/* && mkdirp export",
+    "export:normalized-resources": "zoo node tasks/export-normalized-resources.js",
+    "export:copy": "zoo node tasks/export-copy.js",
     "export": "npm run build && npm run bundle && npm run export:clean && npm run export:normalized-resources && npm run export:copy",
-    "serve": "jspm-server ./public --no-browser",
-    "serve:export": "npm run export && jspm-server ./export --no-browser",
+    "serve": "zoo jspm-server ./public --no-browser",
+    "serve:export": "zoo NODE_ENV=production npm run export && jspm-server ./export --no-browser",
     "watch:src": "watch \"npm run build && npm run test-only\" public/src",
     "watch:css": "watch \"npm run build:css\" public/styles",
     "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run serve\""
@@ -59,13 +60,19 @@
     "babel-preset-stage-1": "^6.5.0",
     "clean-css": "^3.4.18",
     "concurrently": "^2.2.0",
-    "cp": "^0.2.0",
+    "copy": "^0.2.3",
+    "del": "^2.2.1",
+    "fs-promise": "^0.5.0",
+    "glob": "^7.0.5",
     "html-minifier": "^3.0.1",
     "jspm": "^0.16.39",
     "jspm-server": "^1.0.1",
     "mkdirp": "^0.5.1",
+    "promisify-node": "^0.4.0",
     "rimraf": "^2.5.3",
-    "watch": "^0.19.1"
+    "shx": "^0.1.2",
+    "watch": "^0.19.1",
+    "zoo": "^0.1.5"
   },
   "jspm": {
     "directories": {
