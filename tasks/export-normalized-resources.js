@@ -25,29 +25,6 @@ function getNormalizedGlobs() {
         return pathArrays.reduce((a, b) => a.concat(b));
     });
 }
-/*
-function copyToExportPath(fromPaths) {
-    console.log(`copying ${fromPaths.length} paths`);
-
-    let promises = fromPaths.map(fromBaseRelativePath => {
-        let fromPath = path.join(bundleConfig.baseURL, fromBaseRelativePath);
-        let toPath = path.join(resources.exportPath, fromPath);
-        if (process.env.BUILD_OUTPUT === "verbose") {
-            console.log(`copying ${fromPath} to ${toPath}`);
-        }
-
-        return fsp.copy(fromPath, toPath);
-    });
-
-    return Promise.all(promises);
-}
-
-let promises = getNormalizedGlobs().map(fileOrGlob => {
-    return copy(fileOrGlob, resources.exportPath, bundleConfig.baseURL);
-});
-
-return Promise.all(promises).catch(errorHandler.handleError);
-*/
 
 return getNormalizedGlobs().then(normalizedGlobs => {
     return copyUtil
