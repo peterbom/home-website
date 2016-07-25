@@ -3,6 +3,7 @@ npm-debug.log*
 
 jspm_packages
 
-public/dist
+dist
+export
 
 .env

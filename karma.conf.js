@@ -13,15 +13,13 @@ module.exports = function(config) {
 
         // Path issues, see: https://github.com/Workiva/karma-jspm/issues/91
         jspm: {
-            config: 'public/config.js',
-            packages: 'public/jspm_packages',
-            loadFiles: ['test/unit/setup.js'], //, 'test/unit/**/*.js'],
-            serveFiles: ['public/src/**/*.js'],
+            loadFiles: ['test/unit/setup.js', 'test/unit/**/!(setup).js'],
+            serveFiles: ['src/**/*.*'],
             paths: {
-                'src/*': 'base/public/src/*',
-                'test/*': 'base/test/*',
-                'github:*': 'base/public/jspm_packages/github/*',
-                'npm:*': 'base/public/jspm_packages/npm/*'
+                '*': 'src/*',
+                'test/*': 'test/*',
+                'github:*': 'jspm_packages/github/*',
+                'npm:*': 'jspm_packages/npm/*'
             }
         },
 
@@ -35,18 +33,22 @@ module.exports = function(config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'test/**/*.js': ['babel'],
-            'public/src/**/*.js': ['babel']
+            'src/**/*.js': ['babel']
         },
 
         babelPreprocessor: {
             options: {
                 sourceMap: 'inline',
-                presets: [ 'es2015-loose', 'stage-1'],
+                presets: [ 'es2015-loose', 'stage-1' ],
                 plugins: [
-                    "transform-async-to-generator",
-                    "syntax-flow",
-                    "transform-flow-strip-types",
-                    "transform-es2015-modules-systemjs"
+                    'syntax-flow',
+                    'transform-decorators-legacy',
+                    'transform-flow-strip-types',
+//                    "transform-async-to-generator",
+//                    "syntax-flow",
+//                    "transform-flow-strip-types",
+//                    // https://github.com/babel/gulp-babel/issues/90
+                    //"transform-es2015-modules-systemjs"
                 ]
             }
         },
