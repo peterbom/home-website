@@ -18,6 +18,7 @@ System.config({
     "aurelia-logging-console": "npm:aurelia-logging-console@1.0.0-rc.1.0.0",
     "aurelia-pal-browser": "npm:aurelia-pal-browser@1.0.0-rc.1.0.1",
     "aurelia-polyfills": "npm:aurelia-polyfills@1.0.0-rc.1.0.0",
+    "aurelia-router": "npm:aurelia-router@1.0.0-rc.1.0.5",
     "aurelia-templating-binding": "npm:aurelia-templating-binding@1.0.0-rc.1.0.1",
     "aurelia-templating-resources": "npm:aurelia-templating-resources@1.0.0-rc.1.0.1",
     "aurelia-templating-router": "npm:aurelia-templating-router@1.0.0-rc.1.0.1",
@@ -123,6 +124,14 @@ System.config({
       "aurelia-path": "npm:aurelia-path@1.0.0-rc.1.0.0"
     },
     "npm:aurelia-router@1.0.0-rc.1.0.1": {
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-rc.1.0.1",
+      "aurelia-event-aggregator": "npm:aurelia-event-aggregator@1.0.0-rc.1.0.0",
+      "aurelia-history": "npm:aurelia-history@1.0.0-rc.1.0.0",
+      "aurelia-logging": "npm:aurelia-logging@1.0.0-rc.1.0.1",
+      "aurelia-path": "npm:aurelia-path@1.0.0-rc.1.0.0",
+      "aurelia-route-recognizer": "npm:aurelia-route-recognizer@1.0.0-rc.1.0.1"
+    },
+    "npm:aurelia-router@1.0.0-rc.1.0.5": {
       "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-rc.1.0.1",
       "aurelia-event-aggregator": "npm:aurelia-event-aggregator@1.0.0-rc.1.0.0",
       "aurelia-history": "npm:aurelia-history@1.0.0-rc.1.0.0",
