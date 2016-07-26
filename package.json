@@ -2,41 +2,27 @@
   "scripts": {
     "init": "shx cp -n .env.template .env",
     "preclean": "npm run unbundle",
-    "clean": "rimraf public/dist/* && mkdirp public/dist",
+    "clean": "rimraf dist/* && mkdirp dist",
     "prebuild": "npm run clean",
-    "build:system": "babel public/src --out-dir public/dist",
-    "build:html": "html-minifier --collapse-whitespace --input-dir public/src --output-dir public/dist",
-    "build:css": "cleancss --output public/dist/styles.css < public/styles/styles.css",
+    "build:system": "zoo babel src --out-dir dist",
+    "build:html": "html-minifier --collapse-whitespace --input-dir src --file-ext html --output-dir dist",
+    "build:css": "cleancss --output dist/styles.css < styles/styles.css",
     "build": "concurrently \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "bundle": "zoo node tasks/bundle.js",
     "unbundle": "zoo node tasks/unbundle.js",
     "test": "karma start --single-run",
-    "test:watch": "karma start",
+    "test:tdd": "karma start",
+    "test:tdd-debug": "node-debug node_modules/karma/bin/karma start",
     "test:cover": "echo \"Error: no test specified\"",
     "export:clean": "rimraf export/* && mkdirp export",
     "export:normalized-resources": "zoo node tasks/export-normalized-resources.js",
     "export:copy": "zoo node tasks/export-copy.js",
     "export": "npm run build && npm run bundle && npm run export:clean && npm run export:normalized-resources && npm run export:copy",
-    "serve": "zoo jspm-server ./public --no-browser",
+    "serve": "zoo jspm-server . --no-browser",
     "serve:export": "zoo NODE_ENV=production npm run export && jspm-server ./export --no-browser",
-    "watch:src": "watch \"npm run build && npm run test\" public/src",
-    "watch:css": "watch \"npm run build:css\" public/styles",
-    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:watch\" \"npm run serve\""
-  },
-  "babel": {
-    "sourceMaps": true,
-    "comments": false,
-    "minified": false,
-    "presets": [
-      "es2015-loose",
-      "stage-1"
-    ],
-    "plugins": [
-      "transform-async-to-generator",
-      "syntax-flow",
-      "transform-flow-strip-types",
-      "transform-es2015-modules-systemjs"
-    ]
+    "watch:src": "watch \"npm run build && npm run test\" src",
+    "watch:css": "watch \"npm run build:css\" styles",
+    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve\""
   },
   "name": "aurelia-home-website",
   "version": "1.0.0",
@@ -76,6 +62,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-jspm": "^2.2.0",
     "mkdirp": "^0.5.1",
+    "node-inspector": "^0.12.8",
     "promisify-node": "^0.4.0",
     "rimraf": "^2.5.3",
     "shx": "^0.1.2",
@@ -83,9 +70,6 @@
     "zoo": "^0.1.5"
   },
   "jspm": {
-    "directories": {
-      "baseURL": "public"
-    },
     "dependencies": {
       "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-rc.1.0.0",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.1",

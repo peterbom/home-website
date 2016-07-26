@@ -1,7 +1,7 @@
 module.exports = {
     force: true,
-    baseURL: 'public',                   // baseURL of the application
-    configPath: 'public/config.js',      // config.js file. Must be within `baseURL`
+    baseURL: '.',                   // baseURL of the application
+    configPath: 'config.js',      // config.js file. Must be within `baseURL`
     bundles: {
         "dist/app-build": {              // bundle name/path. Must be within `baseURL`. Final path is: `baseURL/dist/app-build.js`.
             includes: [

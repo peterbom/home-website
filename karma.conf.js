@@ -36,23 +36,6 @@ module.exports = function(config) {
             'src/**/*.js': ['babel']
         },
 
-        babelPreprocessor: {
-            options: {
-                sourceMap: 'inline',
-                presets: [ 'es2015-loose', 'stage-1' ],
-                plugins: [
-                    'syntax-flow',
-                    'transform-decorators-legacy',
-                    'transform-flow-strip-types',
-//                    "transform-async-to-generator",
-//                    "syntax-flow",
-//                    "transform-flow-strip-types",
-//                    // https://github.com/babel/gulp-babel/issues/90
-                    //"transform-es2015-modules-systemjs"
-                ]
-            }
-        },
-
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
