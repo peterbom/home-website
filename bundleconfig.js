@@ -17,6 +17,7 @@ module.exports = {
         },
         "dist/vendor-build": {
             includes: [
+                'aurelia-framework',
                 'aurelia-bootstrapper',
                 'aurelia-fetch-client',
                 'aurelia-router',
@@ -28,7 +29,10 @@ module.exports = {
                 "aurelia-loader-default",
                 "aurelia-history-browser",
                 "aurelia-logging-console",
-                'bootstrap/css/bootstrap.css!text'
+                "fetch",
+                "bootstrap",
+                "bootstrap/css/bootstrap.css!text",
+                "jquery"  // required by bootstrap
             ],
             options: {
                 inject: true,
