@@ -76,6 +76,8 @@
   "jspm": {
     "dependencies": {
       "aurelia-animator-css": "npm:aurelia-animator-css@^1.0.0-rc.1.0.0",
+      "aurelia-api": "npm:aurelia-api@^3.0.0-rc4",
+      "aurelia-authentication": "npm:aurelia-authentication@^3.0.0-rc5",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.0-rc.1.0.1",
       "aurelia-fetch-client": "npm:aurelia-fetch-client@^1.0.0-rc.1.0.1",
       "aurelia-framework": "npm:aurelia-framework@^1.0.0-rc.1.0.2",

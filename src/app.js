@@ -7,6 +7,10 @@ export class App {
             { route: ['', 'welcome'], name: 'welcome',      moduleId: 'welcome',      nav: true, title: 'Welcome' },
             { route: 'users',         name: 'users',        moduleId: 'users',        nav: true, title: 'Github Users' },
             { route: 'child-router',  name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router' },
+
+            { route: 'login',         name: 'login',      moduleId: './account/login',     nav: false, title: 'Login' },
+            { route: 'logout',        name: 'logout',     moduleId: './account/logout',    nav: false, title: 'Logout',  auth: true },
+            { route: 'profile',       name: 'profile',    moduleId: './account/profile',   nav: false, title: 'Profile', auth: true }
 /*
             { route: ["", "list"], name: "home", moduleId: "movies/list", title: "List", nav: true },
             { route: "about",           name: "about", moduleId: "about/about", title: "About", nav: true },

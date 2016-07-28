@@ -1,9 +1,18 @@
 import 'bootstrap';
+import authConfig from './auth-config';
 
 export function configure(aurelia) {
     aurelia.use
         .standardConfiguration()
-        .developmentLogging();
+        .developmentLogging()
+        .plugin("aurelia-api", configure => {
+        	configure
+        		.registerEndpoint("internal", "http://192.168.1.230:8000")
+        		.registerEndpoint("another", "https://pi.bombers.space")
+        })
+        .plugin("aurelia-authentication", baseConfig => {
+        	baseConfig.configure(authConfig);
+        });
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');

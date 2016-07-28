@@ -8,6 +8,8 @@ System.config({
   },
   map: {
     "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0-rc.1.0.0",
+    "aurelia-api": "npm:aurelia-api@3.0.0-rc4",
+    "aurelia-authentication": "npm:aurelia-authentication@3.0.0-rc5",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0-rc.1.0.1",
     "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0-rc.1.0.1",
     "aurelia-framework": "npm:aurelia-framework@1.0.0-rc.1.0.2",
@@ -54,6 +56,24 @@ System.config({
       "aurelia-metadata": "npm:aurelia-metadata@1.0.0-rc.1.0.1",
       "aurelia-pal": "npm:aurelia-pal@1.0.0-rc.1.0.0",
       "aurelia-templating": "npm:aurelia-templating@1.0.0-rc.1.0.1"
+    },
+    "npm:aurelia-api@3.0.0-rc4": {
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-rc.1.0.1",
+      "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0-rc.1.0.1",
+      "extend": "npm:extend@3.0.0",
+      "qs": "npm:qs@6.2.1"
+    },
+    "npm:aurelia-authentication@3.0.0-rc5": {
+      "aurelia-api": "npm:aurelia-api@3.0.0-rc4",
+      "aurelia-dependency-injection": "npm:aurelia-dependency-injection@1.0.0-rc.1.0.1",
+      "aurelia-fetch-client": "npm:aurelia-fetch-client@1.0.0-rc.1.0.1",
+      "aurelia-logging": "npm:aurelia-logging@1.0.0-rc.1.0.1",
+      "aurelia-metadata": "npm:aurelia-metadata@1.0.0-rc.1.0.1",
+      "aurelia-pal": "npm:aurelia-pal@1.0.0-rc.1.0.0",
+      "aurelia-path": "npm:aurelia-path@1.0.0-rc.1.0.0",
+      "aurelia-router": "npm:aurelia-router@1.0.0-rc.1.0.5",
+      "extend": "npm:extend@3.0.0",
+      "jwt-decode": "npm:jwt-decode@2.1.0"
     },
     "npm:aurelia-binding@1.0.0-rc.1.0.3": {
       "aurelia-logging": "npm:aurelia-logging@1.0.0-rc.1.0.1",
@@ -196,6 +216,10 @@ System.config({
     },
     "npm:jquery@3.1.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:jwt-decode@2.1.0": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:process@0.11.5": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

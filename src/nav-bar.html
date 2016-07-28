@@ -20,6 +20,14 @@
                 </li>
             </ul>
 
+            <ul if.bind="!authService.authenticated" class="nav navbar-nav navbar-right">
+                <li class="active"><a route-href="route:login">Login</a></li>
+            </ul>
+            <ul if.bind="authService.authenticated" class="nav navbar-nav navbar-right">
+                <li class="active"><a route-href="route:profile">Profile</a></li>
+                <li class="active"><a route-href="route:logout">Logout</a></li>
+            </ul>
+
             <ul class="nav navbar-nav navbar-right">
                 <li class="loader" if.bind="router.isNavigating">
                     <i class="fa fa-spinner fa-spin fa-2x"></i>
