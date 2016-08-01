@@ -26,8 +26,8 @@ export default {
     providers: {
         outlook: {
             name: "outlook",
-            url: "", // api route to outlook methods
-            clientId: "000000004C16745D",
+            url: "/authentication", // api route to outlook methods
+            clientId: "00000000-0000-0000-0000-00004C16745D",
             authorizationEndpoint: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
             responseType: "id_token",
             requiredUrlParams: ["display", "scope", "nonce", "state"],
@@ -44,9 +44,15 @@ export default {
         },
         google: {
             name: "google",
-            url: "/auth/google",
-            clientId: "569253544793-jg6vhjl8q9h7blta967pdv0ao4qmlrra.apps.googleusercontent.com",
+            url: "/authentication",
+            clientId: "1062215298697-jkb62vvju15fip57ntra61i7jg9it4t8.apps.googleusercontent.com",
             authorizationEndpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+            responseType: "id_token",
+            requiredUrlParams: ["display", "scope", "nonce", "state"],
+            state: function() {
+                return Math.random(); // this just an example
+            },
+            nonce: getNonce(),
             scope: ["profile", "email"],
             scopePrefix: "openid",
             scopeDelimiter: " ",
