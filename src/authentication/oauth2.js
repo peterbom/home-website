@@ -39,26 +39,23 @@ export class OAuth2 {
         }
 
         const url = provider.authorizationEndpoint + '?' + buildQueryString(this.buildQuery(provider));
-        const popup = this.popup.open(url, provider.name, provider.popupOptions);
+        const popup = await this.popup.open(url, provider.name, provider.popupOptions);
         let oauthData = await popup.pollPopup();
+
+        if (!oauthData.id_token) {
+            throw new Error(`Returned data ${JSON.stringify(oauthData, null, 2)} does not contain id_token`);
+        }
 
         if (oauthData.state && oauthData.state !== this.storage.get(stateName)) {
             throw new Error('OAuth 2.0 state parameter mismatch.');
         }
 
-        await this.exchangeForToken(oauthData, userData, provider);
-    }
+        // Exchange the ID token for an access token
+        let tokenExchangeData = {
+            id_token: oauthData.id_token
+        };
 
-    async exchangeForToken(oauthData, userData, provider) {
-        const data = Object.assign({}, userData, {
-            clientId: provider.clientId,
-            redirectUri: provider.redirectUri
-        }, oauthData);
-
-        const serverUrl = this.config.joinBase(provider.url);
-        const credentials = this.config.withCredentials ? 'include' : 'same-origin';
-
-        await this.config.client.post(serverUrl, data, {credentials: credentials});
+        return await this.config.client.post(this.config.tokenExchangeResource, tokenExchangeData);
     }
 
     buildQuery(provider) {

@@ -385,15 +385,14 @@ export class AuthService {
      *
      * @return {Promise<Object>|Promise<Error>}     Server response as Object
      */
-    authenticate(name, redirectUri, userData = {}) {
-        return this.authentication.authenticate(name, userData)
-            .then(response => {
-                this.setResponseObject(response);
+    async authenticate(name, redirectUri, userData = {}) {
+        let response = await this.authentication.authenticate(name, userData);
 
-                this.authentication.redirect(redirectUri, this.config.loginRedirect);
+        this.setResponseObject(response);
 
-                return response;
-            });
+        this.authentication.redirect(redirectUri, this.config.loginRedirect);
+
+        return response;
     }
 
     /**

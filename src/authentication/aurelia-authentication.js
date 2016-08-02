@@ -25,33 +25,15 @@ export function configure(aurelia, config) {
     const fetchConfig  = aurelia.container.get(FetchConfig);
     const clientConfig = aurelia.container.get(Config);
 
-    // Array? Configure the provided endpoints.
-    if (Array.isArray(baseConfig.configureEndpoints)) {
-        baseConfig.configureEndpoints.forEach(endpointToPatch => {
-            fetchConfig.configure(endpointToPatch);
-        });
-    }
-
-    let client;
+    // Configure the provided endpoints.
+    baseConfig.configureEndpoints.forEach(endpointToPatch => {
+        fetchConfig.configure(endpointToPatch);
+    });
 
     // Let's see if there's a configured named or default endpoint or a HttpClient.
-    if (baseConfig.endpoint !== null) {
-        if (typeof baseConfig.endpoint === 'string') {
-            const endpoint = clientConfig.getEndpoint(baseConfig.endpoint);
-            if (!endpoint) {
-                throw new Error(`There is no '${baseConfig.endpoint || 'default'}' endpoint registered.`);
-            }
-            client = endpoint;
-        } else if (baseConfig.endpoint instanceof HttpClient) {
-            client = new Rest(baseConfig.endpoint);
-        }
+    // This gives us an aurelia-api Rest endpoint
+    baseConfig.client = clientConfig.getEndpoint(baseConfig.endpoint);
+    if (!baseConfig.client) {
+        throw new Error(`There is no '${baseConfig.endpoint}' endpoint registered.`);
     }
-
-    // No? Fine. Default to HttpClient. BC all the way.
-    if (!(client instanceof Rest)) {
-        client = new Rest(aurelia.container.get(HttpClient));
-    }
-
-    // Set the client on the config, for use throughout the plugin.
-    baseConfig.client = client;
 }

@@ -8,15 +8,27 @@ export class Popup {
         this.url         = '';
     }
 
-    open(url, windowName, options) {
+    async open(url, windowName, options) {
         this.url = url;
         const optionsString = buildPopupWindowOptions(options || {});
 
-        this.popupWindow = PLATFORM.global.open(url, windowName, optionsString);
+        // In case we can't launch our popup immediately (e.g. because of a popup blocker)
+        // retry 10 times after a second each time
+        await new Promise((resolve, reject) => {
+            let count = 0;
+            let poller = PLATFORM.global.setInterval(() => {
+                this.popupWindow = PLATFORM.global.open(url, windowName, optionsString);
+                count++;
 
-        if (this.popupWindow && this.popupWindow.focus) {
-            this.popupWindow.focus();
-        }
+                if (this.popupWindow) {
+                    PLATFORM.global.clearInterval(poller);
+                    resolve();
+                } else if (count >= 10) {
+                    PLATFORM.global.clearInterval(poller);
+                    reject(new Error("Could not open popup window"));
+                }
+            }, 1000);
+        });
 
         return this;
     }
@@ -27,9 +39,12 @@ export class Popup {
                 let errorData;
 
                 try {
-                    if (this.popupWindow.location.host ===  PLATFORM.global.document.location.host
-                        && (this.popupWindow.location.search || this.popupWindow.location.hash)) {
-                        const qs = parseUrl(this.popupWindow.location);
+                    if (this.popupWindow &&
+                        this.popupWindow.location.hash &&
+                        this.popupWindow.location.host ===  PLATFORM.global.document.location.host) {
+
+                        let queryString = this.popupWindow.location.hash.substring(1);
+                        const qs = parseQueryString(queryString);
 
                         if (qs.error) {
                             reject({error: qs.error});
@@ -77,8 +92,4 @@ const buildPopupWindowOptions = options => {
     Object.keys(extended).map(key => parts.push(key + '=' + extended[key]));
 
     return parts.join(',');
-};
-
-const parseUrl = url => {
-    return Object.assign({}, parseQueryString(url.search), parseQueryString(url.hash));
 };
