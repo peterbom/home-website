@@ -1,5 +1,5 @@
 import {inject} from "aurelia-framework";
-import {AuthService} from "aurelia-authentication";
+import {AuthService} from "../authentication/auth-service";
 
 @inject(AuthService)
 export class Login {

@@ -1,5 +1,5 @@
 import {inject, bindable} from "aurelia-framework";
-import {AuthService} from "aurelia-authentication";
+import {AuthService} from "./authentication/aurelia-authentication";
 
 @inject(AuthService)
 export class NavBar {

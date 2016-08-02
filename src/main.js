@@ -1,4 +1,5 @@
 import 'bootstrap';
+import 'babel-polyfill';
 import authConfig from './auth-config';
 
 export function configure(aurelia) {
@@ -6,13 +7,12 @@ export function configure(aurelia) {
         .standardConfiguration()
         .developmentLogging()
         .plugin("aurelia-api", configure => {
-        	configure
-        		.registerEndpoint("internal", "http://192.168.1.230:8000")
-        		.registerEndpoint("another", "https://pi.bombers.space")
+            configure
+                .registerEndpoint("internal", "http://192.168.1.230:8000")
+                .registerEndpoint("another", "https://pi.bombers.space")
         })
-        .plugin("aurelia-authentication", baseConfig => {
-        	baseConfig.configure(authConfig);
-        });
+        .plugin("authentication/aurelia-authentication", authConfig)
+        .globalResources("authentication/auth-filter-value-converter");
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');
