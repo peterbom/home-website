@@ -11,8 +11,7 @@ export const configure = async function (aurelia) {
                 .registerEndpoint("main", "http://192.168.1.230:8000/")
                 .registerEndpoint("dev", "https://dev.bombers.space/")
         })
-        .plugin("authentication/aurelia-authentication", authConfig)
-        .globalResources("authentication/auth-filter-value-converter");
+        .feature("authentication", authConfig);
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');

@@ -5,7 +5,7 @@ import * as LogManager from 'aurelia-logging';
 
 import {BaseConfig}  from './base-config';
 import {Storage} from './storage';
-import {OAuth2} from './oAuth2';
+import {OAuth2} from './oauth2';
 
 @inject(Storage, BaseConfig, OAuth2)
 export class Authentication {

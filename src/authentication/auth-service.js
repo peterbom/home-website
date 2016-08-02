@@ -1,3 +1,4 @@
+import {noView} from 'aurelia-framework';
 import {PLATFORM} from 'aurelia-pal';
 import {inject} from 'aurelia-dependency-injection';
 import {EventAggregator} from 'aurelia-event-aggregator';
@@ -7,6 +8,7 @@ import * as LogManager from 'aurelia-logging';
 import {Authentication} from './authentication';
 import {BaseConfig} from './base-config';
 
+@noView
 @inject(Authentication, BaseConfig, BindingSignaler, EventAggregator)
 export class AuthService {
     /**

@@ -22,6 +22,9 @@ export function configure(aurelia, config) {
 
     baseConfig.configure(config);
 
+    // after baseConfig was configured
+    aurelia.globalResources("authentication/auth-filter-value-converter")
+
     const fetchConfig  = aurelia.container.get(FetchConfig);
     const clientConfig = aurelia.container.get(Config);
 
