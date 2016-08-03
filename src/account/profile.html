@@ -2,62 +2,22 @@
     <section class="au-animate">
         <div class="container">
 
-            <div class="panel panel-default col-md-6">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    Profile
+                    ${name}
                 </div>
 
                 <div class="panel-body">
-                    <legend>
-                        <i class="ZZZZ-ion-clipboard"> Edit my profile</i>
-                    </legend>
-                    
-                    <form method="post" submit.trigger="updateProfile()">
-                        <div class="form-group">
-                            <label class="control-label">Profile Picture</label>
-                            <img class="profile-picture" src.bind="profile.picture || 'http://placehold.it/100x100'">
-                        </div>
+                    <dl>
+                        <dt>Email</dt>
+                        <dd>${email}</dd>
 
-                        <div class="form-group">
-                            <label class="control-label"><i class="ZZZZ-ion-person"></i> Name</label>
-                            <input class="form-control" type="text" value.bind="profile.displayName">
-                        </div>
+                        <dt>Permissions</dt>
+                        <dd>${permissions.join(", ") || "none"}</dd>
 
-                        <div class="form-group">
-                            <label class="control-label"><i class="ZZZZ-ion-at"></i> Email Address</label>
-                            <input class="form-control" type="email" value.bind="profile.email">
-                        </div>
-
-                        <button type="submit" class="btn btn-lg btn-success">Update Information</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="panel panel-default col-md-6">
-                <div class="panel-heading">
-                    Accounts
-                </div>
-
-                <div class="panel-body">
-                    <legend>
-                        <i class="ZZZZ-ion-link"> Linked Accounts</i>
-                    </legend>
-                    
-                    <div class="btn-group-vertical">
-                        <button class="btn btn-sm btn-danger" if.bind="profile.outlook" click.delegate="unlink('outlook')">
-                            <i class="ZZZZ-ion-social-outlook"></i> Unlink Outlook Account
-                        </button>
-                        <button class="btn btn-sm btn-primary" if.bind="!profile.outlook" click.delegate="link('outlook')">
-                            <i class="ZZZZ-ion-social-outlook"></i> Link Outlook Account
-                        </button>
-
-                        <button class="btn btn-sm btn-danger" if.bind="profile.google" click.delegate="unlink('google')">
-                            <i class="ZZZZ-ion-social-google"></i> Unlink Google Account
-                        </button>
-                        <button class="btn btn-sm btn-primary" if.bind="!profile.google" click.delegate="link('google')">
-                            <i class="ZZZZ-ion-social-google"></i> Link Google Account
-                        </button>
-                    </div>
+                        <dt>Token expiry</dt>
+                        <dd>${tokenExpiryDate}</dd>
+                    </dl>
                 </div>
             </div>
             

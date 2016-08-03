@@ -2,6 +2,14 @@ import 'bootstrap';
 import 'babel-polyfill';
 import authConfig from './auth-config';
 
+// In case we need to set the root according to the authentication status:
+//import {AuthService} from "./authentication/auth-service";
+
+// After aurelia.start(), set the initial page to login if the user is not authenticated
+//var auth = aurelia.container.get(AuthService);
+//let root = auth.isAuthenticated() ? "app" : "account/login";
+//aurelia.setRoot(root);
+
 export const configure = async function (aurelia) {
     aurelia.use
         .standardConfiguration()
@@ -21,5 +29,6 @@ export const configure = async function (aurelia) {
     //aurelia.use.plugin('aurelia-html-import-template-loader')
 
     await aurelia.start();
-    aurelia.setRoot();
+
+    aurelia.setRoot("app");
 };

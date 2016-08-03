@@ -163,7 +163,8 @@ export class BaseConfig {
             let targetProvider = {
                 name: name,
                 responseType: "id_token",
-                requiredUrlParams: ["display", "scope", "nonce", "state"],
+                requiredUrlParams: ["display", "scope", "nonce", "state", "redirect_uri"],
+                redirectUri: PLATFORM.location.origin,
                 state: randomState,
                 nonce: randomState,
                 scope: ["profile", "email"],

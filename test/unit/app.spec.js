@@ -25,7 +25,7 @@ describe('the App module', () => {
   });
 
   it('configures the router title', () => {
-    expect(sut.router.title).toEqual('Aurelia');
+    expect(sut.router.title).toEqual("Bombers' Space");
   });
 
   it('should have a welcome route', () => {
