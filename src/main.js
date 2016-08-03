@@ -1,5 +1,7 @@
 import 'bootstrap';
 import 'babel-polyfill';
+
+import "./env.js";
 import authConfig from './auth-config';
 
 // In case we need to set the root according to the authentication status:
@@ -10,14 +12,30 @@ import authConfig from './auth-config';
 //let root = auth.isAuthenticated() ? "app" : "account/login";
 //aurelia.setRoot(root);
 
+let mainEndpoint;
+let devEndpoint;
+
+switch (window.env.NODE_ENV) {
+    case "development":
+        mainEndpoint = "http://192.168.1.230:8000/";
+        devEndpoint = "http://192.168.1.200:8000/";
+        break;
+    case "production":
+        mainEndpoint = "https://pi.bombers.space/";
+        devEndpoint = "https://dev.bombers.space/";
+        break;
+    default:
+        throw new Error(`Unexpected environment ${window.env.NODE_ENV}`);
+}
+
 export const configure = async function (aurelia) {
     aurelia.use
         .standardConfiguration()
         .developmentLogging()
         .plugin("aurelia-api", configure => {
             configure
-                .registerEndpoint("main", "http://192.168.1.230:8000/")
-                .registerEndpoint("dev", "https://dev.bombers.space/")
+                .registerEndpoint("main", mainEndpoint)
+                .registerEndpoint("dev", devEndpoint)
         })
         .feature("authentication", authConfig);
 
