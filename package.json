@@ -1,27 +1,36 @@
 {
   "scripts": {
-    "init": "shx cp -n .env.template .env",
-    "preclean": "npm run unbundle",
-    "clean": "rimraf dist/* && mkdirp dist",
-    "prebuild": "npm run clean",
-    "build:env": "node tasks/set-env.js dist/env.js",
+    "init-env": "shx cp -n .env.template .env",
+
+    "unbundle": "node tasks/unbundle.js",
+    "clean-debug": "npm run unbundle && rimraf dist/* && mkdirp dist",
+    "clean-release": "npm run unbundle && rimraf export/* && mkdirp export/dist",
+
+    "build:env-dev": "zoo NODE_ENV=development node tasks/set-env.js dist/env.js",
+    "build:env-prod": "zoo NODE_ENV=production node tasks/set-env.js dist/env.js",
     "build:system": "zoo babel src --out-dir dist",
     "build:html": "html-minifier --collapse-whitespace --input-dir src --file-ext html --output-dir dist",
     "build:css": "cleancss --output dist/styles.css < styles/styles.css",
-    "build": "zoo NODE_ENV=development concurrently \"npm run build:env\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
-    "bundle": "zoo node tasks/bundle.js",
-    "unbundle": "zoo node tasks/unbundle.js",
+    "build:export": "zoo node tasks/bundle.js && zoo node tasks/export-normalized-resources.js && zoo node tasks/export-copy.js",
+    "build:dev-debug": "concurrently \"npm run build:env-dev\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
+    "build:prod-debug": "concurrently \"npm run build:env-prod\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
+    "build:dev-release": "npm run build:dev-debug && npm run build:export",
+    "build:prod-release": "npm run build:prod-debug && npm run build:export",
+
+    "build-dev-debug": "npm run clean-debug && npm run build:dev-debug",
+    "build-prod-debug": "npm run clean-debug && npm run build:prod-debug",
+    "build-dev-release": "npm run clean-release && npm run build:dev-release",
+    "build-prod-release": "npm run clean-release && npm run build:prod-release",
+
     "test": "karma start karma-conf/test.js",
     "test:tdd": "karma start karma-conf/tdd.js",
     "test:tdd-debug": "node-debug karma start karma-conf/tdd.js",
     "test:cover": "karma start karma-conf/cover.js",
     "test:cover-debug": "node-debug karma start karma-conf/cover.js",
-    "export:clean": "rimraf export/* && mkdirp export/dist",
-    "export:normalized-resources": "zoo node tasks/export-normalized-resources.js",
-    "export:copy": "zoo node tasks/export-copy.js",
-    "export": "zoo NODE_ENV=production npm run build && npm run bundle && npm run export:clean && npm run export:normalized-resources && npm run export:copy",
-    "serve": "zoo jspm-server . --no-browser",
-    "serve:export": "zoo NODE_ENV=production npm run export && jspm-server ./export --no-browser",
+
+    "serve-debug": "jspm-server . --no-browser",
+    "serve-release": "jspm-server ./export --no-browser",
+
     "watch:src": "watch \"npm run build && npm run test\" src",
     "watch:css": "watch \"npm run build:css\" styles",
     "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve\""

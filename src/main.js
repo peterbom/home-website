@@ -17,8 +17,8 @@ let devEndpoint;
 
 switch (window.env.NODE_ENV) {
     case "development":
-        mainEndpoint = "http://192.168.1.230:8000/";
-        devEndpoint = "http://192.168.1.200:8000/";
+        mainEndpoint = "http://192.168.1.230:20080/";
+        devEndpoint = "http://192.168.1.200:20080/";
         break;
     case "production":
         mainEndpoint = "https://pi.bombers.space/";
