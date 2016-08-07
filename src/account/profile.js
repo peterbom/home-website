@@ -1,7 +1,7 @@
 import {inject} from "aurelia-framework";
-import {AuthService} from "../authentication/auth-service";
+import {AuthenticationManager} from "../authentication/authentication-manager";
 
-@inject(AuthService)
+@inject(AuthenticationManager)
 export class Profile {
     
     email;
@@ -12,16 +12,16 @@ export class Profile {
 
     tokenExpiryDate;
 
-    constructor(authService) {
-        this.authService = authService;
+    constructor(authenticationManager) {
+        this.auth = authenticationManager;
     }
 
     activate() {
-        let payload = this.authService.getTokenPayload();
+        let payload = this.auth.getTokenPayload();
 
         this.email = payload.email;
         this.name = payload.name;
         this.permissions = payload.permissions || [];
-        this.tokenExpiryDate = new Date(this.authService.getExp() * 1000);
+        this.tokenExpiryDate = new Date(this.auth.getExp() * 1000);
     }
 }

@@ -1,15 +1,19 @@
-import {PLATFORM} from 'aurelia-pal';
+import {PLATFORM} from "aurelia-pal";
 
 export class Storage {
+	constructor() {
+		this._storage = PLATFORM.global["localStorage"];
+	}
+
     get(key) {
-        return PLATFORM.global['localStorage'].getItem(key);
+        return this._storage.getItem(key);
     }
 
     set(key, value) {
-        PLATFORM.global['localStorage'].setItem(key, value);
+        this._storage.setItem(key, value);
     }
 
     remove(key) {
-        PLATFORM.global['localStorage'].removeItem(key);
+        this._storage.removeItem(key);
     }
 }

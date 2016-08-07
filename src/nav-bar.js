@@ -1,23 +1,19 @@
 import {inject, bindable} from "aurelia-framework";
-import {AuthService} from "./authentication/auth-service";
+import {AuthenticationManager} from "./authentication/authentication-manager";
 
-@inject(AuthService)
+@inject(AuthenticationManager)
 export class NavBar {
 
-	@bindable router = null;
+    @bindable router = null;
 
     /**
-     * The AuthService that supplies authentication information
+     * The AuthenticationManager that supplies authentication information
      *
-     * @param  {AuthService}
+     * @param  {AuthenticationManager}
      */
-    authService;
+    auth;
 
-	constructor(authService) {
-		this.authService = authService;
-	}
-
-	get isAuthenticated() {
-		return this.authService.isAuthenticated();
-	}
+    constructor(authenticationManager) {
+        this.auth = authenticationManager;
+    }
 }

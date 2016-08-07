@@ -20,13 +20,13 @@
                     </li>
                 </ul>
 
-                <ul if.bind="!authService.authenticated" class="nav navbar-nav navbar-right">
+                <ul if.bind="!auth.authenticated" class="nav navbar-nav navbar-right">
                     <li class="active">
                         <a data-toggle="collapse" data-target="#account-navigation-navbar-collapse.in" route-href="route:login"> Login </a>
                     </li>
                 </ul>
 
-                <ul if.bind="authService.authenticated" class="nav navbar-nav navbar-right">
+                <ul if.bind="auth.authenticated" class="nav navbar-nav navbar-right">
                     <li class="active">
                         <a data-toggle="collapse" data-target="#account-navigation-navbar-collapse.in" route-href="route:profile"> Profile </a>
                     </li>

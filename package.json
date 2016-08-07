@@ -1,11 +1,9 @@
 {
   "scripts": {
     "init-env": "shx cp -n .env.template .env",
-
     "unbundle": "node tasks/unbundle.js",
     "clean-debug": "npm run unbundle && rimraf dist/* && mkdirp dist",
     "clean-release": "npm run unbundle && rimraf export/* && mkdirp export/dist",
-
     "build:env-dev": "zoo NODE_ENV=development node tasks/set-env.js dist/env.js",
     "build:env-prod": "zoo NODE_ENV=production node tasks/set-env.js dist/env.js",
     "build:system": "zoo babel src --out-dir dist",
@@ -16,24 +14,20 @@
     "build:prod-debug": "concurrently \"npm run build:env-prod\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "build:dev-release": "npm run build:dev-debug && npm run build:export",
     "build:prod-release": "npm run build:prod-debug && npm run build:export",
-
     "build-dev-debug": "npm run clean-debug && npm run build:dev-debug",
     "build-prod-debug": "npm run clean-debug && npm run build:prod-debug",
     "build-dev-release": "npm run clean-release && npm run build:dev-release",
     "build-prod-release": "npm run clean-release && npm run build:prod-release",
-
     "test": "karma start karma-conf/test.js",
     "test:tdd": "karma start karma-conf/tdd.js",
     "test:tdd-debug": "node-debug karma start karma-conf/tdd.js",
     "test:cover": "karma start karma-conf/cover.js",
     "test:cover-debug": "node-debug karma start karma-conf/cover.js",
-
     "serve-debug": "jspm-server . --no-browser",
     "serve-release": "jspm-server ./export --no-browser",
-
-    "watch:src": "watch \"npm run build && npm run test\" src",
+    "watch:src": "watch \"npm run build-dev-debug\" src",
     "watch:css": "watch \"npm run build:css\" styles",
-    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve\""
+    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve-debug\""
   },
   "name": "aurelia-home-website",
   "version": "1.0.0",
@@ -111,6 +105,8 @@
       "font-awesome": "npm:font-awesome@4.6.3",
       "jquery": "npm:jquery@^3.1.0",
       "jwt-decode": "npm:jwt-decode@^2.1.0",
+      "moment": "npm:moment@^2.14.1",
+      "oidc-client": "github:IdentityModel/oidc-client-js@^1.0.1",
       "text": "github:systemjs/plugin-text@^0.0.8"
     },
     "devDependencies": {}

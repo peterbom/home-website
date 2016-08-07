@@ -33,6 +33,8 @@ System.config({
     "font-awesome": "npm:font-awesome@4.6.3",
     "jquery": "npm:jquery@3.1.0",
     "jwt-decode": "npm:jwt-decode@2.1.0",
+    "moment": "npm:moment@2.14.1",
+    "oidc-client": "github:IdentityModel/oidc-client-js@1.0.1",
     "text": "github:systemjs/plugin-text@0.0.8",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"

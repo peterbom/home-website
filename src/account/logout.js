@@ -1,14 +1,14 @@
 import {inject} from "aurelia-framework";
-import {AuthService} from "../authentication/auth-service";
+import {AuthenticationManager} from "../authentication/authentication-manager";
 
-@inject(AuthService)
+@inject(AuthenticationManager)
 export class Logout {
-    constructor(authService) {
-        this.authService = authService;
+    constructor(authenticationManager) {
+        this.auth = authenticationManager;
     }
 
     activate() {
         // since its stateless, we only need to delete the token in the browsers storage
-        this.authService.logout();
+        this.auth.logout();
     }
 }

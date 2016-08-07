@@ -1,13 +1,13 @@
 import {inject} from "aurelia-framework";
-import {AuthService} from "../authentication/auth-service";
+import {AuthenticationManager} from "../authentication/authentication-manager";
 
-@inject(AuthService)
+@inject(AuthenticationManager)
 export class Login {
-	constructor(authService) {
-		this.authService = authService;
+	constructor(authenticationManager) {
+		this.auth = authenticationManager;
 	}
 
-	authenticate(name) {
-		return this.authService.authenticate(name);
+	async authenticate(name) {
+		await this.auth.requestSignIn(name);
 	}
 }
