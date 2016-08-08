@@ -44,6 +44,8 @@ module.exports = {
                 "font-awesome",
                 "jquery",  // required by bootstrap
                 "jwt-decode",
+                "moment",
+                "oidc-client",
                 "text"
             ],
             options: {
