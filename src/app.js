@@ -1,7 +1,7 @@
 import {inject} from "aurelia-framework";
 import {PLATFORM} from "aurelia-pal";
 
-import {AuthenticationManager} from "./authentication/authentication-manager";
+import {AuthenticationManager} from "./features/authentication/authentication-manager";
 
 @inject(AuthenticationManager)
 export class App {
@@ -14,13 +14,11 @@ export class App {
         this.router = router;
         config.title = "Bombers' Space";
         config.map([
-            { route: '',              name: 'home',         moduleId: 'home',         nav: true, title: 'Home' },
-            { route: 'users',         name: 'users',        moduleId: 'users',        nav: true, title: 'Github Users', auth: true, perm: "home_manage" },
-            { route: 'child-router',  name: 'child-router', moduleId: 'child-router', nav: true, title: 'Child Router', auth: true, perm: "home_manage" },
-
-            { route: 'login',         name: 'login',      moduleId: './account/login',     nav: false, title: 'Login' },
-            { route: 'logout',        name: 'logout',     moduleId: './account/logout',    nav: false, title: 'Logout',  auth: true },
-            { route: 'profile',       name: 'profile',    moduleId: './account/profile',   nav: false, title: 'Profile', auth: true, perm: "home_manage" }
+            { route: "", name: "home", moduleId: "./pages/home", nav: true, title: "Home" },
+            { route: "login", name: "login", moduleId: "./pages/login", nav: false, title: "Login" },
+            { route: "logout", name: "logout", moduleId: "./pages/logout", nav: false, title: "Logout", auth: true },
+            { route: "profile", name: "profile", moduleId: "./pages/profile", nav: false, title: "Profile", auth: true, perm: "home_manage" },
+            { route: "packaging", name: "packaging", moduleId: "./pages/packaging", nav: true, title: "Packaging", auth: true, perm: "home_manage" }
         ]);
 
         config.mapUnknownRoutes(async instr => {

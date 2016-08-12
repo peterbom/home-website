@@ -8,7 +8,7 @@
     "build:env-prod": "zoo NODE_ENV=production node tasks/set-env.js dist/env.js",
     "build:system": "zoo babel src --out-dir dist",
     "build:html": "html-minifier --collapse-whitespace --input-dir src --file-ext html --output-dir dist",
-    "build:css": "cleancss --output dist/styles.css < styles/styles.css",
+    "build:css": "cleancss --output dist/styles.css < assets/styles/styles.css",
     "build:export": "zoo node tasks/bundle.js && zoo node tasks/export-normalized-resources.js && zoo node tasks/export-copy.js",
     "build:dev-debug": "concurrently \"npm run build:env-dev\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
     "build:prod-debug": "concurrently \"npm run build:env-prod\" \"npm run build:system\" \"npm run build:html\" \"npm run build:css\"",
@@ -26,7 +26,7 @@
     "serve-debug": "jspm-server . --no-browser",
     "serve-release": "jspm-server ./export --no-browser",
     "watch:src": "watch \"npm run build-dev-debug\" src",
-    "watch:css": "watch \"npm run build:css\" styles",
+    "watch:css": "watch \"npm run build:css\" assets/styles",
     "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve-debug\""
   },
   "name": "aurelia-home-website",

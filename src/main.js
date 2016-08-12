@@ -1,7 +1,9 @@
 import 'bootstrap';
 import 'babel-polyfill';
 
+// Don't remove this import. The env.js file is generated at build time
 import "./env.js";
+
 import {apiConfig, authConfig} from "./config";
 
 // In case we need to set the root according to the authentication status:
@@ -21,7 +23,7 @@ export const configure = async function (aurelia) {
                 .registerEndpoint("main", apiConfig.mainEndpoint)
                 .registerEndpoint("dev", apiConfig.devEndpoint)
         })
-        .feature("authentication", authConfig);
+        .feature("features/authentication", authConfig);
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');
