@@ -69,6 +69,15 @@ div.au-stagger {
     animation-delay: 50ms;
 }
 
+.clickable-block {
+    display: block;
+}
+
+.clickable-block:hover {
+    text-decoration: none;
+}
+
+
 .card-container.au-enter {
     opacity: 0;
 }

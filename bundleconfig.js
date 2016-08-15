@@ -36,6 +36,8 @@ module.exports = {
                 "aurelia-templating-binding",
                 "aurelia-templating-resources",
                 "aurelia-templating-router",
+                "aurelia-validatejs",
+                "aurelia-validation",
                 "babel-polyfill",
                 "bluebird",
                 "bootstrap",

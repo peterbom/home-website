@@ -4,6 +4,10 @@ let devEndpoint;
 
 switch (window.env.NODE_ENV) {
     case "development":
+        mainEndpoint = "http://localhost:8000/";
+        devEndpoint = "http://localhost:16000/";
+        break;
+    case "test":
         mainEndpoint = "http://192.168.1.230:20080/";
         devEndpoint = "http://192.168.1.200:20080/";
         break;

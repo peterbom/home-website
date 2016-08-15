@@ -18,6 +18,8 @@ export const configure = async function (aurelia) {
     aurelia.use
         .standardConfiguration()
         .developmentLogging()
+        .plugin("aurelia-validation")
+        .plugin("aurelia-validatejs")
         .plugin("aurelia-api", configure => {
             configure
                 .registerEndpoint("main", apiConfig.mainEndpoint)

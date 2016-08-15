@@ -1,0 +1,20 @@
+<template>
+    <table class="table table-hover">
+        <tr>
+            <th>FEFCO/ESBO Code</th>
+            <th>Name</th>
+        </tr>
+        <tr repeat.for="style of constructionStyles">
+            <td>
+                <a route-href="route:construction-style-edit; params.bind:{id:style.id}" class="clickable-block">
+                    ${style.fefcoEsboCode}
+                </a>
+            </td>
+            <td>
+                <a route-href="route:construction-style-edit; params.bind:{id:style.id}" class="clickable-block">
+                    ${style.name}
+                </a>
+            </td>
+        </tr>
+    </table>
+</template>

@@ -1,0 +1,47 @@
+<template>
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h3>${constructionStyle.name}</h3>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <form class="form-horizontal"
+                submit.trigger="save()"
+                validation-renderer="bootstrap-form"
+                validation-errors.bind="errors">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">FEFCO/ESBO code</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Name" value.bind="constructionStyle.fefcoEsboCode & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Name" value.bind="constructionStyle.name & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Piece length formula</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Piece length formula" value.bind="constructionStyle.formulaText & validate:rules" />
+                    </div>
+                </div>
+
+                <validation-summary errors.bind="errors" autofocus.bind="controller.validateTrigger === 'manual'">
+                </validation-summary>
+
+                <!-- <input type="submit" name="submit" class="btn btn-primary" value="Save"> -->
+                <button class="btn btn-primary" type="submit" disabled.bind="errors && errors.length">Save</button>
+
+            </form>
+        </div>
+
+    </div>
+</template>
