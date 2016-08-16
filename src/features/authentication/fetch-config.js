@@ -23,7 +23,7 @@ export class FetchConfig {
     get interceptor() {
         return {
             request: request => {
-                if (!this._authenticationManager.isAuthenticated) {
+                if (!this._authenticationManager.authenticated) {
                     return request;
                 }
 

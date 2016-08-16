@@ -3,7 +3,7 @@
 
         <div class="panel-heading">
             <div class="panel-title">
-                <h3>${constructionStyle.name}</h3>
+                <h3>${name}</h3>
             </div>
         </div>
 
@@ -16,21 +16,62 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">FEFCO/ESBO code</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Name" value.bind="constructionStyle.fefcoEsboCode & validate:rules" />
+                        <input type="text" class="form-control" placeholder="Name" value.bind="fefcoEsboCode & validate:rules" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Name</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Name" value.bind="constructionStyle.name & validate:rules" />
+                        <input type="text" class="form-control" placeholder="Name" value.bind="name & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Formula variables</label>
+                    <div class="col-sm-10 well">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr repeat.for="variable of variables">
+                                    <td>${variable.variableIdentifier}</td>
+                                    <td>${variable.propertyName}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Piece length formula</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Piece length formula" value.bind="constructionStyle.formulaText & validate:rules" />
+                        <input type="text" class="form-control" placeholder="Piece length formula" value.bind="pieceLengthFormula & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Piece width formula</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Piece width formula" value.bind="pieceWidthFormula & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Lengthwise scoring allowance formula</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Lengthwise scoring allowance formula" value.bind="lengthwiseScoringAllowanceFormula & validate:rules" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Widthwise scoring allowance formula</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" placeholder="Widthwise scoring allowance formula" value.bind="widthwiseScoringAllowanceFormula & validate:rules" />
                     </div>
                 </div>
 

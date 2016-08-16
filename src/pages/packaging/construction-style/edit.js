@@ -4,10 +4,24 @@ import {Endpoint} from "aurelia-api";
 import {ValidationController, validateTrigger} from "aurelia-validation";
 import {ValidationRules} from "aurelia-validatejs";
 
+import {replacePlaceholdersWithVariables} from "../shared/formula-utils";
+
 @inject(Endpoint.of("main"), Router, NewInstance.of(ValidationController))
 export class Edit {
 
-    constructionStyle;
+    id;
+
+    fefcoEsboCode;
+    name;
+
+    pieceLengthFormula;
+    pieceWidthFormula;
+    lengthwiseScoringAllowanceFormula;
+    widthwiseScoringAllowanceFormula;
+
+    updateVersion;
+
+    variables = [];
 
     // Validation rules
     rules;
@@ -24,7 +38,25 @@ export class Edit {
     }
 
     async activate (params) {
-        this.constructionStyle = await this._endpoint.find("packaging/construction-style", params.id);
+        let constructionStyle = await this._endpoint.find("packaging/construction-style", params.id);
+
+        this.id = params.id;
+
+        this.name = constructionStyle.name;
+        this.fefcoEsboCode = constructionStyle.fefcoEsboCode;
+
+        this.pieceLengthFormula = replacePlaceholdersWithVariables(
+            constructionStyle.pieceLengthFormulaText, constructionStyle.variables);
+        this.pieceWidthFormula = replacePlaceholdersWithVariables(
+            constructionStyle.pieceWidthFormulaText, constructionStyle.variables);
+        this.lengthwiseScoringAllowanceFormula = replacePlaceholdersWithVariables(
+            constructionStyle.lengthwiseScoringAllowanceFormulaText, constructionStyle.variables);
+        this.widthwiseScoringAllowanceFormula = replacePlaceholdersWithVariables(
+            constructionStyle.widthwiseScoringAllowanceFormulaText, constructionStyle.variables);
+
+        this.updateVersion = constructionStyle.updateVersion;
+
+        this.variables = constructionStyle.variables;
     }
 
     async save() {
@@ -33,7 +65,16 @@ export class Edit {
             return;
         }
 
-        await this._endpoint.update("packaging/construction-style", this.constructionStyle.id, this.constructionStyle);
+        await this._endpoint.update("packaging/construction-style", this.id, {
+            fefcoEsboCode: this.fefcoEsboCode,
+            name: this.name,
+            pieceLengthFormula: this.pieceLengthFormula,
+            pieceWidthFormula: this.pieceWidthFormula,
+            lengthwiseScoringAllowanceFormula: this.lengthwiseScoringAllowanceFormula,
+            widthwiseScoringAllowanceFormula: this.widthwiseScoringAllowanceFormula,
+            updateVersion: this.updateVersion
+        });
+
         let url = this._router.generate("construction-style-list");
         this._router.navigate(url);
     }
