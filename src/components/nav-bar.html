@@ -15,7 +15,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navigation-navbar-collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li repeat.for="row of router.navigation | authFilter: auth.authenticated & signal: 'authentication-change'" class="${row.isActive ? 'active' : ''}">
+                    <li repeat.for="row of router.navigation | authFilter: auth.permissions & signal: 'authentication-change'" class="${row.isActive ? 'active' : ''}">
                         <a data-toggle="collapse" data-target="#navigation-navbar-collapse.in" href.bind="row.href"> ${row.title} </a>
                     </li>
                 </ul>

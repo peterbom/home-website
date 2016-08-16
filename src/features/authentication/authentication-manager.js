@@ -7,6 +7,8 @@ export class AuthenticationManager {
 
     authenticated = false;
 
+    permissions = [];
+
     constructor(authApiClient, providerManager, tokenManager, bindingSignaler, eventAggregator, settings) {
         this._authApiClient = authApiClient;
         this._providerManager = providerManager;
@@ -85,6 +87,7 @@ export class AuthenticationManager {
 
         let wasAuthenticated = this.authenticated;
         this.authenticated = this._tokenManager.isAuthenticated();
+        this.permissions = Array.from(this._tokenManager.payload && this._tokenManager.payload.permissions || []);
 
         if (this.authenticated && !Number.isNaN(this._tokenManager.exp)) {
             this.setTimeout(this._tokenManager.getTtl() * 1000);
