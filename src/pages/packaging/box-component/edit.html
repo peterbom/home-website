@@ -1,0 +1,133 @@
+<template>
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h3>Box Component for ${boxShortCode}</h3>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <form class="form-horizontal"
+                submit.trigger="save()"
+                validation-renderer="bootstrap-form"
+                validation-errors.bind="errors">
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#general-information-tab">General Information</a></li>
+                    <li><a data-toggle="tab" href="#box-construction-tab">Box Construction</a></li>
+                    <li><a data-toggle="tab" href="#sheetboard-layout-tab">Sheetboard Layout</a></li>
+                    <li><a data-toggle="tab" href="#production-cost-tab">Production/Cost</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="general-information-tab" class="tab-pane fade in active">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly.bind="!isMainComponent" class="form-control" placeholder="Name" value.bind="name & validate:rules" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Printed name</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly.bind="!isMainComponent" class="form-control" placeholder="Printed name" value.bind="printedName & validate:rules" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="box-construction-tab" class="tab-pane fade">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Flute type</label>
+                            <div class="col-sm-10">
+                                <select value.bind="sheetboardFluteTypeId" class="form-control">
+                                    <option value="">[none]</option>
+                                    <option repeat.for="sheetboardFluteType of sheetboardFluteTypes" model.bind="sheetboardFluteType">${sheetboardFluteType.fluteTypeText}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Paper grade</label>
+                            <div class="col-sm-10">
+                                <select value.bind="sheetboardSpecificationId" class="form-control">
+                                    <option value="">[none]</option>
+                                    <option repeat.for="sheetboardSpecification of filteredSheetboardSpecifications" model.bind="sheetboardSpecification">${sheetboardSpecification.paperGradesText}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Form type</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control" value.bind="sheetboardFormTypeText" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Construction style</label>
+                            <div class="col-sm-10">
+                                <select value.bind="constructionStyleId" class="form-control">
+                                    <option value="">[none]</option>
+                                    <option repeat.for="constructionStyle of constructionStyles" model.bind="constructionStyle">${constructionStyle.name}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-2 control-label">Dimensions</label>
+                            <div class="col-sm-10">
+                                <div class="form-group col-sm-4">
+                                    <label class="control-label col-sm-3">L</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" class="form-control" placeholder="Length" value.bind="length & validate:rules" />
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label class="control-label col-sm-3">W</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" class="form-control" placeholder="Width" value.bind="width & validate:rules" />
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label class="control-label col-sm-3">D</label>
+                                    <div class="col-sm-9">
+                                        <input type="number" class="form-control" placeholder="Depth" value.bind="depth & validate:rules" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" repeat.for="extraPropertyValue of sheetSizeExtraPropertyValues">
+                            <label class="col-sm-2 control-label">${extraPropertyValue.propertyName}</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" placeholder="${extraPropertyValue.propertyName}" value.bind="extraPropertyValue.value & validate:rules" />
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div id="sheetboard-layout-tab" class="tab-pane fade">
+                        
+                    </div>
+
+                    <div id="production-cost-tab" class="tab-pane fade">
+                        
+                    </div>
+                </div>
+
+                <validation-summary errors.bind="errors" autofocus.bind="controller.validateTrigger === 'manual'">
+                </validation-summary>
+
+                <!-- <input type="submit" name="submit" class="btn btn-primary" value="Save"> -->
+                <button class="btn btn-primary" type="submit" disabled.bind="errors && errors.length">Save</button>
+
+            </form>
+        </div>
+
+    </div>
+</template>
