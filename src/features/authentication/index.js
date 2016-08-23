@@ -2,11 +2,10 @@ import {PLATFORM} from "aurelia-pal";
 import {Config as ApiConfig} from "aurelia-api";
 import {BindingSignaler} from "aurelia-templating-resources";
 import {EventAggregator} from "aurelia-event-aggregator";
-import {Log as OidcLog} from "oidc-client";
+import Auth0Lock from "auth0-lock";
 
+import {AuthChangeNotifier} from "./auth-change-notifier";
 import {Storage} from "./storage";
-import {AuthApiClient} from "./auth-api-client";
-import {ProviderManager} from "./provider-manager";
 import {TokenManager} from "./token-manager";
 import {AuthenticationManager} from "./authentication-manager";
 import {FetchConfig} from './fetch-config';
@@ -24,13 +23,6 @@ export function configure(aurelia, settings) {
         PLATFORM.location.origin = PLATFORM.location.protocol + '//' + PLATFORM.location.hostname + (PLATFORM.location.port ? ':' + PLATFORM.location.port : '');
     }
 
-    if (!settings.authEndpoint) {
-        throw new Error("There is no 'authEndpoint' endpoint configured.");
-    }
-
-    // TODO: Merge OIDC logging into project logging
-    OidcLog.logger = console;
-
     // Dependencies which can be resolved by the container (i.e. need no more custom configuration)
     let apiConfig = aurelia.container.get(ApiConfig);
     let storage = aurelia.container.get(Storage);
@@ -38,24 +30,29 @@ export function configure(aurelia, settings) {
     let eventAggregator = aurelia.container.get(EventAggregator);
 
     // Create other dependencies according to configuration
-    let authEndpoint = apiConfig.getEndpoint(settings.authEndpoint);
-    let authApiClient = new AuthApiClient(authEndpoint, settings.authApiClientSettings);
-    let providerManager = new ProviderManager(authApiClient, storage);
+    let auth0Lock = new Auth0Lock(settings.auth0ClientId, settings.auth0Domain, {
+        auth: {
+            params: {
+                scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+            }
+        }
+    });
+    let permissionsEndpoint = apiConfig.getEndpoint(settings.permissionsEndpoint);
     let tokenManager = new TokenManager(storage);
+    let authChangeNotifier = new AuthChangeNotifier(bindingSignaler, eventAggregator);
     let authenticationManager = new AuthenticationManager(
-        authApiClient,
-        providerManager,
+        auth0Lock,
+        permissionsEndpoint,
         tokenManager,
-        bindingSignaler,
-        eventAggregator,
-        settings.urlSettings);
+        authChangeNotifier,
+        settings);
     let fetchConfig = new FetchConfig(apiConfig, authenticationManager, settings.securedEndpoints);
 
     // Register all new'ed up dependencies with the container so we always resolve
     // the same instances in future.
-    aurelia.container.registerInstance(AuthApiClient, authApiClient);
+    aurelia.container.registerInstance(Auth0Lock, auth0Lock);
     aurelia.container.registerInstance(TokenManager, tokenManager);
-    aurelia.container.registerInstance(ProviderManager, providerManager);
+    aurelia.container.registerInstance(AuthChangeNotifier, authChangeNotifier);
     aurelia.container.registerInstance(AuthenticationManager, authenticationManager);
     aurelia.container.registerInstance(FetchConfig, fetchConfig);
 

@@ -3,10 +3,14 @@ import {AuthenticationManager} from "../features/authentication/authentication-m
 
 @inject(AuthenticationManager)
 export class Profile {
+
+    name;
+
+    picture;
     
     email;
 
-    name;
+    emailVerified;
 
     permissions;
 
@@ -17,11 +21,11 @@ export class Profile {
     }
 
     activate() {
-        let payload = this.auth.getTokenPayload();
-
-        this.email = payload.email;
-        this.name = payload.name;
-        this.permissions = payload.permissions || [];
-        this.tokenExpiryDate = new Date(this.auth.getExp() * 1000);
+        this.name = this.auth.profile.name;
+        this.picture = this.auth.profile.picture;
+        this.email = this.auth.profile.email;
+        this.emailVerified = this.auth.profile.email_verified;
+        this.permissions = this.auth.permissions || [];
+        this.tokenExpiryDate = new Date(this.auth.exp * 1000);
     }
 }

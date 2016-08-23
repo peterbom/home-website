@@ -24,6 +24,7 @@ export const configure = async function (aurelia) {
             configure
                 .registerEndpoint("main", apiConfig.mainEndpoint)
                 .registerEndpoint("dev", apiConfig.devEndpoint)
+                .registerEndpoint("packaging", apiConfig.packagingEndpoint)
         })
         .feature("features/authentication", authConfig);
 

@@ -38,6 +38,7 @@ module.exports = {
                 "aurelia-templating-router",
                 "aurelia-validatejs",
                 "aurelia-validation",
+                "auth0-lock",
                 "babel-polyfill",
                 "bluebird",
                 "bootstrap",
@@ -47,7 +48,6 @@ module.exports = {
                 "jquery",  // required by bootstrap
                 "jwt-decode",
                 "moment",
-                "oidc-client",
                 "text"
             ],
             options: {

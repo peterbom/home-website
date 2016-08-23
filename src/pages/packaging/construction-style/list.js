@@ -1,7 +1,7 @@
 import {inject}   from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 
-@inject(Endpoint.of("main"))
+@inject(Endpoint.of("packaging"))
 export class List {
 
     constructionStyles = [];
@@ -11,6 +11,6 @@ export class List {
     }
 
     async activate () {
-        this.constructionStyles = await this._endpoint.find("packaging/construction-style");
+        this.constructionStyles = await this._endpoint.find("construction-style");
     }
 }

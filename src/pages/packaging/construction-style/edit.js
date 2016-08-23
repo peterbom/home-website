@@ -6,7 +6,7 @@ import {ValidationRules} from "aurelia-validatejs";
 
 import {replacePlaceholdersWithVariables} from "../shared/formula-utils";
 
-@inject(Endpoint.of("main"), Router, NewInstance.of(ValidationController))
+@inject(Endpoint.of("packaging"), Router, NewInstance.of(ValidationController))
 export class Edit {
 
     id;
@@ -38,7 +38,7 @@ export class Edit {
     }
 
     async activate (params) {
-        let constructionStyle = await this._endpoint.find("packaging/construction-style", params.id);
+        let constructionStyle = await this._endpoint.find("construction-style", params.id);
 
         this.id = params.id;
 

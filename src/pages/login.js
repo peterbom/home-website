@@ -3,11 +3,11 @@ import {AuthenticationManager} from "../features/authentication/authentication-m
 
 @inject(AuthenticationManager)
 export class Login {
-	constructor(authenticationManager) {
-		this.auth = authenticationManager;
-	}
+    constructor(authenticationManager) {
+        this.auth = authenticationManager;
+    }
 
-	async authenticate(name) {
-		await this.auth.requestSignIn(name);
-	}
+    activate() {
+        this.auth.requestSignIn();
+    }
 }

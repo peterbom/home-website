@@ -27,16 +27,15 @@ export class FetchConfig {
                     return request;
                 }
 
-                let accessToken = this._authenticationManager.getAccessToken();
-                if (!accessToken) {
+                let idToken = this._authenticationManager.idToken;
+                if (!idToken) {
                     return request;
                 }
 
-                request.headers.set("Authorization", `Bearer ${accessToken}`);
+                request.headers.set("Authorization", `Bearer ${idToken}`);
 
                 return request;
-            }/*,
-            response: (response, request) => Promise.resolve(response)*/
+            }
         };
     }
 }

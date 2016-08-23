@@ -4,7 +4,7 @@ import {Endpoint} from "aurelia-api";
 import {ValidationController, validateTrigger} from "aurelia-validation";
 import {ValidationRules} from "aurelia-validatejs";
 
-@inject(Endpoint.of("main"), Router, NewInstance.of(ValidationController))
+@inject(Endpoint.of("packaging"), Router, NewInstance.of(ValidationController))
 export class Edit {
     boxShortCode = "0010-002-0";
     isMainComponent = true;

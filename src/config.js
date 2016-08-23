@@ -21,18 +21,16 @@ switch (window.env.NODE_ENV) {
 
 export let apiConfig = {
     mainEndpoint: mainEndpoint,
-    devEndpoint: devEndpoint
+    devEndpoint: devEndpoint,
+    packagingEndpoint: "https://packagingapi.azurewebsites.net/"
 };
 
 export let authConfig = {
-    authEndpoint: "main",   // Used to set "client" on the BaseConfig instance
-    securedEndpoints: ["main", "dev"],    // add Authorization headers to those for authenticated requests
-    authApiClientSettings: {
-        providersResource: "authentication",
-        tokenExchangeResource: "authentication",
-    },
-    urlSettings: {
-        expiredRedirectUrl: "#/login",
-        logoutRedirectUrl: ""
-    }
+    auth0ClientId: "DwlKF4GYbw3BIc2Eo6PRJXiHyG0Lr8L7",
+    auth0Domain: "bomb.au.auth0.com",
+    permissionsEndpoint: "main",
+    permissionsResource: "permission",
+    securedEndpoints: ["main", "dev", "packaging"],    // add Authorization headers to those for authenticated requests
+    expiredRedirectUrl: "#/login",
+    logoutRedirectUrl: ""
 };

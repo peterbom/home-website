@@ -4,6 +4,6 @@ export class AuthFilterValueConverter {
         return routes.filter(route =>
             !route.config.perm ||
             typeof route.config.perm !== "string" ||
-            permissions.indexOf(route.config.perm) >= 0);
+            (permissions || []).indexOf(route.config.perm) >= 0);
     }
 }

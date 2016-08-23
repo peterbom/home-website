@@ -7,10 +7,15 @@
                     ${name}
                 </div>
 
+                <img src="${picture}" width="64" height="64">
+
                 <div class="panel-body">
                     <dl>
                         <dt>Email</dt>
                         <dd>${email}</dd>
+
+                        <dt>Email verified</dt>
+                        <dd>${emailVerified}</dd>
 
                         <dt>Permissions</dt>
                         <dd>${permissions.join(", ") || "none"}</dd>
