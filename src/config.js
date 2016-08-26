@@ -1,19 +1,24 @@
 
 let mainEndpoint;
 let devEndpoint;
+let packagingEndpoint;
 
 switch (window.env.NODE_ENV) {
     case "development":
+    case "test":
         mainEndpoint = "http://localhost:8000/";
         devEndpoint = "http://localhost:16000/";
+        packagingEndpoint = "http://localhost:37081/";
         break;
-    case "test":
+    case "staging":
         mainEndpoint = "http://192.168.1.230:20080/";
         devEndpoint = "http://192.168.1.200:20080/";
+        packagingEndpoint = "http://192.168.1.200:37081/";
         break;
     case "production":
         mainEndpoint = "https://pi.bombers.space/";
         devEndpoint = "https://dev.bombers.space/";
+        packagingEndpoint = "https://packagingapi.azurewebsites.net/";
         break;
     default:
         throw new Error(`Unexpected environment ${window.env.NODE_ENV}`);
@@ -22,7 +27,7 @@ switch (window.env.NODE_ENV) {
 export let apiConfig = {
     mainEndpoint: mainEndpoint,
     devEndpoint: devEndpoint,
-    packagingEndpoint: "https://packagingapi.azurewebsites.net/"
+    packagingEndpoint: packagingEndpoint
 };
 
 export let authConfig = {
