@@ -12,8 +12,8 @@ switch (window.env.NODE_ENV) {
         break;
     case "staging":
         mainEndpoint = "http://192.168.1.230:20080/";
-        devEndpoint = "http://192.168.1.200:20080/";
-        packagingEndpoint = "http://192.168.1.200:37081/";
+        devEndpoint = "http://localhost:20080/";  // Assume we're testing from dev machine
+        packagingEndpoint = "http://localhost:37081/";  // Invalid hostname from IIS Express if we use IP address
         break;
     case "production":
         mainEndpoint = "https://pi.bombers.space/";

@@ -11,6 +11,6 @@ export class List {
     }
 
     async activate () {
-        this.constructionStyles = await this._endpoint.find("construction-style");
+        this.constructionStyles = await this._endpoint.find("construction-styles");
     }
 }

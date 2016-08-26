@@ -38,7 +38,7 @@ export class Edit {
     }
 
     async activate (params) {
-        let constructionStyle = await this._endpoint.find("construction-style", params.id);
+        let constructionStyle = await this._endpoint.find("construction-styles", params.id);
 
         this.id = params.id;
 
@@ -65,7 +65,7 @@ export class Edit {
             return;
         }
 
-        await this._endpoint.update("packaging/construction-style", this.id, {
+        await this._endpoint.update("construction-styles", this.id, {
             fefcoEsboCode: this.fefcoEsboCode,
             name: this.name,
             pieceLengthFormula: this.pieceLengthFormula,
