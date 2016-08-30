@@ -30,6 +30,7 @@
     "test:cover-debug": "node-debug karma start karma-conf/cover.js",
     "serve-debug": "jspm-server . --no-browser",
     "serve-release": "jspm-server ./export --no-browser",
+    "build-start": "npm run build-dev-debug && npm run serve-debug",
     "watch:src": "watch \"npm run build-dev-debug\" src",
     "watch:css": "watch \"npm run build:css\" assets/styles",
     "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve-debug\""

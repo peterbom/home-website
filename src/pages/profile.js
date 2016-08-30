@@ -4,6 +4,8 @@ import {AuthenticationManager} from "../features/authentication/authentication-m
 @inject(AuthenticationManager)
 export class Profile {
 
+    idToken;
+
     name;
 
     picture;
@@ -21,6 +23,7 @@ export class Profile {
     }
 
     activate() {
+        this.idToken = this.auth.idToken;
         this.name = this.auth.profile.name;
         this.picture = this.auth.profile.picture;
         this.email = this.auth.profile.email;
