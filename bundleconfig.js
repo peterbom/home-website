@@ -20,6 +20,7 @@ module.exports = {
                 "aurelia-animator-css",
                 "aurelia-api",
                 "aurelia-bootstrapper",
+                "aurelia-computed",
                 "aurelia-dependency-injection",
                 "aurelia-event-aggregator",
                 "aurelia-fetch-client",

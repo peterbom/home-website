@@ -18,6 +18,9 @@ export const configure = async function (aurelia) {
     aurelia.use
         .standardConfiguration()
         .developmentLogging()
+        .plugin("aurelia-computed", { // install the plugin
+            enableLogging: true // enable debug logging to see aurelia-computed's observability messages.
+        })
         .plugin("aurelia-validation")
         .plugin("aurelia-validatejs")
         .plugin("aurelia-api", configure => {

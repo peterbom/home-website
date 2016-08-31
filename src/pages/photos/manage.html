@@ -1,0 +1,44 @@
+<template>
+    <div class="panel panel-info" if.bind="!directories">
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+        Loading photo directories
+    </div>
+
+    <table if.bind="directories" class="table table-hover" data-click-to-select="true">
+        <tr>
+            <th>Directory</th>
+            <th>Fully indexed?</th>
+            <th>
+                <input type="checkbox" checked.bind="allSelected">
+            </th>
+        </tr>
+        <tr repeat.for="directory of directories">
+            <td>
+                <a route-href="route:list; params.bind:{id:directory.path}" class="clickable-block">
+                    ${directory.path}
+                </a>
+            </td>
+            <td>
+                <a route-href="route:list; params.bind:{id:directory.path}" class="clickable-block">
+                    <span if.bind="directory.hasUnknownFiles === false" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span if.bind="directory.hasUnknownFiles === true" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    <span if.bind="directory.hasUnknownFiles === null" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                </a>
+            </td>
+            <td>
+                <input
+                    type="checkbox"
+                    model.bind="directory"
+                    checked.bind="$parent.selectedDirectories">
+            </td>
+        </tr>
+    </table>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="!selectedDirectories.length || isIndexing"
+        click.delegate="reindex()">
+        Re-Index
+    </button>
+</template>
