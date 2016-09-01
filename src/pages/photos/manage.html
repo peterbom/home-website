@@ -7,22 +7,34 @@
     <table if.bind="directories" class="table table-hover" data-click-to-select="true">
         <tr>
             <th>Directory</th>
-            <th>Fully indexed?</th>
+            <th># Files</th>
+            <th># New Files (unindexed)</th>
+            <th># Deleted Files</th>
             <th>
                 <input type="checkbox" checked.bind="allSelected">
             </th>
         </tr>
         <tr repeat.for="directory of directories">
             <td>
-                <a route-href="route:list; params.bind:{id:directory.path}" class="clickable-block">
-                    ${directory.path}
+                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                    ${directory.directoryPath}
                 </a>
             </td>
             <td>
-                <a route-href="route:list; params.bind:{id:directory.path}" class="clickable-block">
-                    <span if.bind="directory.hasUnknownFiles === false" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    <span if.bind="directory.hasUnknownFiles === true" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    <span if.bind="directory.hasUnknownFiles === null" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                    ${directory.fileCount}
+                </a>
+            </td>
+            <td>
+                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                    ${directory.newFileCount}
+                    <span if.bind="directory.isIndexing" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                </a>
+            </td>
+            <td>
+                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                    ${directory.deletedFileCount}
+                    <span if.bind="directory.isCleaning" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
                 </a>
             </td>
             <td>
@@ -37,8 +49,24 @@
     <button
         class="btn btn-primary"
         type="button"
-        disabled.bind="!selectedDirectories.length || isIndexing"
+        disabled.bind="!selectedDirectories.length || isWorking"
+        click.delegate="index()">
+        Index new files
+    </button>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="!selectedDirectories.length || isWorking"
+        click.delegate="clean()">
+        Forget deleted files
+    </button>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="!selectedDirectories.length || isWorking"
         click.delegate="reindex()">
-        Re-Index
+        Re-Index all files
     </button>
 </template>

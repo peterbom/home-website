@@ -6,7 +6,7 @@ export class Manage {
     directories = null;
     selectedDirectories = [];
 
-    isIndexing = false;
+    isWorking = false;
 
     set allSelected (val) {
         if (val) {
@@ -30,7 +30,6 @@ export class Manage {
     async activate () {
         let initialize = async () => {
             this.directories = await this._endpoint.find("photo-directory");
-            this.selectedDirectories = this.directories.filter(d => d.hasUnknownFiles);
         };
 
         // Call but don't await the initialize function. The view should handle this.directories
@@ -38,19 +37,73 @@ export class Manage {
         initialize();
     }
 
-    async reindex () {
-        this.isIndexing = true;
+    async index () {
+        this.isWorking = true;
         try {
-            let reindexDirectory = async directory => {
-                directory.hasUnknownFiles = null;
-                await this._endpoint.update("photo-directory", encodeURIComponent(directory.path));
-                directory.hasUnknownFiles = false;
+            let callIndexDirectory = async directory => {
+                await indexDirectory(this._endpoint, directory);
             };
 
-            let promises = this.selectedDirectories.map(reindexDirectory);
-            await Promise.all(promises);
+            await Promise.all(this.selectedDirectories.map(callIndexDirectory));
         } finally {
-            this.isIndexing = false;
+            this.isWorking = false;
         }
     }
+
+    async clean () {
+        this.isWorking = true;
+        try {
+            let cleanDirectory = async directory => {
+                directory.isCleaning = true;
+                try {
+                    await this._endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+                        operation: "clean"
+                    });
+                } finally {
+                    directory.isCleaning = false;
+                }
+            };
+        } finally {
+            this.isWorking = false;
+        }
+    }
+
+    async reindex () {
+        this.isWorking = true;
+        try {
+            let reindexDirectory = async directory => {
+                await this._endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+                    operation: "invalidate"
+                });
+
+                // All files are effectively new now the indexed files are invalidated.
+                directory.newFileCount = directory.fileCount;
+
+                await indexDirectory(this._endpoint, directory);
+            };
+
+            await Promise.all(this.selectedDirectories.map(reindexDirectory));
+        } finally {
+            this.isWorking = false;
+        }
+    }
+}
+
+async function indexDirectory (endpoint, directory) {
+    let filesOutstanding = false;
+    directory.isIndexing = true;
+    try {
+        do {
+            let result = await endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+                operation: "index"
+            });
+
+            directory.newFileCount -= result.indexed;
+            filesOutstanding = result.remaining > 0;
+        } while (filesOutstanding)
+    } finally {
+        directory.isIndexing = false;
+    }
+
+    directory.newFileCount = 0;
 }
