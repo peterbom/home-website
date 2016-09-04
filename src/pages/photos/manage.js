@@ -1,7 +1,9 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
+import {DialogService} from "aurelia-dialog";
+import {LoadingModal} from "../../components/loading-modal";
 
-@inject(Endpoint.of("main"))
+@inject(Endpoint.of("main"), DialogService)
 export class Manage {
     directories = null;
     selectedDirectories = [];
@@ -17,34 +19,39 @@ export class Manage {
     }
 
     get allSelected () {
-        return
-            this.directories &&
+        return this.directories &&
             this.selectedDirectories &&
             this.selectedDirectories.length === this.directories.length;
     }
 
-    constructor (endpoint) {
+    constructor (endpoint, dialogService) {
         this._endpoint = endpoint;
+        this._dialogService = dialogService;
     }
 
     async activate () {
         let initialize = async () => {
+            let controller = await this._dialogService.openAndYieldController({
+                viewModel: LoadingModal,
+                model: "Loading photo directories"});
+
             this.directories = await this._endpoint.find("photo-directory");
+
+            controller.cancel();
         };
 
         // Call but don't await the initialize function. The view should handle this.directories
         // being uninitialized.
-        initialize();
+        window.setTimeout(initialize, 100);
     }
 
     async index () {
         this.isWorking = true;
         try {
-            let callIndexDirectory = async directory => {
+            // Index serially, not in parallel, as it's quite CPU intensive
+            for (let directory of this.selectedDirectories) {
                 await indexDirectory(this._endpoint, directory);
-            };
-
-            await Promise.all(this.selectedDirectories.map(callIndexDirectory));
+            }
         } finally {
             this.isWorking = false;
         }
@@ -71,7 +78,8 @@ export class Manage {
     async reindex () {
         this.isWorking = true;
         try {
-            let reindexDirectory = async directory => {
+            // Index serially, not in parallel, as it's quite CPU intensive
+            for (let directory of this.selectedDirectories) {
                 await this._endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
                     operation: "invalidate"
                 });
@@ -80,9 +88,7 @@ export class Manage {
                 directory.newFileCount = directory.fileCount;
 
                 await indexDirectory(this._endpoint, directory);
-            };
-
-            await Promise.all(this.selectedDirectories.map(reindexDirectory));
+            }
         } finally {
             this.isWorking = false;
         }

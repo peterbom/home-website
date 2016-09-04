@@ -23,6 +23,10 @@ export const configure = async function (aurelia) {
         })
         .plugin("aurelia-validation")
         .plugin("aurelia-validatejs")
+        .plugin("aurelia-dialog", config => {
+            config.useDefaults();
+            config.useCSS("");
+        })
         .plugin("aurelia-api", configure => {
             configure
                 .registerEndpoint("main", apiConfig.mainEndpoint)

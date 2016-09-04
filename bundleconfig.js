@@ -22,6 +22,7 @@ module.exports = {
                 "aurelia-bootstrapper",
                 "aurelia-computed",
                 "aurelia-dependency-injection",
+                "aurelia-dialog",
                 "aurelia-event-aggregator",
                 "aurelia-fetch-client",
                 "aurelia-framework",

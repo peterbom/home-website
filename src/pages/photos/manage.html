@@ -1,9 +1,4 @@
 <template>
-    <div class="panel panel-info" if.bind="!directories">
-        <i class="fa fa-spinner fa-spin fa-2x"></i>
-        Loading photo directories
-    </div>
-
     <table if.bind="directories" class="table table-hover" data-click-to-select="true">
         <tr>
             <th>Directory</th>
