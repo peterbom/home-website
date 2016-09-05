@@ -11,23 +11,23 @@
         </tr>
         <tr repeat.for="directory of directories">
             <td>
-                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                <a route-href="route:search; params.bind:{path:directory.directoryPath}" class="clickable-block">
                     ${directory.directoryPath}
                 </a>
             </td>
             <td>
-                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                <a route-href="route:search; params.bind:{path:directory.directoryPath}" class="clickable-block">
                     ${directory.fileCount}
                 </a>
             </td>
             <td>
-                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                <a route-href="route:search; params.bind:{path:directory.directoryPath}" class="clickable-block">
                     ${directory.newFileCount}
                     <span if.bind="directory.isIndexing" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
                 </a>
             </td>
             <td>
-                <a route-href="route:list; params.bind:{id:directory.directoryPath}" class="clickable-block">
+                <a route-href="route:search; params.bind:{path:directory.directoryPath}" class="clickable-block">
                     ${directory.deletedFileCount}
                     <span if.bind="directory.isCleaning" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
                 </a>

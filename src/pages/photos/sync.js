@@ -4,7 +4,7 @@ import {DialogService} from "aurelia-dialog";
 import {LoadingModal} from "../../components/loading-modal";
 
 @inject(Endpoint.of("main"), DialogService)
-export class Manage {
+export class Sync {
     directories = null;
     selectedDirectories = [];
 
@@ -35,7 +35,7 @@ export class Manage {
                 viewModel: LoadingModal,
                 model: "Loading photo directories"});
 
-            this.directories = await this._endpoint.find("photo-directory");
+            this.directories = await this._endpoint.find("photo-sync");
 
             controller.cancel();
         };
@@ -63,7 +63,7 @@ export class Manage {
             let cleanDirectory = async directory => {
                 directory.isCleaning = true;
                 try {
-                    await this._endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+                    await this._endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
                         operation: "clean"
                     });
                 } finally {
@@ -80,7 +80,7 @@ export class Manage {
         try {
             // Index serially, not in parallel, as it's quite CPU intensive
             for (let directory of this.selectedDirectories) {
-                await this._endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+                await this._endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
                     operation: "invalidate"
                 });
 
@@ -100,7 +100,7 @@ async function indexDirectory (endpoint, directory) {
     directory.isIndexing = true;
     try {
         do {
-            let result = await endpoint.update("photo-directory", encodeURIComponent(directory.directoryPath), {
+            let result = await endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
                 operation: "index"
             });
 

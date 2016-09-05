@@ -1,0 +1,25 @@
+<template>
+    <table if.bind="duplicates" class="table table-hover">
+        <tr>
+            <th>Count</th>
+            <th>Files</th>
+        </tr>
+        <tr repeat.for="set of duplicates">
+            <td>
+                <a route-href="route:resolve-duplicates; params.bind:{id:set.hash}" class="clickable-block">
+                    ${set.images.length} files
+                </a>
+            </td>
+            <td>
+                <a route-href="route:resolve-duplicates; params.bind:{id:set.hash}" class="clickable-block">
+                    <table class="table">
+                        <tr repeat.for="image of set.images">
+                            <td>${image.directoryPath}</td>
+                            <td>${image.filename}</td>
+                        </tr>
+                    </table>
+                </a>
+            </td>
+        </tr>
+    </table>
+</template>
