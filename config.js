@@ -7,7 +7,7 @@ System.config({
     "npm:*": "jspm_packages/npm/*"
   },
   map: {
-    "aurelia-animator-css": "npm:aurelia-animator-css@1.0.0",
+    "aurelia-animator-css": "npm:aurelia-animator-css@1.0.1",
     "aurelia-api": "npm:aurelia-api@3.0.0-rc8",
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.0",
     "aurelia-computed": "npm:aurelia-computed@1.0.0",
@@ -145,7 +145,7 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2",
       "util": "npm:util@0.10.3"
     },
-    "npm:aurelia-animator-css@1.0.0": {
+    "npm:aurelia-animator-css@1.0.1": {
       "aurelia-metadata": "npm:aurelia-metadata@1.0.0",
       "aurelia-pal": "npm:aurelia-pal@1.0.0",
       "aurelia-templating": "npm:aurelia-templating@1.0.1"
