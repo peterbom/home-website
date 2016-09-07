@@ -1,0 +1,29 @@
+<template>
+    <require from="../../components/data-uri-value-converter"></require>
+
+    <table if.bind="images" class="table table-hover">
+        <tr>
+            <th>Thumbnail</th>
+            <th>Directory</th>
+            <th>Filename</th>
+            <th>
+            </th>
+        </tr>
+        <tr repeat.for="image of images">
+            <td>
+                <span if.bind="thumbnailLookup[image.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                <span if.bind="thumbnailLookup[image.id] === null" class="fa fa-image" aria-hidden="true"></span>
+                <img if.bind="thumbnailLookup[image.id]" class="img-thumbnail" src.bind="thumbnailLookup[image.id] | dataUri:'image/jpeg'"/>
+            </td>
+            <td>
+                ${image.directoryPath}
+            </td>
+            <td>
+                ${image.filename}
+            </td>
+            <td>
+                <input type="date">
+            </td>
+        </tr>
+    </table>
+</template>

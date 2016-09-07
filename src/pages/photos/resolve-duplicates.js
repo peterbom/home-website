@@ -32,7 +32,8 @@ export class ResolveDuplicates {
         });
 
         for (let imageId in thumbnails) {
-            this.thumbnailLookup[imageId] = thumbnails[imageId].ThumbnailImage.substring("base64:".length);
+            let imageString = thumbnails[imageId].ThumbnailImage;
+            this.thumbnailLookup[imageId] = imageString ? imageString.substring("base64:".length) : null;
         }
     }
 

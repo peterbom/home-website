@@ -8,6 +8,7 @@ export class Index {
             { route: "search", name: "search", moduleId: "pages/photos/search", nav: true, title: "Search" },
             { route: "sync", name: "sync", moduleId: "pages/photos/sync", nav: true, title: "Sync" },
             { route: "unreadable", name: "unreadable", moduleId: "pages/photos/unreadable", nav: true, title: "Unreadable" },
+            { route: "undated", name: "undated", moduleId: "pages/photos/undated", nav: true, title: "Undated" },
             { route: "duplicates", name: "duplicates", moduleId: "pages/photos/duplicates", nav: true, title: "Duplicates" },
             { route: "restructure", name: "restructure", moduleId: "pages/photos/restructure", nav: true, title: "Restructure" },
             { route: "import", name: "import", moduleId: "pages/photos/import", nav: true, title: "Import" },
