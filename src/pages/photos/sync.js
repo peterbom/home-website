@@ -71,6 +71,8 @@ export class Sync {
                     directory.isCleaning = false;
                 }
             };
+
+            await Promise.all(this.selectedDirectories.map(cleanDirectory));
         } finally {
             this.isWorking = false;
         }

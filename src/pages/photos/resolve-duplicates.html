@@ -16,8 +16,14 @@
                         </li>
                         <li class="au-animate list-group-item movable" repeat.for="duplicateImage of duplicateImages">
                             <h3>${duplicateImage.filename}</h3>
-                            <img src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
-                            <p>${duplicateImage.directoryPath}</p>
+                            <img class="img-thumbnail" src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
+                            <dl>
+                                <dt>Path</dt>
+                                <dd>${duplicateImage.directoryPath}</dd>
+
+                                <dt>Taken</dt>
+                                <dd>${duplicateImage.takenDateTime}</dd>
+                            </dl>
                             <p>
                                 <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:duplicateImage.id}">Details</a>
                             </p>
@@ -46,8 +52,14 @@
                         </li>
                         <li class="au-animate list-group-item movable" repeat.for="distinctImage of distinctImages">
                             <h3>${distinctImage.filename}</h3>
-                            <img src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
-                            <p>${distinctImage.directoryPath}</p>
+                            <img class="img-thumbnail" src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
+                            <dl>
+                                <dt>Path</dt>
+                                <dd>${distinctImage.directoryPath}</dd>
+
+                                <dt>Taken</dt>
+                                <dd>${distinctImage.takenDateTime}</dd>
+                            </dl>
                             <p>
                                 <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:distinctImage.id}">Details</a>
                             </p>
