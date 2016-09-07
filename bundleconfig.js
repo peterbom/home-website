@@ -50,6 +50,7 @@ module.exports = {
                 "jquery",  // required by bootstrap
                 "jwt-decode",
                 "moment",
+                "sortable",
                 "text"
             ],
             options: {

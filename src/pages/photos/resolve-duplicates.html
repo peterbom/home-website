@@ -1,37 +1,62 @@
 <template>
+    <require from="../../components/data-uri-value-converter"></require>
+
     <h2>Resolve Duplicates</h2>
     <div class="row au-stagger">
-        <div class="col-md-6 panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Duplicate Images</h3>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Duplicate Images</h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group" ref="duplicateList">
+                        <li class="au-animate list-group-item" if.bind="duplicateImages.length === 0">
+                            <h3>Drag images here</h3>
+                        </li>
+                        <li class="au-animate list-group-item movable" repeat.for="duplicateImage of duplicateImages">
+                            <h3>${duplicateImage.filename}</h3>
+                            <img src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
+                            <p>${duplicateImage.directoryPath}</p>
+                            <p>
+                                <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:duplicateImage.id}">Details</a>
+                            </p>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    model.bind="duplicateImage"
+                                    checked.bind="$parent.deleteImages">
+                                Delete
+                            </label>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <ul class="panel-body list-group">
-                <li class="au-animate list-group-item" repeat.for="duplicateImage of duplicateImages">
-                    <h3>${duplicateImage.filename}</h3>
-                    <img src.bind="'data:image/jpeg;base64,' + ${thumbnailLookup[duplicateImage.id]}"/>
-                    <p>${duplicateImage.directoryPath}</p>
-                    <p>
-                        <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:duplicateImage.id}">Details</a>
-                    </p>
-                </li>
-            </ul>
         </div>
 
-        <div class="col-md-6 panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Distinct Images (ordered)</h3>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Distinct Images (ordered)</h3>
+                </div>
+                <div class="panel-body">
+                    <ol class="list-group" ref="distinctList">
+                        <li class="au-animate list-group-item" if.bind="distinctImages.length === 0">
+                            <h3>Drag images here</h3>
+                        </li>
+                        <li class="au-animate list-group-item movable" repeat.for="distinctImage of distinctImages">
+                            <h3>${distinctImage.filename}</h3>
+                            <img src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
+                            <p>${distinctImage.directoryPath}</p>
+                            <p>
+                                <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:distinctImage.id}">Details</a>
+                            </p>
+                        </li>
+                    </ol>
+                </div>
             </div>
-            <ol class="panel-body list-group">
-                <li class="au-animate list-group-item" repeat.for="distinctImage of distinctImages">
-                    <h3>${distinctImage.filename}</h3>
-                    <img src.bind="'data:image/jpeg;base64,' + ${thumbnailLookup[distinctImage.id]}"/>
-                    <p>${distinctImage.directoryPath}</p>
-                    <p>
-                        <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:distinctImage.id}">Details</a>
-                    </p>
-                </li>
-            </ol>
         </div>
+
     </div>
 
     <button

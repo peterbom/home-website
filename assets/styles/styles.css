@@ -153,6 +153,10 @@ ai-dialog > ai-dialog-footer button:hover:enabled {
     overflow: hidden;
 }
 
+.movable {
+    cursor: move;
+}
+
 @media print {
     .page-host {
         position: absolute;

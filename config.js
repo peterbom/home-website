@@ -39,6 +39,7 @@ System.config({
     "jquery": "npm:jquery@2.2.4",
     "jwt-decode": "npm:jwt-decode@2.1.0",
     "moment": "npm:moment@2.14.1",
+    "sortable": "github:rubaxa/sortable@1.4.2",
     "text": "github:systemjs/plugin-text@0.0.8",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"

@@ -35,7 +35,7 @@ export class Sync {
                 viewModel: LoadingModal,
                 model: "Loading photo directories"});
 
-            this.directories = await this._endpoint.find("photo-sync");
+            this.directories = await this._endpoint.find("photo-index");
 
             controller.cancel();
         };
@@ -63,7 +63,8 @@ export class Sync {
             let cleanDirectory = async directory => {
                 directory.isCleaning = true;
                 try {
-                    await this._endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
+                    await this._endpoint.post("photo-index", {
+                        directoryPath: directory.directoryPath,
                         operation: "clean"
                     });
                 } finally {
@@ -80,7 +81,8 @@ export class Sync {
         try {
             // Index serially, not in parallel, as it's quite CPU intensive
             for (let directory of this.selectedDirectories) {
-                await this._endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
+                await this._endpoint.post("photo-index", {
+                    directoryPath: directory.directoryPath,
                     operation: "invalidate"
                 });
 
@@ -100,7 +102,8 @@ async function indexDirectory (endpoint, directory) {
     directory.isIndexing = true;
     try {
         do {
-            let result = await endpoint.update("photo-sync", encodeURIComponent(directory.directoryPath), {
+            let result = await endpoint.post("photo-index", {
+                directoryPath: directory.directoryPath,
                 operation: "index"
             });
 
