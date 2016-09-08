@@ -48,6 +48,7 @@ module.exports = {
                 "fetch",
                 "font-awesome",
                 "jquery",  // required by bootstrap
+                "jquery-datetimepicker",
                 "jwt-decode",
                 "moment",
                 "sortable",

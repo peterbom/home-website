@@ -6,8 +6,7 @@
             <th>Thumbnail</th>
             <th>Directory</th>
             <th>Filename</th>
-            <th>
-            </th>
+            <th>Taken</th>
         </tr>
         <tr repeat.for="image of images">
             <td>
@@ -22,7 +21,10 @@
                 ${image.filename}
             </td>
             <td>
-                <input type="date">
+                <input
+                    type="datetime"
+                    value.bind="image.takenDateTime | dateTimeFormat"
+                    datepicker>
             </td>
         </tr>
     </table>

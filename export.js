@@ -33,6 +33,10 @@ module.exports = {
             'bluebird', [
                 '/js/browser/bluebird.min.js'
             ]
+        ], [
+            'jquery-datetimepicker', [
+                '/build/jquery.datetimepicker.min.css'
+            ]
         ]
     ]
 };

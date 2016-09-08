@@ -37,6 +37,7 @@ System.config({
     "fetch": "github:github/fetch@1.0.0",
     "font-awesome": "npm:font-awesome@4.6.3",
     "jquery": "npm:jquery@2.2.4",
+    "jquery-datetimepicker": "npm:jquery-datetimepicker@2.5.4",
     "jwt-decode": "npm:jwt-decode@2.1.0",
     "moment": "npm:moment@2.14.1",
     "sortable": "github:rubaxa/sortable@1.4.2",
@@ -768,6 +769,11 @@ System.config({
     "npm:isomorphic-fetch@2.2.1": {
       "node-fetch": "npm:node-fetch@1.6.0",
       "whatwg-fetch": "npm:whatwg-fetch@0.9.0"
+    },
+    "npm:jquery-datetimepicker@2.5.4": {
+      "jquery": "npm:jquery@2.2.4",
+      "jquery-mousewheel": "npm:jquery-mousewheel@3.1.13",
+      "php-date-formatter": "npm:php-date-formatter@1.3.4"
     },
     "npm:jsonp@0.0.4": {
       "debug": "npm:debug@2.1.3"

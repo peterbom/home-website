@@ -36,7 +36,8 @@ export const configure = async function (aurelia) {
         .feature("features/authentication", authConfig)
         .feature("resources/components")
         .feature("resources/converters")
-        .feature("resources/custom-elements");
+        .feature("resources/custom-elements")
+        .feature("resources/custom-attributes");
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');
