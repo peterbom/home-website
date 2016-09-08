@@ -15,10 +15,14 @@
                 <img if.bind="thumbnailLookup[image.id]" class="img-thumbnail" src.bind="thumbnailLookup[image.id] | dataUri:'image/jpeg'"/>
             </td>
             <td>
-                ${image.directoryPath}
+                <a target="_blank" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                    ${image.directoryPath}
+                </a>
             </td>
             <td>
-                ${image.filename}
+                <a target="_blank" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                    ${image.filename}
+                </a>
             </td>
             <td>
                 <input
@@ -28,4 +32,11 @@
             </td>
         </tr>
     </table>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        click.delegate="save()">
+        Save
+    </button>
 </template>

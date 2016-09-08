@@ -1,6 +1,7 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
+import moment from "moment";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Undated {
@@ -50,5 +51,57 @@ export class Undated {
         // Call but don't await the initialize function. The view should handle this.thumbnailLookup
         // being uninitialized.
         window.setTimeout(initializeThumbnails, 100);
+    }
+
+    async save () {
+        let updatedImages = this.images.filter(i => i.takenDateTime);
+        if (!updatedImages.length) {
+            return;
+        }
+
+        let controller = await this._dialogService.openAndYieldController({
+            viewModel: this.loadingModal,
+            model: {
+                message: "Updating",
+                progressPercent: 0
+            }
+        });
+
+        // create batches
+        let batches = [];
+        while (updatedImages.length > 0) {
+            batches.push(updatedImages.splice(0, 10));
+        }
+
+        for (let i = 0; i < batches.length; i++) {
+            let batch = batches[i];
+
+            let updates = batch.map(i => ({
+                id: i.id,
+                value: i.takenDateTime
+            }));
+
+            await this._endpoint.post("photo-exif-data", {
+                propertyName: "DateTimeOriginal",
+                type: "date",
+                updates: updates
+            });
+
+            controller.viewModel.progressPercent = ((i + 1) / batches.length) * 50;
+        }
+
+        controller.viewModel.message = "Re-indexing";
+        for (let i = 0; i < batches.length; i++) {
+            let batch = batches[i];
+
+            await this._endpoint.post("photo-index", {
+                imageIds: batch.map(i => i.id),
+                operation: "index"
+            });
+
+            controller.viewModel.progressPercent = 50 + ((i + 1) / batches.length) * 50;
+        }
+
+        controller.cancel();
     }
 }
