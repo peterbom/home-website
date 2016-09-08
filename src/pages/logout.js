@@ -1,7 +1,6 @@
 import {inject} from "aurelia-framework";
-import {AuthenticationManager} from "../features/authentication/authentication-manager";
 
-@inject(AuthenticationManager)
+@inject("authentication-manager")
 export class Logout {
     constructor(authenticationManager) {
         this.auth = authenticationManager;

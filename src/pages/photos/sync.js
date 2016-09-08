@@ -1,7 +1,7 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
-import {LoadingModal} from "../../components/loading-modal";
+//import {LoadingModal} from "../../components/loading-modal";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Sync {
@@ -32,7 +32,7 @@ export class Sync {
     async activate () {
         let initialize = async () => {
             let controller = await this._dialogService.openAndYieldController({
-                viewModel: LoadingModal,
+                viewModel: this.loadingModal,
                 model: "Loading photo directories"});
 
             this.directories = await this._endpoint.find("photo-index");

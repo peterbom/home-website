@@ -1,7 +1,6 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
-import {LoadingModal} from "../../components/loading-modal";
 import Sortable from "sortable";
 
 @inject(Endpoint.of("main"), DialogService)
@@ -83,8 +82,12 @@ export class ResolveDuplicates {
 
     async save() {
         let controller = await this._dialogService.openAndYieldController({
-            viewModel: LoadingModal,
-            model: "Resolving Duplicates"});
+            viewModel: this.loadingModal,
+            model: {
+                message: "Resolving Duplicates",
+                progressPercent: 0
+            }
+        });
 
         let sameIds = this.duplicateImages.map(i => i.id);
         let differentIds = this.distinctImages.map(i => i.id);
@@ -93,6 +96,8 @@ export class ResolveDuplicates {
             differentIds: differentIds
         });
 
+        controller.viewModel.progressPercent = 25;
+
         if (differentIds.length) {
             controller.viewModel.message = "Re-indexing";
             await this._endpoint.post("photo-index", {
@@ -100,6 +105,8 @@ export class ResolveDuplicates {
                 operation: "index"
             });
         }
+
+        controller.viewModel.progressPercent = 50;
 
         if (this.deleteImages.length) {
             controller.viewModel.message = "Deleting files";
@@ -120,11 +127,14 @@ export class ResolveDuplicates {
             })
         }
 
+        controller.viewModel.progressPercent = 75;
+
         controller.viewModel.message = "Refreshing";
         this.duplicateImages = await this._endpoint.find("photo-duplicate", this.hash);
         this.distinctImages = [];
         this.deleteImages = [];
 
+        controller.viewModel.progressPercent = 100;
         controller.cancel();
     }
 }

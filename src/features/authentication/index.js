@@ -56,6 +56,5 @@ export function configure(aurelia, settings) {
     aurelia.container.registerInstance(AuthenticationManager, authenticationManager);
     aurelia.container.registerInstance(FetchConfig, fetchConfig);
 
-    // Must be registered after registering AuthenticationManager in the DI container
-    aurelia.globalResources("features/authentication/auth-filter-value-converter");
+    aurelia.container.registerInstance("authentication-manager", authenticationManager);
 }

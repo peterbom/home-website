@@ -1,4 +1,6 @@
 <template>
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
     <table if.bind="directories" class="table table-hover" data-click-to-select="true">
         <tr>
             <th>Directory</th>

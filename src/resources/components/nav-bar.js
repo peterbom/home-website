@@ -1,7 +1,6 @@
 import {inject, bindable} from "aurelia-framework";
-import {AuthenticationManager} from "../features/authentication/authentication-manager";
 
-@inject(AuthenticationManager)
+@inject("authentication-manager")
 export class NavBar {
 
     @bindable router = null;

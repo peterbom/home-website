@@ -33,7 +33,10 @@ export const configure = async function (aurelia) {
                 .registerEndpoint("dev", apiConfig.devEndpoint)
                 .registerEndpoint("packaging", apiConfig.packagingEndpoint)
         })
-        .feature("features/authentication", authConfig);
+        .feature("features/authentication", authConfig)
+        .feature("resources/components")
+        .feature("resources/converters")
+        .feature("resources/custom-elements");
 
     //Uncomment the line below to enable animation.
     //aurelia.use.plugin('aurelia-animator-css');
