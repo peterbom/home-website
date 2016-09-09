@@ -1,7 +1,6 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
-//import {LoadingModal} from "../../components/loading-modal";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Sync {
