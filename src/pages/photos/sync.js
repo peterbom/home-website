@@ -108,7 +108,7 @@ async function indexDirectory (endpoint, directory) {
                 operation: "index"
             });
 
-            directory.newFileCount -= result.indexed;
+            directory.newFileCount = result.remaining;
             filesOutstanding = result.remaining > 0;
         } while (filesOutstanding)
     } finally {
