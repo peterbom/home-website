@@ -1,3 +1,31 @@
 <template>
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
+    <!-- https://www.danyow.net/binding-to-file-inputs-with-aurelia/ -->
+    <label class="btn btn-default btn-file">
+        Browse
+        <input type="file"
+            multiple accept="image/*"
+            files.bind="selectedFiles"
+            style="display: none;">
+    </label>
     
+
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item" repeat.for="file of selectedFiles | fileListToArray">
+                <img width="100" class="img-thumbnail" src.bind="file | blobToUrl" />
+                <h3>${file.name}: ${file.type} ${file.size / 1000} kb</h3>
+                <p>Last Modified: ${file.lastModifiedDate}</p>
+            </li>
+        </ul>
+    </div>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="this.selectedFiles.length === 0"
+        click.delegate="import()">
+        Import
+    </button>
 </template>
