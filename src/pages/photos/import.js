@@ -43,7 +43,7 @@ export class Import {
 
         for (let batch of batches) {
             let uploadImage = async file => {
-                await this._endpoint.update(uploadResource, file.name, this.selectedFiles.item(0), {
+                await this._endpoint.update(uploadResource, file.name, file, {
                     headers: {
                         "Content-Type": null // 'application/octet-stream'
                     }
