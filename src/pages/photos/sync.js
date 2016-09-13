@@ -35,6 +35,7 @@ export class Sync {
                 model: "Loading photo directories"});
 
             this.directories = await this._endpoint.find("photo-index");
+            this.selectedDirectories = this.directories.filter(d => d.newFileCount > 0);
 
             controller.cancel();
         };

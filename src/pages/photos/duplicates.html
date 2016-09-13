@@ -1,8 +1,8 @@
 <template>
     <table if.bind="duplicates" class="table table-hover">
         <tr>
-            <th>Count</th>
-            <th>Files</th>
+            <th class="col-sm-2">Count</th>
+            <th class="col-sm-10">Files</th>
         </tr>
         <tr repeat.for="set of duplicates">
             <td>
@@ -14,8 +14,8 @@
                 <a route-href="route:resolve-duplicates; params.bind:{id:set.hash}" class="clickable-block">
                     <table class="table">
                         <tr repeat.for="image of set.images">
-                            <td>${image.directoryPath}</td>
-                            <td>${image.filename}</td>
+                            <td class="col-sm-8">${image.directoryPath}</td>
+                            <td class="col-sm-4">${image.filename}</td>
                         </tr>
                     </table>
                 </a>

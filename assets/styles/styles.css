@@ -194,6 +194,11 @@ section {
     margin: 0 20px;
 }
 
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
 .navbar-nav li.loader {
     margin: 12px 24px 0 6px;
 }
