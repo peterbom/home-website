@@ -1,5 +1,50 @@
 <template>
     <img src.bind="thumbnail | dataUri:'image/jpeg'">
+    <h3>Image Data</h3>
+    <dl class="dl-horizontal">
+        <dt>Directory Path</dt>
+        <dd>${image.directoryPath}</dd>
+
+        <dt>Filename</dt>
+        <dd>${image.filename}</dd>
+
+        <dt>Hash</dt>
+        <dd>${image.hash}</dd>
+
+        <dt>Taken</dt>
+        <dd>${image.takenDateTime | dateTimeFormat}</dd>
+
+        <dt>Modified</dt>
+        <dd>${image.fileModifyDate | dateTimeFormat}</dd>
+
+        <dt>Created</dt>
+        <dd>${image.fileCreateDate | dateTimeFormat}</dd>
+
+        <dt>File size</dt>
+        <dd>${image.fileSize}</dd>
+
+        <dt>Camera</dt>
+        <dd>${image.camera}</dd>
+
+        <dt>Tags</dt>
+        <dd repeat.for="tag of image.tags">${tag}</dd>
+        <dd if.bind="!image.tags || !image.tags.length">(none)</dd>
+
+        <dt>Pixel count</dt>
+        <dd>${image.pixelCount}</dd>
+
+        <dt>Image number</dt>
+        <dd>${image.imageNumber}</dd>
+
+        <dt>File type</dt>
+        <dd>${image.fileType}</dd>
+
+        <dt>Path history</dt>
+        <dd repeat.for="event of image.pathHistory">${event.date | dateTimeFormat} : ${event.filePath}</dd>
+        <dd if.bind="!image.pathHistory || !image.pathHistory.length">(none)</dd>
+    </dl>
+
+    <h3>Exif Data</h3>
     <table class="table">
         <thead>
             <tr>

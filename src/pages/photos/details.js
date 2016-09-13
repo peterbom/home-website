@@ -4,6 +4,7 @@ import {Endpoint} from "aurelia-api";
 @inject(Endpoint.of("main"))
 export class Details {
 
+    image;
     exifData = [];
     thumbnail;
 
@@ -13,9 +14,18 @@ export class Details {
 
     async activate (params) {
         // TODO: Should be able to use findOne here and specify params.id as the second parameter
-        let exifDataLookup = await this._endpoint.find(`photo-exif-data/${params.id}`, {
-            includeThumbnails: true
-        });
+        let promises = [
+            this._endpoint.find(`photo-image/${params.id}`),
+            this._endpoint.find(`photo-exif-data/${params.id}`, {thumbnailsOnly: true}),
+            this._endpoint.find(`photo-exif-data/${params.id}`, {includeThumbnails: false})
+        ];
+
+        let imageData = await Promise.all(promises);
+        this.image = imageData[0];
+        let thumbnailImage = imageData[1].ThumbnailImage;
+        let exifDataLookup = imageData[2];
+
+        this.thumbnail = thumbnailImage ? thumbnailImage.substring("base64:".length) : null;
 
         for (let property in exifDataLookup) {
             this.exifData.push({
@@ -23,7 +33,5 @@ export class Details {
                 value: exifDataLookup[property]
             });
         }
-
-        this.thumbnail = exifDataLookup.ThumbnailImage.substring("base64:".length);
     }
 }
