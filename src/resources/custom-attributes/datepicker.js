@@ -9,8 +9,13 @@ export class DatePicker {
     }
 
     attached () {
+        // http://xdsoft.net/jqplugins/datetimepicker/
         $(this._element)
-            .datetimepicker()
+            .datetimepicker({
+                formatTime: "H:i:s",  // http://php.net/manual/en/function.date.php
+                validateOnBlur: false,
+                step: 1
+            })
             .on("change", e => fireEvent(e.target, "input"));
     }
 }

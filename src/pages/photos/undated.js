@@ -26,15 +26,12 @@ export class Undated {
             let imageIds = this.images.map(i => i.id);
 
             // Retrieve thumbnails in batches
-            let batches = [];
             while (imageIds.length > 0) {
-                batches.push(imageIds.splice(0, 50));
-            }
+                let batch = imageIds.splice(0, 20);
 
-            let processBatch = async ids => {
                 let batchResults = await this._endpoint.find("photo-exif-data", {
                     json: JSON.stringify({
-                        ids: ids,
+                        ids: batch,
                         thumbnailsOnly: true
                     })
                 });
@@ -43,9 +40,7 @@ export class Undated {
                     let imageString = batchResults[imageId].ThumbnailImage;
                     this.thumbnailLookup[imageId] = imageString ? imageString.substring("base64:".length) : null;
                 }
-            };
-
-            await Promise.all(batches.map(processBatch));
+            }
         };
 
         // Call but don't await the initialize function. The view should handle this.thumbnailLookup

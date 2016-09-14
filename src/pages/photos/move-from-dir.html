@@ -1,0 +1,60 @@
+<template>
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
+    <h3>${directoryPath}</h3>
+
+    <table class="table table-hover" data-click-to-select="true">
+        <tr>
+            <th class="col-sm-3">Current Directory</th>
+            <th class="col-sm-2">Current Filename</th>
+            <th class="col-sm-3">Destination Directory</th>
+            <th class="col-sm-2">Destination Filename</th>
+            <th class="col-sm-1">Warnings</th>
+            <th class="col-sm-1">
+                <input type="checkbox" checked.bind="allSelected">
+            </th>
+        </tr>
+        <tr repeat.for="image of images">
+            <td>
+                <a target="_blank" route-href="route:search; params.bind:{path:image.current.directoryPath}" class="clickable-block">
+                    ${image.current.directoryPath}
+                </a>
+            </td>
+            <td>
+                <a target="_blank" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                    ${image.current.filename}
+                </a>
+            </td>
+            <td>
+                <a target="_blank" route-href="route:search; params.bind:{path:directory.destination.directoryPath}" class="clickable-block">
+                    ${image.destination.directoryPath}
+                </a>
+            </td>
+            <td>
+                <span if.bind="!image.fileExists">${image.destination.filename}</span>
+                
+                <a target="_blank" if.bind="image.fileExists" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                    ${image.destination.filename}
+                </a>
+            </td>
+            <td>
+                <span if.bind="image.fileExists" class="label label-warning">File exists</span>
+                <span if.bind="image.hasDuplicate" class="label label-warning">Has duplicate</span>
+            </td>
+            <td>
+                <input if.bind="image.canMove"
+                    type="checkbox"
+                    model.bind="image"
+                    checked.bind="$parent.selectedImages">
+            </td>
+        </tr>
+    </table>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="!selectedImages.length"
+        click.delegate="move()">
+        Move Selected
+    </button>
+</template>

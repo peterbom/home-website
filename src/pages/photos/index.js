@@ -11,6 +11,7 @@ export class Index {
             { route: "undated", name: "undated", moduleId: "pages/photos/undated", nav: true, title: "Undated" },
             { route: "duplicates", name: "duplicates", moduleId: "pages/photos/duplicates", nav: true, title: "Duplicates" },
             { route: "restructure", name: "restructure", moduleId: "pages/photos/restructure", nav: true, title: "Restructure" },
+            { route: "move-from-dir/:path", name: "move-from-dir", moduleId: "pages/photos/move-from-dir", title: "Move From Directory" },
             { route: "import", name: "import", moduleId: "pages/photos/import", nav: true, title: "Import" },
             { route: "details/:id",  name: "details",  moduleId: "pages/photos/details",  title: "Details" },
             { route: "resolve-duplicates/:id",  name: "resolve-duplicates",  moduleId: "pages/photos/resolve-duplicates",  title: "Resolve Duplicates" }
