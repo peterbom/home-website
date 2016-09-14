@@ -30,9 +30,9 @@ export class MoveFromDir {
     }
 
     async activate (params) {
-        this.directoryPath = params.path;
+        this.directoryPath = decodeURIComponent(params.path);
 
-        this.images = await this._endpoint.find("photo-movement", encodeURIComponent(params.path));
+        this.images = await this._endpoint.find("photo-movement", params.path);
         this.images.forEach(i => i.canMove = !i.fileExists && !i.hasDuplicate);
     }
 

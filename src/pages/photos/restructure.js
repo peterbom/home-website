@@ -16,6 +16,7 @@ export class Restructure {
         this.directoryPaths = [];
         for (let path in pathLookup) {
             this.directoryPaths.push({
+                pathParam: encodeURIComponent(path),
                 path: path,
                 count: pathLookup[path].length
             });

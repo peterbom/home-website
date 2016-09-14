@@ -6,12 +6,12 @@
         </tr>
         <tr repeat.for="dir of directoryPaths">
             <td>
-                <a route-href="route:move-from-dir; params.bind:{path:dir.path}" class="clickable-block">
+                <a route-href="route:move-from-dir; params.bind:{path:dir.pathParam}" class="clickable-block">
                     ${dir.path}
                 </a>
             </td>
             <td>
-                <a route-href="route:move-from-dir; params.bind:{path:dir.path}" class="clickable-block">
+                <a route-href="route:move-from-dir; params.bind:{path:dir.pathParam}" class="clickable-block">
                     ${dir.count}
                 </a>
             </td>
