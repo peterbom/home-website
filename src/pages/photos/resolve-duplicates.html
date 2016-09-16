@@ -16,7 +16,9 @@
                         </li>
                         <li class="au-animate list-group-item movable" repeat.for="duplicateImage of duplicateImages">
                             <h3>${duplicateImage.filename}</h3>
-                            <img class="img-thumbnail" src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
+                            <span if.bind="thumbnailLookup[duplicateImage.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                            <span if.bind="thumbnailLookup[duplicateImage.id] === null" class="fa fa-image" aria-hidden="true"></span>
+                            <img if.bind="thumbnailLookup[duplicateImage.id]" class="img-thumbnail" src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
                             <dl>
                                 <dt>Path</dt>
                                 <dd>
@@ -54,7 +56,9 @@
                         </li>
                         <li class="au-animate list-group-item movable" repeat.for="distinctImage of distinctImages">
                             <h3>${distinctImage.filename}</h3>
-                            <img class="img-thumbnail" src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
+                            <span if.bind="thumbnailLookup[distinctImage.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                            <span if.bind="thumbnailLookup[distinctImage.id] === null" class="fa fa-image" aria-hidden="true"></span>
+                            <img if.bind="thumbnailLookup[distinctImage.id]" class="img-thumbnail" src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
                             <dl>
                                 <dt>Path</dt>
                                 <dd>
