@@ -1,3 +1,104 @@
 <template>
-    
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
+    <h2 if.bind="!!path">${path}</h2>
+
+    <div if.bind="!!path" class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="action-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Actions
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="action-nav">
+            <li>
+                <a route-href="route:move-from-dir; params.bind:{path:pathParam}">Move images</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="form-group">
+        <label>
+            From date
+            <input
+                class="form-control"
+                value.bind="fromDateTime | dateTimeFormat"
+                input.trigger="applyFilters()"
+                datepicker>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            To date
+            <input
+                class="form-control"
+                value.bind="toDateTime | dateTimeFormat"
+                input.trigger="applyFilters()"
+                datepicker>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Operation
+            <select value.bind="selectedOperation" class="form-control">
+                <option repeat.for="option of operationOptions" value.bind="option.value">${option.name}</option>
+            </select>
+        </label>
+    </div>
+
+    <table if.bind="images" class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-2">Thumbnail</th>
+                <th class="col-sm-4">Directory</th>
+                <th class="col-sm-3">Filename</th>
+                <th if.bind="selectedOperation === 'edit-date'" class="col-sm-3">Taken</th>
+                <th if.bind="selectedOperation === 'edit-tags'" class="col-sm-3">Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="image of images">
+                <td>
+                    <span if.bind="thumbnailLookup[image.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                    <span if.bind="thumbnailLookup[image.id] === null" class="fa fa-image" aria-hidden="true"></span>
+                    <img if.bind="thumbnailLookup[image.id]" class="img-thumbnail" src.bind="thumbnailLookup[image.id] | dataUri:'image/jpeg'"/>
+                </td>
+                <td>
+                    <span if.bind="!!path">${image.directoryPath}</span>
+                    <a if.bind="!path" route-href="route:search; params.bind:{path:image.pathParam}" class="clickable-block">
+                        ${image.directoryPath}
+                    </a>
+                </td>
+                <td>
+                    <a route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                        ${image.filename}
+                    </a>
+                </td>
+                <td if.bind="selectedOperation === 'edit-date'">
+                    <input
+                        value.bind="image.takenDateTime | dateTimeFormat"
+                        datepicker>
+                </td>
+                <td if.bind="selectedOperation === 'edit-tags'">
+                    <input value.bind="image.tags">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button
+        if.bind="selectedOperation === 'edit-date'"
+        class="btn btn-primary"
+        type="button"
+        click.delegate="saveTakenDates()">
+        Save
+    </button>
+
+    <button
+        if.bind="selectedOperation === 'edit-tags'"
+        class="btn btn-primary"
+        type="button"
+        click.delegate="saveTags()">
+        Save
+    </button>
 </template>

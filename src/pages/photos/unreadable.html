@@ -11,12 +11,12 @@
         </tr>
         <tr repeat.for="image of images">
             <td>
-                <a target="_blank" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                <a route-href="route:search; params.bind:{path:image.pathParam}" class="clickable-block">
                     ${image.directoryPath}
                 </a>
             </td>
             <td>
-                <a target="_blank" route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                <a route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
                     ${image.filename}
                 </a>
             </td>

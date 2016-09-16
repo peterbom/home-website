@@ -1,5 +1,6 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"))
 export class Restructure {
@@ -16,7 +17,7 @@ export class Restructure {
         this.directoryPaths = [];
         for (let path in pathLookup) {
             this.directoryPaths.push({
-                pathParam: encodeURIComponent(path),
+                pathParam: base64url.encode(path),
                 path: path,
                 count: pathLookup[path].length
             });

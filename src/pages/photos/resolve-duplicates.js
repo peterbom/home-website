@@ -2,6 +2,7 @@ import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import Sortable from "sortable";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"), DialogService)
 export class ResolveDuplicates {
@@ -21,7 +22,7 @@ export class ResolveDuplicates {
 
     async activate (params) {
         this.hash = params.id;
-        this.duplicateImages = await this._endpoint.find("photo-duplicate", this.hash);
+        await this.refreshDuplicates();
 
         let thumbnails = await this._endpoint.find("photo-exif-data", {
             json: JSON.stringify({
@@ -34,6 +35,13 @@ export class ResolveDuplicates {
             let imageString = thumbnails[imageId].ThumbnailImage;
             this.thumbnailLookup[imageId] = imageString ? imageString.substring("base64:".length) : null;
         }
+    }
+
+    async refreshDuplicates () {
+        this.duplicateImages = await this._endpoint.find("photo-duplicate", this.hash);
+        this.duplicateImages.forEach(i => i.pathParam = base64url.encode(i.directoryPath));
+        this.distinctImages = [];
+        this.deleteImages = [];
     }
 
     attached() {
@@ -130,9 +138,7 @@ export class ResolveDuplicates {
         controller.viewModel.progressPercent = 75;
 
         controller.viewModel.message = "Refreshing";
-        this.duplicateImages = await this._endpoint.find("photo-duplicate", this.hash);
-        this.distinctImages = [];
-        this.deleteImages = [];
+        await this.refreshDuplicates();
 
         controller.viewModel.progressPercent = 100;
         controller.cancel();

@@ -19,7 +19,9 @@
                             <img class="img-thumbnail" src.bind="thumbnailLookup[duplicateImage.id] | dataUri:'image/jpeg'"/>
                             <dl>
                                 <dt>Path</dt>
-                                <dd>${duplicateImage.directoryPath}</dd>
+                                <dd>
+                                    <a route-href="route:search; params.bind:{path:duplicateImage.pathParam}">${duplicateImage.directoryPath}</a>
+                                </dd>
 
                                 <dt>Taken</dt>
                                 <dd>${duplicateImage.takenDateTime}</dd>
@@ -55,7 +57,9 @@
                             <img class="img-thumbnail" src.bind="thumbnailLookup[distinctImage.id] | dataUri:'image/jpeg'"/>
                             <dl>
                                 <dt>Path</dt>
-                                <dd>${distinctImage.directoryPath}</dd>
+                                <dd>
+                                    <a route-href="route:search; params.bind:{path:distinctImage.pathParam}">${distinctImage.directoryPath}</a>
+                                </dd>
 
                                 <dt>Taken</dt>
                                 <dd>${distinctImage.takenDateTime}</dd>

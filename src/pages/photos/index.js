@@ -5,7 +5,7 @@ export class Index {
     configureRouter(config, router) {
         config.map([
             { route: "", redirect: "search"},
-            { route: "search", name: "search", moduleId: "pages/photos/search", nav: true, title: "Search" },
+            { route: ["search", "search/:path"], name: "search", moduleId: "pages/photos/search", nav: true, title: "Search" },
             { route: "sync", name: "sync", moduleId: "pages/photos/sync", nav: true, title: "Sync" },
             { route: "unreadable", name: "unreadable", moduleId: "pages/photos/unreadable", nav: true, title: "Unreadable" },
             { route: "undated", name: "undated", moduleId: "pages/photos/undated", nav: true, title: "Undated" },

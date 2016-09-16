@@ -14,7 +14,7 @@ export class DatePicker {
             .datetimepicker({
                 formatTime: "H:i:s",  // http://php.net/manual/en/function.date.php
                 validateOnBlur: false,
-                step: 1
+                step: 600
             })
             .on("change", e => fireEvent(e.target, "input"));
     }

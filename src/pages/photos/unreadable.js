@@ -1,6 +1,7 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Unreadable {
@@ -29,11 +30,19 @@ export class Unreadable {
     }
 
     async activate (params) {
+        await this.refreshImages();
+    }
+
+    async refreshImages () {
         this.images = await this._endpoint.find("photo-image", {
             json: JSON.stringify({
                 unreadable: true
             })
         });
+
+        this.images.forEach(i => i.pathParam = base64url.encode(i.directoryPath));
+
+        this.selectedImages = [];
     }
 
     async delete () {
@@ -64,14 +73,7 @@ export class Unreadable {
 
         await Promise.all(this.selectedImages.map(deleteFile));
 
-        // Refresh
-        this.images = await this._endpoint.find("photo-image", {
-            json: JSON.stringify({
-                unreadable: true
-            })
-        });
-
-        this.selectedImages = [];
+        await this.refreshImages();
 
         controller.cancel();
     }

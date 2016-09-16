@@ -14,6 +14,6 @@ export class DateTimeFormatValueConverter {
             return null;
         }
 
-        return moment(value, "YYYY-MM-DD HH:mm:ss");
+        return moment(value, "YYYY-MM-DD HH:mm:ss").toDate();
     }
 }

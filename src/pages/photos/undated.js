@@ -2,6 +2,7 @@ import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import moment from "moment";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Undated {
@@ -16,11 +17,7 @@ export class Undated {
     }
 
     async activate () {
-        this.images = await this._endpoint.find("photo-image", {
-            json: JSON.stringify({
-                missingTakenDate: true
-            })
-        });
+        await this.refreshImages();
 
         let initializeThumbnails = async () => {
             let imageIds = this.images.map(i => i.id);
@@ -46,6 +43,16 @@ export class Undated {
         // Call but don't await the initialize function. The view should handle this.thumbnailLookup
         // being uninitialized.
         window.setTimeout(initializeThumbnails, 100);
+    }
+
+    async refreshImages () {
+        this.images = await this._endpoint.find("photo-image", {
+            json: JSON.stringify({
+                missingTakenDate: true
+            })
+        });
+
+        this.images.forEach(i => i.pathParam = base64url.encode(i.directoryPath));
     }
 
     async save () {
@@ -96,6 +103,8 @@ export class Undated {
 
             controller.viewModel.progressPercent = 50 + ((i + 1) / batches.length) * 50;
         }
+
+        await this.refreshImages();
 
         controller.cancel();
     }

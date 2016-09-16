@@ -1,10 +1,12 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"), DialogService)
 export class MoveFromDir {
 
+    pathParam;
     directoryPath;
 
     images = null;
@@ -30,10 +32,15 @@ export class MoveFromDir {
     }
 
     async activate (params) {
-        this.directoryPath = decodeURIComponent(params.path);
+        this.pathParam = params.path;
+        this.directoryPath = base64url.decode(params.path);
 
-        this.images = await this._endpoint.find("photo-movement", params.path);
-        this.images.forEach(i => i.canMove = !i.fileExists && !i.hasDuplicate);
+        this.images = await this._endpoint.find("photo-movement", encodeURIComponent(this.directoryPath));
+        this.images.forEach(i => {
+            i.canMove = !i.fileExists && !i.hasDuplicate;
+            i.current.pathParam = base64url.encode(i.current.directoryPath);
+            i.destination.pathParam = base64url.encode(i.destination.directoryPath);
+        });
     }
 
     async move () {

@@ -1,13 +1,16 @@
 import {inject, NewInstance} from "aurelia-framework";
+import {Router} from "aurelia-router";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
+import base64url from "base64-url";
 
-@inject(Endpoint.of("main"), DialogService)
+@inject(Router, Endpoint.of("main"), DialogService)
 export class Import {
 
     selectedFiles;
 
-    constructor (endpoint, dialogService) {
+    constructor (router, endpoint, dialogService) {
+        this._router = router;
         this._endpoint = endpoint;
         this._dialogService = dialogService;
     }
@@ -49,14 +52,27 @@ export class Import {
                     }
                 });
 
-                controller.viewModel.progressPercent += (1 / this.selectedFiles.length) * 100;
+                controller.viewModel.progressPercent += (1 / this.selectedFiles.length) * 50;
             };
 
             await Promise.all(batch.map(uploadImage));
         }
 
-        this.selectedFiles = [];
+        controller.viewModel.message = "Indexing";
+        let filesOutstanding = false;
+        do {
+            let result = await this._endpoint.post("photo-index", {
+                directoryPath: upload.directoryPath,
+                operation: "index"
+            });
 
+            controller.viewModel.progressPercent += (result.indexed / this.selectedFiles.length) * 50;
+            filesOutstanding = result.remaining > 0;
+        } while (filesOutstanding)
+
+        controller.viewModel.progressPercent = 100;
         controller.cancel();
+
+        this._router.navigateToRoute("search", {path: base64url.encode(upload.directoryPath)}, {replace: true});
     }
 }

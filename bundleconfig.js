@@ -42,6 +42,7 @@ module.exports = {
                 "aurelia-validation",
                 "auth0-lock",
                 "babel-polyfill",
+                "base64-url",
                 "bluebird",
                 "bootstrap",
                 "bootstrap/css/bootstrap.css!text",  // not a jspm dependency

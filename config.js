@@ -32,6 +32,7 @@ System.config({
     "aurelia-validation": "npm:aurelia-validation@0.11.0",
     "auth0-lock": "npm:auth0-lock@10.2.2",
     "babel-polyfill": "npm:babel-polyfill@6.13.0",
+    "base64-url": "npm:base64-url@1.3.2",
     "bluebird": "npm:bluebird@3.4.6",
     "bootstrap": "github:twbs/bootstrap@3.3.6",
     "fetch": "github:github/fetch@1.0.0",
@@ -338,6 +339,9 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
     "npm:base64-url@1.2.2": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0"
+    },
+    "npm:base64-url@1.3.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
     "npm:basic-auth-connect@1.0.0": {

@@ -1,6 +1,7 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
+import base64url from "base64-url";
 
 @inject(Endpoint.of("main"), DialogService)
 export class Sync {
@@ -35,6 +36,7 @@ export class Sync {
                 model: "Loading photo directories"});
 
             this.directories = await this._endpoint.find("photo-index");
+            this.directories.forEach(d => d.pathParam = base64url.encode(d.directoryPath));
             this.selectedDirectories = this.directories.filter(d => d.newFileCount > 0);
 
             controller.cancel();
