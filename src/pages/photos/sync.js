@@ -30,13 +30,34 @@ export class Sync {
     }
 
     async activate () {
+        let directoryPaths = await this._endpoint.find("photo-index");
+        this.directories = directoryPaths.map(p => ({
+            directoryPath: p,
+            pathParam: base64url.encode(p)
+        }));
+
         let initialize = async () => {
             let controller = await this._dialogService.openAndYieldController({
                 viewModel: this.loadingModal,
-                model: "Loading photo directories"});
+                model: {
+                    message: "Comparing directories",
+                    progressPercent: 0
+                }
+            });
 
-            this.directories = await this._endpoint.find("photo-index");
-            this.directories.forEach(d => d.pathParam = base64url.encode(d.directoryPath));
+            let updateDirectory = async directory => {
+                let diff = await this._endpoint.find("photo-index", encodeURIComponent(directory.directoryPath));
+
+                directory.fileCount = diff.fileCount;
+                directory.newFileCount = diff.newFileCount;
+                directory.deletedFileCount = diff.deletedFileCount;
+
+                controller.viewModel.progressPercent += (1 / this.directories.length) * 100;
+            };
+
+            await Promise.all(this.directories.map(updateDirectory));
+
+            // By default, select those directories which have new files
             this.selectedDirectories = this.directories.filter(d => d.newFileCount > 0);
 
             controller.cancel();

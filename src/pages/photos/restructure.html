@@ -1,18 +1,22 @@
 <template>
     <table class="table table-hover">
         <tr>
-            <th class="col-sm-10">Directory</th>
-            <th class="col-sm-2"># Files to Move</th>
+            <th class="col-sm-8">Directory</th>
+            <th class="col-sm-2">Total Files</th>
+            <th class="col-sm-2">Movable Files</th>
         </tr>
-        <tr repeat.for="dir of directoryPaths">
+        <tr repeat.for="dir of directories">
             <td>
                 <a route-href="route:move-from-dir; params.bind:{path:dir.pathParam}" class="clickable-block">
-                    ${dir.path}
+                    ${dir.directoryPath}
                 </a>
             </td>
             <td>
+                ${dir.totalCount}
+            </td>
+            <td>
                 <a route-href="route:move-from-dir; params.bind:{path:dir.pathParam}" class="clickable-block">
-                    ${dir.count}
+                    ${dir.movableCount}
                 </a>
             </td>
         </tr>
