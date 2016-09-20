@@ -1,3 +1,3 @@
 export function configure(aurelia) {
-    //aurelia.globalResources("TODO");
+    aurelia.globalResources("./time-data-filter");
 }

@@ -46,6 +46,7 @@ module.exports = {
                 "bluebird",
                 "bootstrap",
                 "bootstrap/css/bootstrap.css!text",  // not a jspm dependency
+                "d3",
                 "fetch",
                 "font-awesome",
                 "jquery",  // required by bootstrap

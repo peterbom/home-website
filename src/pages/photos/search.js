@@ -15,6 +15,7 @@ export class Search {
 
     pathParam;
     path;
+    timeData = {};
     fromDateTime;
     toDateTime;
 
@@ -37,6 +38,41 @@ export class Search {
         } else {
             this.fromDateTime = moment().subtract(30, "days").toDate();
         }
+
+        this.timeData.getYearlyData = async () => {
+            return [
+                {year: 2000, count: 200},
+                {year: 2001, count: 300},
+                {year: 2002, count: 500},
+                {year: 2003, count: 800},
+                {year: 2004, count: 500},
+                {year: 2005, count: 700},
+                {year: 2006, count: 900}
+            ];
+        };
+
+        this.timeData.getDailyData = async (fromDate, toDate) => {
+            let diffDays = moment(toDate).diff(moment(fromDate), "days");
+            let startMoment = moment([fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()]);
+            let day = 0;
+            return Array(diffDays).map(() => ({
+                date: startMoment.add(day++, "days").toDate(),
+                count: Math.round(Math.random() * 100)
+            }));
+        };
+
+        this.timeData.getDataPoints = async (fromDate, toDate) => {
+            let diffSeconds = moment(toDate).diff(moment(fromDate), "seconds");
+            let startMoment = moment(fromDate);
+            let dataPointCount = Math.round(Math.random() * 200);
+            return Array(dataPointCount).map(() => {
+                let seconds = Math.round(Math.random() * diffSeconds);
+                return {
+                    date: startMoment.add(seconds, "seconds"),
+                    id: "IMG_" + seconds
+                };
+            });
+        };
 
         // Call but don't await the applyFilters function. The view should handle this.images
         // being uninitialized.
