@@ -179,11 +179,43 @@ ai-dialog > ai-dialog-footer button:hover:enabled {
 }
 
 .bar {
-    fill: steelblue;
+    fill: rgba(63,0,125,0.5);
 }
 
 .bar:hover {
-    fill: brown;
+    fill: rgba(63,0,125,0.7);
+    cursor: pointer;
+}
+
+.selecting .bar {
+    fill-opacity: .2;
+}
+
+.selecting .bar.selected {
+    stroke: #f00;
+}
+
+.resize path {
+    fill: #666;
+    fill-opacity: .8;
+    stroke: #000;
+    stroke-width: 1.5px;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.tick line {
+     stroke: #d5d5d5; 
+     opacity: 0.7; 
+}
+
+.brush .extent {
+    fill-opacity: .125;
+    shape-rendering: crispEdges;
 }
 
 .axis--x path {
@@ -201,18 +233,23 @@ ai-dialog > ai-dialog-footer button:hover:enabled {
     stroke-width: 2px;
 }
 
-.RdYlGn .q0-11{fill:rgb(165,0,38)}
-.RdYlGn .q1-11{fill:rgb(215,48,39)}
-.RdYlGn .q2-11{fill:rgb(244,109,67)}
-.RdYlGn .q3-11{fill:rgb(253,174,97)}
-.RdYlGn .q4-11{fill:rgb(254,224,139)}
-.RdYlGn .q5-11{fill:rgb(255,255,191)}
-.RdYlGn .q6-11{fill:rgb(217,239,139)}
-.RdYlGn .q7-11{fill:rgb(166,217,106)}
-.RdYlGn .q8-11{fill:rgb(102,189,99)}
-.RdYlGn .q9-11{fill:rgb(26,152,80)}
-.RdYlGn .q10-11{fill:rgb(0,104,55)}
+.circ {
+    fill: rgb(63, 0, 125);
+    opacity: 0.6;
+    stroke: rgba(84, 39, 143, 0.5);
+    stroke-width: 5px;
+    clip-path: url(#data-point-clip);
+}
 
+.photo-count .q0-9{fill:rgb(252,251,253)} 
+.photo-count .q1-9{fill:rgb(239,237,245)} 
+.photo-count .q2-9{fill:rgb(218,218,235)} 
+.photo-count .q3-9{fill:rgb(188,189,220)} 
+.photo-count .q4-9{fill:rgb(158,154,200)} 
+.photo-count .q5-9{fill:rgb(128,125,186)} 
+.photo-count .q6-9{fill:rgb(106,81,163)} 
+.photo-count .q7-9{fill:rgb(84,39,143)} 
+.photo-count .q8-9{fill:rgb(63,0,125)}
 
 @media print {
     .page-host {

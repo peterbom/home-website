@@ -48,7 +48,7 @@ export class Undated {
     async refreshImages () {
         this.images = await this._endpoint.find("photo-image", {
             json: JSON.stringify({
-                missingTakenDate: true
+                preset: "missingTakenDate"
             })
         });
 

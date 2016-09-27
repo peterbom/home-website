@@ -36,7 +36,7 @@ export class Unreadable {
     async refreshImages () {
         this.images = await this._endpoint.find("photo-image", {
             json: JSON.stringify({
-                unreadable: true
+                preset: "unreadable"
             })
         });
 

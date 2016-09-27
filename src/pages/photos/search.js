@@ -40,38 +40,30 @@ export class Search {
         }
 
         this.timeData.getYearlyData = async () => {
-            return [
-                {year: 2000, count: 200},
-                {year: 2001, count: 300},
-                {year: 2002, count: 500},
-                {year: 2003, count: 800},
-                {year: 2004, count: 500},
-                {year: 2005, count: 700},
-                {year: 2006, count: 900}
-            ];
-        };
+            let response = await this._endpoint.find("photo-image", {
+                json: JSON.stringify({
+                    summary: {yearlyTotals: true}
+                })
+            });
 
-        this.timeData.getDailyData = async (fromDate, toDate) => {
-            let diffDays = moment(toDate).diff(moment(fromDate), "days");
-            let startMoment = moment([fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()]);
-            let day = 0;
-            return Array(diffDays).map(() => ({
-                date: startMoment.add(day++, "days").toDate(),
-                count: Math.round(Math.random() * 100)
-            }));
+            return response.yearlyTotals;
         };
 
         this.timeData.getDataPoints = async (fromDate, toDate) => {
-            let diffSeconds = moment(toDate).diff(moment(fromDate), "seconds");
-            let startMoment = moment(fromDate);
-            let dataPointCount = Math.round(Math.random() * 200);
-            return Array(dataPointCount).map(() => {
-                let seconds = Math.round(Math.random() * diffSeconds);
-                return {
-                    date: startMoment.add(seconds, "seconds"),
-                    id: "IMG_" + seconds
-                };
+            let response = await this._endpoint.find("photo-image", {
+                json: JSON.stringify({
+                    criteria: {
+                        fromDateTime: fromDate,
+                        toDateTime: toDate
+                    },
+                    return: {id: true, takenDateTime: true}
+                })
             });
+
+            return response.map(d => ({
+                id: d.id,
+                date: new Date(d.takenDateTime)
+            }));
         };
 
         // Call but don't await the applyFilters function. The view should handle this.images
@@ -94,7 +86,12 @@ export class Search {
         this.subscriptions.forEach(s => s.dispose());
         this.subscriptions = [];
 
-        this.images = await this._endpoint.find("photo-image", {json: JSON.stringify(criteria)});
+        this.images = await this._endpoint.find("photo-image", {
+            json: JSON.stringify({
+                criteria: criteria
+            })
+        });
+        
         this.images.forEach(i => {
             i.pathParam = base64url.encode(i.directoryPath);
 
