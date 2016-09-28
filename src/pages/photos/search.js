@@ -15,7 +15,6 @@ export class Search {
 
     pathParam;
     path;
-    timeData = {};
     fromDateTime;
     toDateTime;
 
@@ -37,34 +36,8 @@ export class Search {
             this.path = base64url.decode(params.path);
         } else {
             this.fromDateTime = moment().subtract(30, "days").toDate();
+            this.toDateTime = moment().endOf("day").toDate();
         }
-
-        this.timeData.getYearlyData = async () => {
-            let response = await this._endpoint.find("photo-image", {
-                json: JSON.stringify({
-                    summary: {yearlyTotals: true}
-                })
-            });
-
-            return response.yearlyTotals;
-        };
-
-        this.timeData.getDataPoints = async (fromDate, toDate) => {
-            let response = await this._endpoint.find("photo-image", {
-                json: JSON.stringify({
-                    criteria: {
-                        fromDateTime: fromDate,
-                        toDateTime: toDate
-                    },
-                    return: {id: true, takenDateTime: true}
-                })
-            });
-
-            return response.map(d => ({
-                id: d.id,
-                date: new Date(d.takenDateTime)
-            }));
-        };
 
         // Call but don't await the applyFilters function. The view should handle this.images
         // being uninitialized.

@@ -15,29 +15,14 @@
         </ul>
     </div>
 
-    <time-data-filter time-data.bind="timeData" width="600" height="500"></time-data-filter>
-
-    <div class="form-group">
-        <label>
-            From date
-            <input
-                class="form-control"
-                value.bind="fromDateTime | dateTimeFormat"
-                input.trigger="applyFilters()"
-                datepicker>
-        </label>
-    </div>
-
-    <div class="form-group">
-        <label>
-            To date
-            <input
-                class="form-control"
-                value.bind="toDateTime | dateTimeFormat"
-                input.trigger="applyFilters()"
-                datepicker>
-        </label>
-    </div>
+    <time-photo-filter
+        from-date.bind="fromDateTime"
+        to-date.bind="toDateTime"
+        max-day-range="60"
+        change.delegate="applyFilters() & debounce:500"
+        width="600"
+        height="500">
+    </time-photo-filter>
 
     <div class="form-group">
         <label>
