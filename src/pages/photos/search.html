@@ -19,26 +19,35 @@
         from-date.bind="fromDateTime"
         to-date.bind="toDateTime"
         max-day-range="60"
-        change.delegate="applyFilters() & debounce:500"
+        change.delegate="applyFilters() & debounce:1000"
         width="600"
         height="500">
     </time-photo-filter>
 
-    <div class="form-group">
-        <label>
-            Operation
-            <select value.bind="selectedOperation" class="form-control">
-                <option repeat.for="option of operationOptions" value.bind="option.value">${option.name}</option>
-            </select>
-        </label>
+    <div class="form-group col-sm-6">
+        <label for="operation-select">Operation</label>
+        <select id="operation-select" value.bind="selectedOperation" class="form-control">
+            <option repeat.for="option of operationOptions" value.bind="option.value">${option.name}</option>
+        </select>
     </div>
+
+    <button
+        class="btn btn-primary pull-right"
+        type="button"
+        disabled.bind="!selectedImages.length"
+        click.delegate="sendToPhotoFrame()">
+        Send to Photo Frame
+    </button>
 
     <table if.bind="images" class="table table-hover">
         <thead>
             <tr>
                 <th class="col-sm-2">Thumbnail</th>
-                <th class="col-sm-4">Directory</th>
+                <th class="col-sm-3">Directory</th>
                 <th class="col-sm-3">Filename</th>
+                <th class="col-sm-1">
+                    <input type="checkbox" checked.bind="allSelected">
+                </th>
                 <th if.bind="selectedOperation === 'edit-date'" class="col-sm-3">Taken</th>
                 <th if.bind="selectedOperation === 'edit-tags'" class="col-sm-3">Tags</th>
             </tr>
@@ -60,6 +69,12 @@
                     <a route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
                         ${image.filename}
                     </a>
+                </td>
+                <td>
+                    <input
+                        type="checkbox"
+                        model.bind="image"
+                        checked.bind="$parent.selectedImages">
                 </td>
                 <td if.bind="selectedOperation === 'edit-date'">
                     <input

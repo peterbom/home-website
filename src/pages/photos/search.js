@@ -19,6 +19,7 @@ export class Search {
     toDateTime;
 
     images;
+    selectedImages = [];
 
     thumbnailLookup = {};
 
@@ -29,6 +30,20 @@ export class Search {
         {value: "edit-date", name: "Edit Taken Date"},
         {value: "edit-tags", name: "Edit Tags"}
     ];
+
+    set allSelected (val) {
+        if (val) {
+            this.selectedImages = (this.images || []).slice();
+        } else {
+            this.selectedImages = [];
+        }
+    }
+
+    get allSelected () {
+        return this.images &&
+            this.selectedImages &&
+            this.selectedImages.length === this.images.length;
+    }
 
     async activate (params) {
         if (params.path) {
@@ -107,6 +122,32 @@ export class Search {
             default:
                 throw new Error(`unexpected operation: ${this.selectedOperation}`);
         }
+    }
+
+    async sendToPhotoFrame() {
+        let controller = await this._dialogService.openAndYieldController({
+            viewModel: this.loadingModal,
+            model: {
+                message: "Clearing images on photo frame",
+                progressPercent: 0
+            }
+        });
+
+        await this._endpoint.destroy("photo-frame");
+
+        controller.viewModel.message = "Sending images to photo frame";
+        controller.viewModel.progressPercent = 10;
+
+        // create batches
+        let remainingImages = this.selectedImages;
+        while (remainingImages.length > 0) {
+            let batch = remainingImages.splice(0, 10);
+
+            await this._endpoint.post("photo-frame", { ids: batch.map(i => i.id) });
+            controller.viewModel.progressPercent += (batch.length / this.selectedImages.length) * 90;
+        }
+
+        controller.cancel();
     }
 
     async saveTakenDates() {
