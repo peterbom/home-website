@@ -53,6 +53,8 @@ module.exports = {
                 "jquery-datetimepicker",
                 "jwt-decode",
                 "moment",
+                "select2",
+                //"select2-bootstrap-theme", -- not needed, only involves CSS
                 "sortable",
                 "text"
             ],

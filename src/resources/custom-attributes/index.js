@@ -1,3 +1,3 @@
 export function configure(aurelia) {
-    aurelia.globalResources("./datepicker");
+    aurelia.globalResources("./datepicker", "./select2");
 }

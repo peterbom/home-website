@@ -42,6 +42,8 @@ System.config({
     "jquery-datetimepicker": "npm:jquery-datetimepicker@2.5.4",
     "jwt-decode": "npm:jwt-decode@2.1.0",
     "moment": "npm:moment@2.14.1",
+    "select2": "npm:select2@4.0.3",
+    "select2-bootstrap-theme": "npm:select2-bootstrap-theme@0.1.0-beta.9",
     "sortable": "github:rubaxa/sortable@1.4.2",
     "text": "github:systemjs/plugin-text@0.0.8",
     "github:jspm/nodelibs-assert@0.1.0": {
@@ -438,7 +440,7 @@ System.config({
       "base64-js": "npm:base64-js@0.0.8",
       "child_process": "github:jspm/nodelibs-child_process@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "ieee754": "npm:ieee754@1.1.6",
+      "ieee754": "npm:ieee754@1.1.8",
       "isarray": "npm:isarray@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
@@ -1124,6 +1126,13 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:select2-bootstrap-theme@0.1.0-beta.9": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:select2@4.0.3": {
+      "almond": "npm:almond@0.3.3",
+      "jquery-mousewheel": "npm:jquery-mousewheel@3.1.13"
     },
     "npm:send@0.13.0": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",

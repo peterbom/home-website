@@ -1,0 +1,131 @@
+<template>
+    <h2>Plants</h2>
+
+    <table if.bind="plants" class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-1">TSN</th>
+                <th class="col-sm-2">
+                    Scientific name
+                    <button class="btn btn-sm" click.delegate="sortByScientificName()">
+                        <i class="fa fa-sort" title="Sort"></i>
+                    </button>
+                </th>
+                <th class="col-sm-3">
+                    Common name
+                    <button class="btn btn-sm" click.delegate="sortByCommonName()">
+                        <i class="fa fa-sort" title="Sort"></i>
+                    </button>
+                </th>
+                <th class="col-sm-2">
+                    Rank
+                    <button class="btn btn-sm" click.delegate="sortByRank()">
+                        <i class="fa fa-sort" title="Sort"></i>
+                    </button>
+                </th>
+                <th class="col-sm-2">
+                    Use
+                    <button class="btn btn-sm" click.delegate="sortByUse()">
+                        <i class="fa fa-sort" title="Sort"></i>
+                    </button>
+                </th>
+                <th class="col-sm-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="plant of plants">
+                <td>
+                    ${plant._id}
+                </td>
+                <td>
+                    <span if.bind="!plant.editValues">
+                        ${plant.scientificName}
+                    </span>
+                    <input if.bind="plant.editValues"
+                        type="text"
+                        class="form-control"
+                        value.bind="plant.editValues.scientificName">
+                    </input>
+                </td>
+                <td>
+                    <span if.bind="!plant.editValues">
+                        ${plant.commonName}
+                    </span>
+                    <input if.bind="plant.editValues"
+                        type="text"
+                        class="form-control"
+                        value.bind="plant.editValues.commonName">
+                    </input>
+                </td>
+                <td>
+                    <span if.bind="!plant.editValues">
+                        ${plant.rankName}
+                    </span>
+                    <input if.bind="plant.editValues"
+                        type="text"
+                        class="form-control"
+                        value.bind="plant.editValues.rankName">
+                    </input>
+                </td>
+                <td>
+                    <span if.bind="!plant.editValues">
+                        ${plant.use}
+                    </span>
+                    <select if.bind="plant.editValues"
+                        select2
+                        value.bind="plant.editValues.use">
+                        <option value="">[none]</option>
+                        <option repeat.for="use of plantUsages"
+                            value.bind="use">
+                            ${use}
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button
+                            if.bind="!plant.editValues"
+                            class="btn btn-sm"
+                            click.delegate="setEditable(plant)">
+                            <i class="fa fa-pencil-square-o" title="Edit"></i>
+                        </button>
+                        <button
+                            if.bind="plant.editValues"
+                            class="btn btn-sm"
+                            click.delegate="save(plant)">
+                            <i class="fa fa-check" title="Save"></i>
+                        </button>
+                        <button
+                            if.bind="plant.editValues"
+                            class="btn btn-sm"
+                            click.delegate="cancel(plant)">
+                            <i class="fa fa-times" title="Cancel"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        click.delegate="getPlantJson()">
+        Get Plant JSON
+    </button>
+
+    <div class="row">
+        <textarea
+            class="form-control col-sm-11"
+            if.bind="json"
+            value.bind="json"
+            readonly>
+        </textarea>
+        <a if.bind="json"
+            class="col-sm-1"
+            click.delegate="json = null">
+            <i class="fa fa-times" title="Close"></i>
+        </a>
+    </div>
+
+</template>

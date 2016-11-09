@@ -37,6 +37,14 @@ module.exports = {
             'jquery-datetimepicker', [
                 '/build/jquery.datetimepicker.min.css'
             ]
+        ], [
+            'select2', [
+                '/css/select2.min.css'
+            ]
+        ], [
+            'select2-bootstrap-theme', [
+                '/dist/select2-bootstrap.min.css'
+            ]
         ]
     ]
 };

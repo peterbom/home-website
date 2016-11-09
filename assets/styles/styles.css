@@ -301,6 +301,106 @@ div.au-stagger {
 }
 
 
+
+.plant-selection-node circle {
+    stroke-width: 2;
+    r: 8;
+}
+
+.plant-selection-node text {
+    fill: #000;
+    font: 10px sans-serif;
+    pointer-events: none;
+}
+
+.plant-selection-node.node--internal text {
+    text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff
+}
+
+.plant-selection-link {
+    fill: none;
+    stroke: #555;
+    stroke-opacity: 0.4;
+    stroke-width: 1.5px;
+}
+
+
+
+.companion-plant-links line {
+    fill: none;
+    stroke-width: 2px;
+}
+
+.companion-plant-links line:hover {
+    cursor: pointer;
+}
+
+.companion-plant-links line.help {
+    stroke: rgb(0,0,0);
+    stroke-opacity: 0.1;
+}
+
+.companion-plant-links line.hinder {
+    stroke: rgb(240,48,0);
+    stroke-opacity: 0.4;
+}
+
+.companion-plant-links line.selected {
+    stroke-opacity: 1;
+}
+
+path.companion-plant-arrow.help {
+    fill: rgb(0,0,0);
+    fill-opacity: 0.1;
+}
+
+path.companion-plant-arrow.hinder {
+    fill: rgb(240,480,0);
+    fill-opacity: 0.4;
+}
+
+path.companion-plant-arrow.selected {
+    fill-opacity: 1;
+}
+
+.companion-plant-node:hover {
+    cursor: pointer;
+}
+
+.companion-plant-node .vegetable {
+    fill: #ff9f9f;
+}
+
+.companion-plant-node .fruit {
+    fill: #ffd59f;
+}
+
+.companion-plant-node .herb {
+    fill: #fffc9f;
+}
+
+.companion-plant-node .flower {
+    fill: #9fffb3;
+}
+
+.companion-plant-node circle {
+    r: 6;
+}
+
+.companion-plant-node circle.selected {
+    stroke: rgb(0,0,0);
+    stroke-width: 2px;
+}
+
+.companion-plant-node text {
+    fill: #000;
+    font: 10px sans-serif;
+    pointer-events: none;
+}
+
+
+
+
 .card-container.au-enter {
     opacity: 0;
 }

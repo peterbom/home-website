@@ -1,0 +1,24 @@
+<template>
+    <div class="radio" repeat.for="nameView of nameViews">
+        <label>
+        <input type="radio" value.bind="nameView" name="nameViews" checked.bind="$parent.selectedNameView">
+            ${nameView}
+        </label>
+    </div>
+
+    <plant-select
+        multiple
+        selected-name-view.bind="selectedNameView"
+        selected-tsns.two-way="selectedTsns"
+        change.delegate="handleSelectionChanged()"
+        width="700"
+        height="700">
+    </plant-select>    
+
+    <companion-plant-view
+        selected-name-view.bind="selectedNameView"
+        selected-tsns.two-way="selectedTsns"
+        width="700"
+        height="700">
+    </companion-plant-view>
+</template>

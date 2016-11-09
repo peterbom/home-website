@@ -1,0 +1,128 @@
+<template>
+
+    <h2>Companions</h2>
+
+    <div class="radio" repeat.for="nameView of nameViews">
+        <label>
+        <input type="radio" value.bind="nameView" name="nameViews" checked.bind="$parent.selectedNameView">
+            ${nameView}
+        </label>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="col-sm-2">Plant</th>
+                <th class="col-sm-4">Helps</th>
+                <th class="col-sm-4">Hinders</th>
+                <th class="col-sm-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="companion of plantCompanions">
+                <td>
+                    <span if.bind="!companion.editValues || !companion.editValues.isNew">
+                        ${selectedNameView === "common" ? plantMap.get(companion._id).commonName : plantMap.get(companion._id).scientificName} (${plantMap.get(companion._id).rankName})
+                    </span>
+                    <select if.bind="companion.editValues && companion.editValues.isNew"
+                        select2
+                        value.bind="companion.editValues.plantTsn">
+                        <option repeat.for="plant of plants"
+                            value.bind="plant._id">
+                            ${selectedNameView === "common" ? plant.commonName : plant.scientificName} (${plant.rankName})
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <ul if.bind="!companion.editValues">
+                        <li repeat.for="tsn of companion.helps">
+                            ${selectedNameView === "common" ? plantMap.get(tsn).commonName : plantMap.get(tsn).scientificName} (${plantMap.get(tsn).rankName})
+                        </li>
+                    </ul>
+                    <select if.bind="companion.editValues"
+                        select2
+                        multiple
+                        value.bind="companion.editValues.helpsTsns">
+                        <option repeat.for="plant of plants"
+                            value.bind="'' + plant._id">
+                            ${selectedNameView === "common" ? plant.commonName : plant.scientificName} (${plant.rankName})
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <ul if.bind="!companion.editValues">
+                        <li repeat.for="tsn of companion.hinders">
+                            ${selectedNameView === "common" ? plantMap.get(tsn).commonName : plantMap.get(tsn).scientificName} (${plantMap.get(tsn).rankName})
+                        </li>
+                    </ul>
+                    <select if.bind="companion.editValues"
+                        select2
+                        multiple
+                        value.bind="companion.editValues.hindersTsns">
+                        <option repeat.for="plant of plants"
+                            value.bind="plant._id">
+                            ${selectedNameView === "common" ? plant.commonName : plant.scientificName} (${plant.rankName})
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button
+                            if.bind="!companion.editValues"
+                            class="btn btn-sm"
+                            click.delegate="setEditable(companion)">
+                            <i class="fa fa-pencil-square-o" title="Edit"></i>
+                        </button>
+                        <button
+                            if.bind="!companion.editValues"
+                            class="btn btn-sm"
+                            click.delegate="delete(companion)">
+                            <i class="fa fa-trash" title="Delete"></i>
+                        </button>
+                        <button
+                            if.bind="companion.editValues"
+                            class="btn btn-sm"
+                            click.delegate="save(companion)">
+                            <i class="fa fa-check" title="Save"></i>
+                        </button>
+                        <button
+                            if.bind="companion.editValues"
+                            class="btn btn-sm"
+                            click.delegate="cancel(companion)">
+                            <i class="fa fa-times" title="Cancel"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        click.delegate="addNew()">
+        Add New
+    </button>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        click.delegate="getJson()">
+        Get JSON
+    </button>
+
+    <div class="row">
+        <textarea
+            class="form-control col-sm-11"
+            if.bind="json"
+            value.bind="json"
+            readonly>
+        </textarea>
+        <a if.bind="json"
+            class="col-sm-1"
+            click.delegate="json = null">
+            <i class="fa fa-times" title="Close"></i>
+        </a>
+    </div>
+
+</template>

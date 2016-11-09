@@ -1,3 +1,5 @@
+// disable automatic object creation:
+import {AccessMember} from 'aurelia-framework';
 import 'bootstrap';
 import 'babel-polyfill';
 
@@ -5,6 +7,18 @@ import 'babel-polyfill';
 import "./env.js";
 
 import {apiConfig, authConfig} from "./config";
+
+// Disable automatic object creation via bindings
+// https://github.com/aurelia/binding/issues/205
+AccessMember.prototype.assign = function(scope, value) {
+    let instance = this.object.evaluate(scope);
+
+    if(instance === null || instance === undefined) {
+        return;
+    }
+
+    return instance[this.name] = value;
+}
 
 // In case we need to set the root according to the authentication status:
 //import {AuthService} from "./authentication/auth-service";

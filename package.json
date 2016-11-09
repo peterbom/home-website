@@ -120,6 +120,8 @@
       "jquery-datetimepicker": "npm:jquery-datetimepicker@^2.5.4",
       "jwt-decode": "npm:jwt-decode@^2.1.0",
       "moment": "npm:moment@^2.14.1",
+      "select2": "npm:select2@^4.0.3",
+      "select2-bootstrap-theme": "npm:select2-bootstrap-theme@^0.1.0-beta.9",
       "sortable": "github:rubaxa/sortable@^1.4.2",
       "text": "github:systemjs/plugin-text@^0.0.8"
     },
@@ -141,6 +143,9 @@
         }
       },
       "npm:jquery-datetimepicker@2.5.4": {
+        "format": "global"
+      },
+      "npm:select2@4.0.3": {
         "format": "global"
       }
     }
