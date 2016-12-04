@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-2">
                 <ul class="well nav nav-pills nav-stacked">
-                    <li repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+                    <li repeat.for="row of router.navigation | authFilter: auth.permissions & signal: 'authentication-change'" class="${row.isActive ? 'active' : ''}">
                         <a href.bind="row.href">${row.title}</a>
                     </li>
                 </ul>

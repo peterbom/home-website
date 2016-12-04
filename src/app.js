@@ -11,7 +11,7 @@ export class App {
             { route: "profile", name: "profile", moduleId: "pages/profile", nav: false, title: "Profile", perm: "home_manage" },
             { route: "machines", name: "machines", moduleId: "pages/machines", nav: true, title: "Machines", perm: "home_manage" },
             { route: "photos", name: "photos", moduleId: "pages/photos/index", nav: true, title: "Photos", perm: "home_manage" },
-            { route: "gardening", name: "gardening", moduleId: "pages/gardening/index", nav: true, title: "Gardening", perm: "home_manage" },
+            { route: "gardening", name: "gardening", moduleId: "pages/gardening/index", nav: true, title: "Gardening" },
             { route: "packaging", name: "packaging", moduleId: "pages/packaging/index", nav: true, title: "Packaging", perm: "packaging_maintain" }
         ]);
     }
