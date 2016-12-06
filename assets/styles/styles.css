@@ -355,7 +355,7 @@ path.companion-plant-arrow.help {
 }
 
 path.companion-plant-arrow.hinder {
-    fill: rgb(240,480,0);
+    fill: rgb(240,48,0);
     fill-opacity: 0.4;
 }
 
@@ -396,6 +396,18 @@ path.companion-plant-arrow.selected {
     fill: #000;
     font: 10px sans-serif;
     pointer-events: none;
+}
+
+.vis-tooltip {   
+    position: fixed;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
 }
 
 

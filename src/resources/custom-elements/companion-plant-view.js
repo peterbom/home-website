@@ -54,6 +54,7 @@ export class CompanionPlantView {
         this.companionLinks = PlantUtils.getLeafNodeCompanionLinks(
             flattenedCompanionLinks, hierarchyLinks, this.plantLookup);
 
+        this.tooltipDiv = d3.select(this.tooltipDivElem);
         this.svg = d3.select(this.svgElem);
         this.svg.on("click", () => {
             // Deselect everything
@@ -115,6 +116,21 @@ export class CompanionPlantView {
         this.refreshView();
     }
 
+    showTooltip (html) {
+        this.tooltipDiv.transition()
+            .duration(300)
+            .style("opacity", 1);
+        this.tooltipDiv.html(html)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY) + "px");
+    }
+
+    hideTooltip () {
+        this.tooltipDiv.transition()
+            .duration(500)
+            .style("opacity", 0);
+    }
+
     refreshView() {
         if (!this._created) {
             return;
@@ -140,6 +156,18 @@ export class CompanionPlantView {
                 this.setLineSelection(d3.select(d3.event.target));
                 this.setNodeSelection(nodeSelection.filter(dn => dn === d.source || dn === d.target));
                 d3.event.stopPropagation();
+            })
+            .on("mouseover", d => {
+                let details = d.details.map(detail => {
+                    let from = PlantUtils.getName(detail.from, this.selectedNameView);
+                    let to = PlantUtils.getName(detail.to, this.selectedNameView);
+                    return `(${d.effect}s) ${from} → ${to}`;
+                });
+
+                this.showTooltip(details.join("<br/>"));
+            })
+            .on("mouseout", d => {
+                this.hideTooltip();
             });
 
         linkUpdateSelection.exit().remove();
@@ -159,6 +187,12 @@ export class CompanionPlantView {
                 this.setNodeSelection(nodeSelection.filter(dn => dn === d));
                 this.setLineSelection(linkSelection.filter(dl => dl.source === d));
                 d3.event.stopPropagation();
+            })
+            .on("mouseover", d => {
+                this.showTooltip(`TSN: ${d._id}<br/>Common name: ${d.commonName || "(unknown)"}<br/>Scientific name: ${d.scientificName}<br/>Use: ${d.use || "(unknown)"}`);
+            })
+            .on("mouseout", d => {
+                this.hideTooltip();
             });
 
         nodeNewSelection.append("circle")
