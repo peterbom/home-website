@@ -7,7 +7,10 @@ import base64url from "base64-url";
 @inject(Router, Endpoint.of("main"), DialogService)
 export class Import {
 
-    selectedFiles;
+    fileInputElem; // From ref attribute
+
+    fileList;  // bound to file selector
+    selectedFiles = [];
 
     constructor (router, endpoint, dialogService) {
         this._router = router;
@@ -15,7 +18,17 @@ export class Import {
         this._dialogService = dialogService;
     }
 
-    async activate (params) {
+    handleFileListChanged() {
+        this.selectedFiles = [];
+        for (let i = 0; i < this.fileList.length; i++) {
+            this.selectedFiles.push(this.fileList.item(i));
+        }
+
+        // Release the file objects held by the file input element
+        // http://stackoverflow.com/a/35323290
+        this.fileList = null;
+        this.fileInputElem.type = "";
+        this.fileInputElem.type = "file";
     }
 
     async import() {
@@ -23,14 +36,9 @@ export class Import {
             return;
         }
 
-        let batch = [];
-        let batches = [batch];
-        for (let i = 0; i < this.selectedFiles.length; i++) {
-            batch.push(this.selectedFiles.item(i));
-            if (batch.length === 10) {
-                batch = [];
-                batches.push(batch);
-            }
+        let batches = [];
+        while (this.selectedFiles.length > 0) {
+            batches.push(this.selectedFiles.splice(0, 10));
         }
 
         let controller = await this._dialogService.openAndYieldController({

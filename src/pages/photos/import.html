@@ -5,15 +5,16 @@
     <label class="btn btn-default btn-file">
         Browse
         <input type="file"
+            ref="fileInputElem"
             multiple accept="image/*"
-            files.bind="selectedFiles"
+            files.bind="fileList"
+            change.delegate="handleFileListChanged()"
             style="display: none;">
     </label>
-    
 
     <div>
         <ul class="list-group">
-            <li class="list-group-item" repeat.for="file of selectedFiles | fileListToArray">
+            <li class="list-group-item" repeat.for="file of selectedFiles">
                 <img width="100" class="img-thumbnail" blob-src.bind="file" />
                 <h3>${file.name}: ${file.type} ${file.size / 1000} kb</h3>
                 <p>Last Modified: ${file.lastModifiedDate}</p>
