@@ -14,7 +14,7 @@
     <div>
         <ul class="list-group">
             <li class="list-group-item" repeat.for="file of selectedFiles | fileListToArray">
-                <img width="100" class="img-thumbnail" src.bind="file | blobToUrl" />
+                <img width="100" class="img-thumbnail" blob-src.bind="file" />
                 <h3>${file.name}: ${file.type} ${file.size / 1000} kb</h3>
                 <p>Last Modified: ${file.lastModifiedDate}</p>
             </li>
