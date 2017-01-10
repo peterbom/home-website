@@ -26,7 +26,15 @@
                                 </dd>
 
                                 <dt>Taken</dt>
-                                <dd>${duplicateImage.takenDateTime}</dd>
+                                <dd>${duplicateImage.properties.takenDateTime | dateTimeFormat}</dd>
+
+                                <dt>File size</dt>
+                                <dd>
+                                    ${duplicateImage.properties.fileSize} (${duplicateImage.properties.pixelCount} pixels)
+                                </dd>
+
+                                <dt>Camera</dt>
+                                <dd>${duplicateImage.properties.camera}</dd>
                             </dl>
                             <p>
                                 <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:duplicateImage.id}">Details</a>
@@ -66,7 +74,15 @@
                                 </dd>
 
                                 <dt>Taken</dt>
-                                <dd>${distinctImage.takenDateTime}</dd>
+                                <dd>${distinctImage.properties.takenDateTime | dateTimeFormat}</dd>
+
+                                <dt>File size</dt>
+                                <dd>
+                                    ${distinctImage.properties.fileSize} (${distinctImage.properties.pixelCount} pixels)
+                                </dd>
+
+                                <dt>Camera</dt>
+                                <dd>${distinctImage.properties.camera}</dd>
                             </dl>
                             <p>
                                 <a target="_blank" class="btn btn-default" route-href="route:details; params.bind:{id:distinctImage.id}">Details</a>
