@@ -1,0 +1,28 @@
+<template>
+    <ul if.bind="pageSet && pageSet.pageCount" class="pagination">
+        <li class.bind="pageSet.currentPageIndex === 0 ? 'disabled' : ''">
+            <a href="#" click.delegate="setPageIndex(0)">«</a>
+        </li>
+    </ul>
+
+    <ul if.bind="pageSet && pageSet.pageCount" class="pagination">
+        <li if.bind="pageLinkGenerator.firstPageIndex > 0" class="disabled">
+            <a href="#">&hellip;</a>
+        </li>
+
+        <li repeat.for="link of pageLinkGenerator.pageLinks"
+            class.bind="link.selected ? 'active' : ''">
+            <a href="#" click.delegate="setPageIndex(link.index)">${link.index + 1}</a>
+        </li>
+
+        <li if.bind="pageLinkGenerator.lastPageIndex < pageSet.pageCount - 1" class="disabled">
+            <a href="#">&hellip;</a>
+        </li>
+    </ul>
+
+    <ul if.bind="pageSet && pageSet.pageCount" class="pagination">
+        <li class.bind="pageSet.currentPageIndex === pageSet.pageCount - 1 ? 'disabled' : ''">
+            <a href="#" click.delegate="setPageIndex(pageSet.pageCount - 1)">»</a>
+        </li>
+    </ul>
+</template>

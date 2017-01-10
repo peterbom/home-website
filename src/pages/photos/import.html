@@ -13,13 +13,27 @@
     </label>
 
     <div>
+        <pagination-control
+            page-set.bind="pageSet"
+            page-link-generator.bind="pageLinkGenerator">
+        </pagination-control>
+    </div>
+
+    <div>
         <ul class="list-group">
-            <li class="list-group-item" repeat.for="file of selectedFiles">
+            <li class="list-group-item" repeat.for="file of pageSet.currentPage.items">
                 <img width="100" class="img-thumbnail" blob-src.bind="file" />
                 <h3>${file.name}: ${file.type} ${file.size / 1000} kb</h3>
                 <p>Last Modified: ${file.lastModifiedDate}</p>
             </li>
         </ul>
+    </div>
+
+    <div>
+        <pagination-control
+            page-set.bind="pageSet"
+            page-link-generator.bind="pageLinkGenerator">
+        </pagination-control>
     </div>
 
     <button

@@ -4,7 +4,7 @@ import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import base64url from "base64-url";
 
-@inject(Router, Endpoint.of("main"), DialogService)
+@inject(Router, Endpoint.of("main"), DialogService, "page-manager")
 export class Import {
 
     fileInputElem; // From ref attribute
@@ -12,10 +12,14 @@ export class Import {
     fileList;  // bound to file selector
     selectedFiles = [];
 
-    constructor (router, endpoint, dialogService) {
+    pageSet;
+    pageLinkGenerator;
+
+    constructor (router, endpoint, dialogService, pageManager) {
         this._router = router;
         this._endpoint = endpoint;
         this._dialogService = dialogService;
+        this._pageManager = pageManager;
     }
 
     handleFileListChanged() {
@@ -23,6 +27,9 @@ export class Import {
         for (let i = 0; i < this.fileList.length; i++) {
             this.selectedFiles.push(this.fileList.item(i));
         }
+
+        this.pageSet = this._pageManager.getPageSet(this.selectedFiles);
+        this.pageLinkGenerator = this._pageManager.getPageLinkGenerator(this.pageSet, 10);
 
         // Release the file objects held by the file input element
         // http://stackoverflow.com/a/35323290
