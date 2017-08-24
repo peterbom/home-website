@@ -7,17 +7,14 @@ switch (window.env.NODE_ENV) {
     case "development":
     case "test":
         mainEndpoint = "http://localhost:8000/";
-        devEndpoint = "http://localhost:16000/";
         packagingEndpoint = "http://localhost:37081/";
         break;
     case "staging":
-        mainEndpoint = "http://192.168.1.230:20080/";
-        devEndpoint = "http://localhost:20080/";  // Assume we're testing from dev machine
+        mainEndpoint = "https://testapi.bombers.space/";
         packagingEndpoint = "http://localhost:37081/";  // Invalid hostname from IIS Express if we use IP address
         break;
     case "production":
-        mainEndpoint = "https://pi.bombers.space/";
-        devEndpoint = "https://dev.bombers.space/";
+        mainEndpoint = "https://api.bombers.space/";
         packagingEndpoint = "https://packagingapi.azurewebsites.net/";
         break;
     default:
@@ -35,7 +32,7 @@ export let authConfig = {
     auth0Domain: "bomb.au.auth0.com",
     permissionsEndpoint: "main",
     permissionsResource: "permission",
-    securedEndpoints: ["main", "dev", "packaging"],    // add Authorization headers to those for authenticated requests
+    securedEndpoints: ["main", "packaging"],    // add Authorization headers to those for authenticated requests
     expiredRedirectUrl: "#/login",
     logoutRedirectUrl: ""
 };

@@ -12,21 +12,6 @@ node {
 
     stage('checkout') {
         checkout scm
-    //     checkout([
-    //         $class: 'GitSCM',
-    //         branches: [
-    //             [name: '*/master']
-    //         ],
-    //         doGenerateSubmoduleConfigurations: false,
-    //         extensions: [],
-    //         submoduleCfg: [],
-    //         userRemoteConfigs: [
-    //             [
-    //                 credentialsId: 'home-gituser-ssh-key',
-    //                 url: '<this repo>'
-    //             ]
-    //         ]
-    //     ])
     }
     
     stage('init') {
@@ -42,7 +27,17 @@ node {
     stage('build') {
         withEnv(["PATH+NODEJS=${node_path}"]) {
             sh 'npm run build-prod-release'
+            archiveArtifacts 'dist/**/*'
         }
+    }
+
+    stage('deploy') {
+        sh "ssh friend@${env.HOME_WEBSITE_IP} rm -rf /mnt/websites/deploy_temp"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mkdir -p /mnt/websites/deploy_temp/"
+        sh "scp -r dist friend@${env.HOME_WEBSITE_IP}:/mnt/websites/deploy_temp/"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} rm -rf /mnt/websites/deploy_prev"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/${env.HOME_WEBSITE_FOLDER} /mnt/websites/deploy_prev"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mv  /mnt/websites/deploy_temp /mnt/websites/${env.HOME_WEBSITE_FOLDER}"
     }
 
     sh 'ls -l'    
