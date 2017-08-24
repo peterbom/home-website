@@ -1,5 +1,19 @@
 #!groovy
 
+properties([
+    buildDiscarder(
+        logRotator(
+            artifactDaysToKeepStr: '',
+            artifactNumToKeepStr: '',
+            daysToKeepStr: '',
+            numToKeepStr: '10'
+        )
+    ),
+    pipelineTriggers([
+        pollSCM('* * * * *')
+    ])
+])
+
 node {
     def node_path = "${tool name: 'NodeJS 8.4.0', type: 'nodejs'}/bin"
     
