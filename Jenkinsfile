@@ -27,7 +27,7 @@ node {
     stage('build') {
         withEnv(["PATH+NODEJS=${node_path}"]) {
             sh 'npm run build-prod-release'
-            archiveArtifacts '**/*'
+            //archiveArtifacts '**/*'
         }
     }
 
