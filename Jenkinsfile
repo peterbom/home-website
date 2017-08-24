@@ -37,7 +37,8 @@ node {
         sh "scp -r dist friend@${env.HOME_WEBSITE_IP}:/mnt/websites/deploy_temp/"
         sh "ssh friend@${env.HOME_WEBSITE_IP} rm -rf /mnt/websites/deploy_prev"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/${env.HOME_WEBSITE_FOLDER} /mnt/websites/deploy_prev"
-        sh "ssh friend@${env.HOME_WEBSITE_IP} mv  /mnt/websites/deploy_temp /mnt/websites/${env.HOME_WEBSITE_FOLDER}"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/deploy_temp /mnt/websites/${env.HOME_WEBSITE_FOLDER}"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} sudo chown www-data:www-data /mnt/websites/${env.HOME_WEBSITE_FOLDER}"
     }
 
     sh 'ls -l'    
