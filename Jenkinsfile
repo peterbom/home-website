@@ -27,14 +27,14 @@ node {
     stage('build') {
         withEnv(["PATH+NODEJS=${node_path}"]) {
             sh 'npm run build-prod-release'
-            //archiveArtifacts '**/*'
+            archiveArtifacts 'export/**/*'
         }
     }
 
     stage('deploy') {
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo rm -rf /mnt/websites/deploy_temp"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mkdir -p /mnt/websites/deploy_temp/"
-        sh "scp -r . friend@${env.HOME_WEBSITE_IP}:/mnt/websites/deploy_temp/"
+        sh "scp -r export/ friend@${env.HOME_WEBSITE_IP}:/mnt/websites/deploy_temp/"
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo rm -rf /mnt/websites/deploy_prev"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/${env.HOME_WEBSITE_FOLDER} /mnt/websites/deploy_prev"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/deploy_temp /mnt/websites/${env.HOME_WEBSITE_FOLDER}"
