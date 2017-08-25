@@ -55,10 +55,18 @@ node {
         def pathTemp = "${rootPath}/${folder}_temp"
         def pathDeploy = "${rootPath}/${folder}"
 
+        // Cleanup
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo rm -rf ${pathTemp}"
-        sh "ssh friend@${env.HOME_WEBSITE_IP} mkdir -p ${pathTemp}"
-        sh "scp -r export/* friend@${env.HOME_WEBSITE_IP}:${pathTemp}/"
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo rm -rf ${pathPrev}"
+
+        // Initialise folders
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mkdir -p ${pathTemp}"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mkdir -p ${pathDeploy}"
+
+        // Copy files to server (temp folder)
+        sh "scp -r export/* friend@${env.HOME_WEBSITE_IP}:${pathTemp}/"
+
+        // Switch paths and set folder ownsership
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/${pathDeploy} ${pathPrev}"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv ${pathTemp} ${pathDeploy}"
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo chown www-data:www-data -R ${pathDeploy}"
