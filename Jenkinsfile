@@ -40,7 +40,10 @@ node {
     
     stage('build') {
         withEnv(["PATH+NODEJS=${node_path}"]) {
-            sh 'npm run build-prod-release'
+            def npm_script = env.BRANCH_NAME == 'master'
+                ? 'build-prod-release'
+                : 'build-staging-release'
+            sh "npm run ${npm_script}"
             archiveArtifacts 'export/**/*'
         }
     }
