@@ -67,7 +67,7 @@ node {
         sh "scp -r export/* friend@${env.HOME_WEBSITE_IP}:${pathTemp}/"
 
         // Switch paths and set folder ownsership
-        sh "ssh friend@${env.HOME_WEBSITE_IP} mv /mnt/websites/${pathDeploy} ${pathPrev}"
+        sh "ssh friend@${env.HOME_WEBSITE_IP} mv ${pathDeploy} ${pathPrev}"
         sh "ssh friend@${env.HOME_WEBSITE_IP} mv ${pathTemp} ${pathDeploy}"
         sh "ssh friend@${env.HOME_WEBSITE_IP} sudo chown www-data:www-data -R ${pathDeploy}"
     }
