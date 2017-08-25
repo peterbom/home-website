@@ -10,7 +10,7 @@ switch (window.env.NODE_ENV) {
         packagingEndpoint = "http://localhost:37081/";
         break;
     case "staging":
-        mainEndpoint = "https://testapi.bombers.space/";
+        mainEndpoint = "https://testapi.bombers.space:8443/";
         packagingEndpoint = "http://localhost:37081/";  // Invalid hostname from IIS Express if we use IP address
         break;
     case "production":
