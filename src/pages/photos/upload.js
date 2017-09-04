@@ -49,6 +49,8 @@ export class Import {
             return;
         }
 
+        let totalFileSize = this.selectedFiles.reduce((size, f) => size + f.size, 0);
+
         let batches = [];
         while (this.selectedFiles.length > 0) {
             batches.push(this.selectedFiles.splice(0, 10));
@@ -61,19 +63,27 @@ export class Import {
                 progressPercent: 0
             }});
 
-        let azureSasTokenResponse = await this._endpoint.find("azure-sas-token");
-        let blobService = AzureStorage.createBlobServiceWithSas(
-            azureSasTokenResponse.host,
-            azureSasTokenResponse.token);
+        let blobService;
+        if (window.env.NODE_ENV === "development") {
+            // Save bandwidth by using a local storage emulator.
+            // https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator
+            let storageEmulatorConnectionString = "UseDevelopmentStorage=true";
+            blobService = AzureStorage.createBlobService(storageEmulatorConnectionString);
+        } else {
+            // For non-development environments, use an SAS token provided by the API to authenticate with storage.
+            let azureSasTokenResponse = await this._endpoint.find("azure-sas-token");
+            blobService = AzureStorage.createBlobServiceWithSas(
+                azureSasTokenResponse.host,
+                azureSasTokenResponse.token);
+        }
 
         let dateString = moment().format("YYYY-MM-DD_HH-mm-ss");
         let imageIndex = 1;
         let speedSummaries = [];
 
-        let timer = setTimeout(() => {
-            let totalFilesPercent = this.selectedFiles.length * 100;
-            let currentPercent = speedSummaries.reduce((total, ss) => total + ss.getCompletePercent(), 0);
-            controller.viewModel.progressPercent = (currentPercent / totalFilesPercent) * 100;
+        let intervalId = setInterval(() => {
+            let completeSize = speedSummaries.reduce((total, ss) => total + ss.completeSize, 0);
+            controller.viewModel.progressPercent = (completeSize / totalFileSize) * 100;
         }, 200);
 
         for (let batch of batches) {
@@ -111,7 +121,7 @@ export class Import {
             await Promise.all(batch.map(uploadImage));
         }
 
-        clearTimeout(timer);
+        clearInterval(intervalId);
 
         controller.viewModel.progressPercent = 100;
         controller.cancel();
