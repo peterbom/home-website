@@ -1,0 +1,46 @@
+<template>
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
+    <!-- https://www.danyow.net/binding-to-file-inputs-with-aurelia/ -->
+    <label class="btn btn-default btn-file">
+        Browse
+        <input type="file"
+            ref="fileInputElem"
+            multiple accept="image/*,video/*"
+            files.bind="fileList"
+            change.delegate="handleFileListChanged()"
+            style="display: none;">
+    </label>
+
+    <div>
+        <pagination-control
+            page-set.bind="pageSet"
+            page-link-generator.bind="pageLinkGenerator">
+        </pagination-control>
+    </div>
+
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item" repeat.for="file of pageSet.currentPage.items">
+                <img width="100" class="img-thumbnail" blob-src.bind="file" />
+                <h3>${file.name}: ${file.type} ${file.size / 1000} kb</h3>
+                <p>Last Modified: ${file.lastModifiedDate}</p>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <pagination-control
+            page-set.bind="pageSet"
+            page-link-generator.bind="pageLinkGenerator">
+        </pagination-control>
+    </div>
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        disabled.bind="this.selectedFiles.length === 0"
+        click.delegate="upload()">
+        Upload
+    </button>
+</template>

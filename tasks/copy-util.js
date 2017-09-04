@@ -3,7 +3,7 @@ const path = require('path');
 const promisify = require("promisify-node");
 const glob = promisify("glob");
 
-function copyFile(fromPath, toDirectory, copyFrom) {
+async function copyFile(fromPath, toDirectory, copyFrom) {
     // E.g.
     //   fromPath:     public/resources/resource.js
     //   toDirectory:  export
@@ -31,26 +31,23 @@ function copyFile(fromPath, toDirectory, copyFrom) {
     }
 
     // Return a promise
-    return fsp.copy(fromPath, toPath);
+    await fsp.copy(fromPath, toPath);
 }
 
-function copyFileOrGlob (fromGlob, toDirectory, copyFrom) {
+async function copyFileOrGlob (fromGlob, toDirectory, copyFrom) {
     copyFrom = copyFrom || "";
 
     // To expand the glob, we must be able to locate it on the filesystem
     let fromGlobPath = path.join(copyFrom, fromGlob);
+    let fromPaths = await glob(fromGlobPath);
 
-    return glob(fromGlobPath).then(fromPaths => {
-        return Promise.all(fromPaths.map(fromPath => {
-            return copyFile(fromPath, toDirectory, copyFrom);
-        }));
-    });
+    for (let fromPath of fromPaths) {
+        await copyFile(fromPath, toDirectory, copyFrom);
+    }
 };
 
-module.exports.copyFilesOrGlobs = function (fromGlobs, toDirectory, copyFrom) {
-    let promises = fromGlobs.map(fileOrGlob => {
-        return copyFileOrGlob(fileOrGlob, toDirectory, copyFrom);
-    });
-
-    return Promise.all(promises);
+module.exports.copyFilesOrGlobs = async (fromGlobs, toDirectory, copyFrom) => {
+    for (let fileOrGlob of fromGlobs) {
+        await copyFileOrGlob(fileOrGlob, toDirectory, copyFrom);
+    }
 };
