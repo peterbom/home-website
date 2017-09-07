@@ -5,8 +5,10 @@ import {DialogService} from "aurelia-dialog";
 import base64url from "base64-url";
 import moment from "moment";
 
-@inject(Router, Endpoint.of("main"), DialogService, "page-manager")
+@inject(Router, Endpoint.of("main"), DialogService, "page-manager", "authentication-manager")
 export class Import {
+
+    owner;
 
     fileInputElem; // From ref attribute
 
@@ -16,11 +18,16 @@ export class Import {
     pageSet;
     pageLinkGenerator;
 
-    constructor (router, endpoint, dialogService, pageManager) {
+    constructor (router, endpoint, dialogService, pageManager, authenticationManager) {
         this._router = router;
         this._endpoint = endpoint;
         this._dialogService = dialogService;
         this._pageManager = pageManager;
+        this._auth = authenticationManager;
+    }
+
+    activate() {
+        this.owner = this._auth.profile && (this._auth.profile.name || this._auth.profile.email);
     }
 
     handleFileListChanged() {
@@ -81,43 +88,49 @@ export class Import {
         let imageIndex = 1;
         let speedSummaries = [];
 
+        // An interval for refreshing progress
         let intervalId = setInterval(() => {
             let completeSize = speedSummaries.reduce((total, ss) => total + ss.completeSize, 0);
             controller.viewModel.progressPercent = (completeSize / totalFileSize) * 100;
         }, 200);
 
-        for (let batch of batches) {
-            let uploadImage = async file => {
-                let blobName = `${dateString}_${("00000" + imageIndex++).slice(-5)}`;
-                let customBlockSize = file.size > 1024 * 1024 * 32 // 32 MB
-                    ? 1024 * 1024 * 4   // 4 MB
-                    : 1024 * 512;       // 512 kB
-                blobService.singleBlobPutThresholdInBytes = customBlockSize;
+        // The function used to upload each individual file
+        let uploadImage = async file => {
+            let blobName = `${dateString}_${("00000" + imageIndex++).slice(-5)}`;
+            let customBlockSize = file.size > 1024 * 1024 * 32 // 32 MB
+                ? 1024 * 1024 * 4   // 4 MB
+                : 1024 * 512;       // 512 kB
+            blobService.singleBlobPutThresholdInBytes = customBlockSize;
 
-                let options = {
-                    blockSize : customBlockSize
-                };
-
-                await new Promise((resolve, reject) => {
-                    let callback = error => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve();
-                        }
-                    };
-
-                    let speedSummary = blobService.createBlockBlobFromBrowserFile(
-                        "images",
-                        blobName,
-                        file,
-                        options,
-                        callback);
-
-                    speedSummaries.push(speedSummary);
-                });
+            let options = {
+                blockSize : customBlockSize,
+                metadata: {
+                    owner: this.owner,
+                    filename: file.name
+                }
             };
 
+            await new Promise((resolve, reject) => {
+                let callback = error => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve();
+                    }
+                };
+
+                let speedSummary = blobService.createBlockBlobFromBrowserFile(
+                    "images",
+                    blobName,
+                    file,
+                    options,
+                    callback);
+
+                speedSummaries.push(speedSummary);
+            });
+        };
+
+        for (let batch of batches) {
             await Promise.all(batch.map(uploadImage));
         }
 

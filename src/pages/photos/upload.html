@@ -1,6 +1,11 @@
 <template>
     <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
 
+    <div class="form-group col-sm-6">
+        <label for="owner-input">Owner</label>
+        <input type="text" id="owner-input" value.bind="owner" class="form-control">
+    </div>
+
     <!-- https://www.danyow.net/binding-to-file-inputs-with-aurelia/ -->
     <label class="btn btn-default btn-file">
         Browse
