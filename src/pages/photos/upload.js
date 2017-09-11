@@ -56,6 +56,7 @@ export class Import {
             return;
         }
 
+        let fileCount = this.selectedFiles.length;
         let totalFileSize = this.selectedFiles.reduce((size, f) => size + f.size, 0);
 
         let batches = [];
@@ -146,17 +147,23 @@ export class Import {
             await new Promise((resolve, reject) => {
                 queueService.createMessage(queueName, encodedMessage, error => error ? reject(error) : resolve());
             });
+
+            console.info(`Completed uploading ${file.name} to blob ${blobName}`);
         };
 
-        for (let batch of batches) {
-            await Promise.all(batch.map(uploadImage));
+        try {
+            console.info(`Processing ${fileCount} files`);
+            for (let batch of batches) {
+                await Promise.all(batch.map(uploadImage));
+            }
+
+            this.clear();
+            console.info("Upload completed successfully");
+        } finally {
+            clearInterval(intervalId);
+
+            controller.viewModel.progressPercent = 100;
+            controller.cancel();
         }
-
-        clearInterval(intervalId);
-
-        controller.viewModel.progressPercent = 100;
-        controller.cancel();
-
-        this.clear();
     }
 }
