@@ -70,18 +70,26 @@ export class Import {
                 progressPercent: 0
             }});
 
-        let blobService;
+        let blobService, blobContainerName;
+        let queueService, queueName;
+        let messageEncoder = new AzureStorage.QueueMessageEncoder.TextBase64QueueMessageEncoder();
         if (window.env.NODE_ENV === "development") {
             // Save bandwidth by using a local storage emulator.
             // https://docs.microsoft.com/en-us/azure/storage/common/storage-use-emulator
             let storageEmulatorConnectionString = "UseDevelopmentStorage=true";
             blobService = AzureStorage.createBlobService(storageEmulatorConnectionString);
+            queueService = AzureStorage.createQueueService(storageEmulatorConnectionString);
+            blobContainerName = "images";
+            queueName = "client-requests";
         } else {
             // For non-development environments, use an SAS token provided by the API to authenticate with storage.
             let azureSasTokenResponse = await this._endpoint.find("azure-sas-token");
-            blobService = AzureStorage.createBlobServiceWithSas(
-                azureSasTokenResponse.host,
-                azureSasTokenResponse.token);
+            let blobTokenInfo = azureSasTokenResponse.blob;
+            let queueTokenInfo = azureSasTokenResponse.queue;
+            blobService = AzureStorage.createBlobServiceWithSas(blobTokenInfo.host, blobTokenInfo.token);
+            queueService = AzureStorage.createQueueServiceWithSas(queueTokenInfo.host, queueTokenInfo.token);
+            blobContainerName = blobTokenInfo.container;
+            queueName = queueTokenInfo.queue;
         }
 
         let dateString = moment().format("YYYY-MM-DD_HH-mm-ss");
@@ -120,13 +128,23 @@ export class Import {
                 };
 
                 let speedSummary = blobService.createBlockBlobFromBrowserFile(
-                    "images",
+                    blobContainerName,
                     blobName,
                     file,
                     options,
                     callback);
 
                 speedSummaries.push(speedSummary);
+            });
+
+            let message = {
+                task: "RegisterNewImage",
+                name: blobName
+            };
+
+            let encodedMessage = messageEncoder.encode(JSON.stringify(message));
+            await new Promise((resolve, reject) => {
+                queueService.createMessage(queueName, encodedMessage, error => error ? reject(error) : resolve());
             });
         };
 
