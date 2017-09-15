@@ -4,13 +4,14 @@ import {DialogService} from "aurelia-dialog";
 import moment from "moment";
 import base64url from "base64-url";
 
-@inject(BindingEngine, Endpoint.of("main"), DialogService)
+@inject(BindingEngine, Endpoint.of("main"), DialogService, "page-manager")
 export class Search {
 
-    constructor (bindingEngine, endpoint, dialogService) {
+    constructor (bindingEngine, endpoint, dialogService, pageManager) {
         this._bindingEngine = bindingEngine;
         this._endpoint = endpoint;
         this._dialogService = dialogService;
+        this._pageManager = pageManager;
     }
 
     pathParam;
@@ -20,6 +21,9 @@ export class Search {
 
     images;
     selectedImages = [];
+
+    pageSet;
+    pageLinkGenerator;
 
     thumbnailLookup = {};
 
@@ -90,6 +94,9 @@ export class Search {
             this.subscriptions.push(this._bindingEngine.collectionObserver(i.tags)
                 .subscribe(splices => i.tagsSplices = splices));
         });
+
+        this.pageSet = this._pageManager.getPageSet(this.images);
+        this.pageLinkGenerator = this._pageManager.getPageLinkGenerator(this.pageSet, 10);
 
         controller.cancel();
 

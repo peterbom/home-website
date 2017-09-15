@@ -33,6 +33,10 @@ body {
     overflow-y: auto;
 }
 
+.disabled a {
+    pointer-events: none;
+}
+
 ai-dialog-overlay {
     bottom: 0;
     left: 0;
