@@ -7,6 +7,8 @@ export class BlobService {
             containerName: null,
             renewAt: null
         };
+
+        this._retryFilter = new AzureStorage.ExponentialRetryPolicyFilter();
     }
 
     async _ensureService() {
@@ -25,7 +27,10 @@ export class BlobService {
         //     "container": "images",
         //     "expiry": "2017-09-21T00:59:29.5506411+12:00"
         // }
-        this._blobConnection.service = AzureStorage.createBlobServiceWithSas(blobTokenInfo.host, blobTokenInfo.token);
+        this._blobConnection.service = AzureStorage
+            .createBlobServiceWithSas(blobTokenInfo.host, blobTokenInfo.token)
+            .withFilter(this._retryFilter);
+
         this._blobConnection.containerName = blobTokenInfo.container;
         
         // Make sure this service is renewed (with another token) if it's less than 120 minutes away from expiry
