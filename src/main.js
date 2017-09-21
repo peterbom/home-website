@@ -44,10 +44,12 @@ export const configure = async function (aurelia) {
         .plugin("aurelia-api", configure => {
             configure
                 .registerEndpoint("main", apiConfig.mainEndpoint)
+                .registerEndpoint("function", apiConfig.functionEndpoint)
                 .registerEndpoint("packaging", apiConfig.packagingEndpoint)
         })
         .feature("features/utils")
         .feature("features/authentication", authConfig)
+        .feature("features/azure-services")
         .feature("resources/components")
         .feature("resources/converters")
         .feature("resources/custom-elements")
