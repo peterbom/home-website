@@ -85,14 +85,10 @@ export class AuthenticationManager {
         // need to set the authorization header for the permission request.
         this.refreshAuthenticationStatus();
 
-        let permissionRequestBody = {
-            id_token: authResult.idToken
-        };
-
         // Get user profile data and permissions in parallel
         let userInfoTasks = [
             this._getProfileAsync(authResult.idToken),
-            this._permissionsEndpoint.find(this._settings.permissionsResource, permissionRequestBody)
+            this._permissionsEndpoint.find(this._settings.permissionsResource)
         ];
 
         let [profile, permissions] = await Promise.all(userInfoTasks);
