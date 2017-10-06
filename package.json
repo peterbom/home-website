@@ -34,7 +34,8 @@
     "build-start": "npm run build-dev-debug && npm run serve-debug",
     "watch:src": "watch \"npm run build-dev-debug\" src",
     "watch:css": "watch \"npm run build:css\" styles",
-    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve-debug\""
+    "watch-tdd": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run test:tdd\" \"npm run serve-debug\"",
+    "watch": "concurrently \"npm run watch:src\" \"npm run watch:css\" \"npm run serve-debug\""
   },
   "name": "aurelia-home-website",
   "version": "1.0.0",

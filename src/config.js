@@ -7,7 +7,7 @@ switch (window.env.NODE_ENV) {
     case "development":
     case "test":
         mainEndpoint = "http://localhost:8000/";
-        functionEndpoint = "http://localhost:7071/api/";
+        functionEndpoint = "https://home-image-processing-dev.azurewebsites.net/api/";
         packagingEndpoint = "http://localhost:37081/";
         break;
     case "staging":

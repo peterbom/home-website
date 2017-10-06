@@ -1,0 +1,56 @@
+<template>
+    <table if.bind="duplicateSets" class="table table-hover">
+        <tr>
+            <th class="col-sm-10">Duplicates</th>
+            <th class="col-sm-2">Save</th>
+        </tr>
+        <tr repeat.for="set of duplicateSets">
+            <td>
+                <table class="table table-hover">
+                    <tr>
+                        <th>Image</th>
+                        <th>Original Filename</th>
+                        <th>Size</th>
+                        <th>Taken</th>
+                        <th>Tags</th>
+                        <th>Delete</th>
+                        <th>Re-order</th>
+                    </tr>
+                    <tr repeat.for="image of set.images" css="background-color: ${image.backgroundColor}">
+                        <td title="${image.name}">
+                            <img
+                                if.bind="image.thumbnailUrl"
+                                class="img-thumbnail"
+                                src.bind="image.thumbnailUrl"/>
+                        </td>
+                        <td title="${image.originalDirectory}">${image.originalFilename}</td>
+                        <td>${image.pixelCount.toLocaleString()} pixels, ${image.fileSizeBytes.toLocaleString()} B</td>
+                        <td>${image.takenDateTimeString}</td>
+                        <td>${image.tagListString}</td>
+                        <td>
+                            <input
+                                type="checkbox"
+                                model.bind="image"
+                                checked.bind="set.imagesToDelete">
+                        </td>
+                        <td>
+                            <button
+                                if.bind="!$first"
+                                click.delegate="moveUp(set, $index)"
+                                aria-label="Move Up">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <button
+                    click.delegate="save(set)"
+                    aria-label="Save">
+                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+</template>
