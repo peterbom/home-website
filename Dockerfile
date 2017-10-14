@@ -1,6 +1,6 @@
 FROM node:8.7.0 as builder
 
-# Environment needs to be passed in as 'prod' or 'staging'
+# Environment needs to be passed in as 'production' or 'staging'
 ARG environment
 
 # JSPM install requires an auth token for connecting to GitHub because it makes so many requests that without
@@ -35,9 +35,10 @@ COPY --from=builder /src/export/ /source
 
 WORKDIR /usr/local/bin
 RUN echo "#!/bin/sh" > start.sh &&\
-    echo "rm -rf \$1" >> start.sh && \
     echo "mkdir -p \$1" >> start.sh && \
-    echo "mv -f /source/* \$1" >> start.sh && \
+    echo "rm -rf \$1" >> start.sh && \
+    echo "ln -sf /source \$1" && \
+    echo "tail -f /dev/null" >> start.sh && \
     chmod 555 start.sh
 
 ENV TARGET_DIR /sites/$environment

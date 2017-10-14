@@ -1,56 +1,28 @@
 #!groovy
 
 node {
-    def node_path = "${tool name: 'NodeJS 8.4.0', type: 'nodejs'}/bin"
-    
     stage('checkout') {
         checkout scm
     }
-    
-    stage('init') {
-        withCredentials([string(credentialsId: 'jspm-github-auth', variable: 'jspm_github_auth')]) {
-            withEnv(["PATH+NODEJS=${node_path}", "JSPM_GITHUB_AUTH_TOKEN=${jspm_github_auth}"]) {
-                sh "echo ${jspm_github_auth}"
-                sh 'npm install'
-                sh 'npm run jspm-install'
-            }
-        }
-    }
-    
+
+	def docker_path = "${tool name: 'Docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'}/bin"
+	def environment = env.BRANCH_NAME == 'master' ? 'production' : 'staging'
+	def repo = "image-registry:5000/home-website:${environment}"
+
     stage('build') {
-        withEnv(["PATH+NODEJS=${node_path}"]) {
-            def npm_script = env.BRANCH_NAME == 'master'
-                ? 'build-prod-release'
-                : 'build-staging-release'
-            sh "npm run ${npm_script}"
-            archiveArtifacts 'export/**/*'
+        withCredentials([string(credentialsId: 'jspm-github-auth', variable: 'jspm_github_auth')]) {
+            sh "docker build -t ${repo} --build-arg jspm_github_auth=${jspm_github_auth} --build-arg environment=${environment} ."
         }
     }
 
-    stage('deploy') {
-        def folder = env.BRANCH_NAME == 'master'
-            ? env.HOME_WEBSITE_FOLDER_PROD
-            : env.HOME_WEBSITE_FOLDER_STAGING
-            
-        def rootPath = env.HOME_WEBSITE_ROOT
-        def pathPrev = "${rootPath}/${folder}_prev"
-        def pathTemp = "${rootPath}/${folder}_temp"
-        def pathDeploy = "${rootPath}/${folder}"
-
-        // Cleanup
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} sudo rm -rf ${pathTemp}"
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} sudo rm -rf ${pathPrev}"
-
-        // Initialise folders
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} mkdir -p ${pathTemp}"
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} mkdir -p ${pathDeploy}"
-
-        // Copy files to server (temp folder)
-        sh "scp -r export/* ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP}:${pathTemp}/"
-
-        // Switch paths and set folder ownsership
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} mv ${pathDeploy} ${pathPrev}"
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} mv ${pathTemp} ${pathDeploy}"
-        sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} sudo chown www-data:www-data -R ${pathDeploy}"
+    stage('push') {
+        sh "docker push ${repo}"
     }
+
+	stage('deploy') {
+		// https://staxmanade.com/2016/09/how-to-update-a-single-running-docker-compose-container/
+		def service_name = env.BRANCH_NAME == 'master' ? 'website' : 'testwebsite'
+		def working_dir = env.HOME_ENV_COMPOSE_DIR
+		sh "ssh ${env.HOME_ENV_SSH_USERNAME}@${env.HOME_ENV_IP} 'cd ${working_dir} && docker-compose up -d --no-deps --build ${service_name}'"
+	}
 }

@@ -23,7 +23,7 @@
     "build-prod-debug": "npm run clean-debug && npm run build:prod-debug",
     "build-dev-release": "npm run clean-release && npm run build:dev-release && jspm unbundle",
     "build-staging-release": "npm run clean-release && npm run build:staging-release && jspm unbundle",
-    "build-prod-release": "npm run clean-release && npm run build:prod-release && jspm unbundle",
+    "build-production-release": "npm run clean-release && npm run build:prod-release && jspm unbundle",
     "test": "karma start karma-conf/test.js",
     "test:tdd": "karma start karma-conf/tdd.js",
     "test:tdd-debug": "node-debug karma start karma-conf/tdd.js",
