@@ -1,11 +1,10 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 
-@inject(Endpoint.of("main"), Endpoint.of("function"))
+@inject(Endpoint.of("function"))
 export class DuplicateResolution {
 
-    constructor (mainEndpoint, functionEndpoint) {
-        this._mainEndpoint = mainEndpoint;
+    constructor (functionEndpoint) {
         this._functionEndpoint = functionEndpoint;
 
         this.duplicateSets = [];
@@ -16,12 +15,12 @@ export class DuplicateResolution {
         let publicUris = await this._functionEndpoint.find("public-uris");
         this.resizedImageContainerUri = publicUris.resizedImageContainerUri;
 
-        this.duplicateSets = await this._mainEndpoint.find("photo-duplicate");
+        this.duplicateSets = await this._functionEndpoint.find("duplicate-set");
         for (let set of this.duplicateSets) {
             set.imagesToDelete = [];
 
             for (let image of set.images) {
-                image.thumbnailUrl = image.widths && image.widths["200"] ? `${this.resizedImageContainerUri}/200/${image.name}` : null;
+                image.thumbnailUrl = image.sizes && image.sizes["200"] ? `${this.resizedImageContainerUri}/200/${image.name}` : null;
                 image.takenDateTimeString = image.takenDateTime ? new Date(image.takenDateTime).toLocaleString() : "";
                 image.tagListString = Object
                     .keys(image.tags || {})
