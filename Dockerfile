@@ -1,11 +1,12 @@
-ARG build-image
+ARG build_tag
 ARG environment
 
-FROM ${build-image} as build
+# https://docs.docker.com/engine/reference/builder/#environment-replacement
+FROM $build_tag as build
 
 # Create a new image to contain the files output from the build, plus a lightweight OS image to move
 # the files to the shared volume at runtime.
-FROM alpine:3.6
+FROM arm32v7/debian:stretch
 
 COPY --from=build /source /source
 
