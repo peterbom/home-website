@@ -28,7 +28,7 @@ RUN npm run build-$environment-release
 
 # Create a new image to contain just the files output from the build. This needs a lightweight OS image to move
 # the files to the shared volume at runtime.
-FROM alpine:3.6
+FROM arm32v7/debian:jessie
 ARG environment
 
 COPY --from=builder /src/export/ /source

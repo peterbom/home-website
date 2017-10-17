@@ -8,16 +8,14 @@ node {
 	def environment = env.BRANCH_NAME == 'master' ? 'production' : 'staging'
 	def repo = "image-registry:5000/home-website:${environment}"
 
-    docker.withServer(env.ARM32_DOCKER_HOST) {
-        stage('build') {
-            withCredentials([string(credentialsId: 'jspm-github-auth', variable: 'jspm_github_auth')]) {
-                sh "docker build -t ${repo} --build-arg jspm_github_auth=${jspm_github_auth} --build-arg environment=${environment} ."
-            }
+    stage('build') {
+        withCredentials([string(credentialsId: 'jspm-github-auth', variable: 'jspm_github_auth')]) {
+            sh "docker build -t ${repo} --build-arg jspm_github_auth=${jspm_github_auth} --build-arg environment=${environment} ."
         }
+    }
 
-        stage('push') {
-            sh "docker push ${repo}"
-        }
+    stage('push') {
+        sh "docker push ${repo}"
     }
 
 	stage('deploy') {
