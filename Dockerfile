@@ -1,8 +1,10 @@
+ARG build-image
 ARG environment
+
+FROM ${build-image} as build
 
 # Create a new image to contain the files output from the build, plus a lightweight OS image to move
 # the files to the shared volume at runtime.
-FROM image-registry:5000/home-website-build:$environment as build
 FROM alpine:3.6
 
 COPY --from=build /source /source
