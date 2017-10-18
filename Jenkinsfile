@@ -23,11 +23,8 @@ node {
         docker.withServer(env.ARM32_DOCKER_HOST) {
             sh "docker pull ${build_tag}"
             sh "docker build -t ${deploy_tag} --build-arg build_tag=${build_tag} --build-arg environment=${environment} ."
+            sh "docker push ${deploy_tag}"
         }
-    }
-
-    stage('push') {
-        sh "docker push ${deploy_tag}"
     }
 
 	stage('deploy') {
