@@ -26,7 +26,7 @@ export class ImageService {
     async saveChanges(image) {
         let change = image.getChange();
         if (change.isChanged) {
-            await this._endpoint.post("commands/update-image", change);
+            await this._endpoint.post(`image-update/${image.name}`, change);
             image.commitChange();
         }
     }

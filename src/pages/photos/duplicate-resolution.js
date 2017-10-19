@@ -15,7 +15,7 @@ export class DuplicateResolution {
         let publicUris = await this._functionEndpoint.find("public-uris");
         this.resizedImageContainerUri = publicUris.resizedImageContainerUri;
 
-        this.duplicateSets = await this._functionEndpoint.find("duplicate-set");
+        this.duplicateSets = await this._functionEndpoint.find("duplicate-sets");
         for (let set of this.duplicateSets) {
             set.imagesToDelete = [];
 
@@ -44,12 +44,12 @@ export class DuplicateResolution {
             .filter(name => imageNamesToDelete.indexOf(name) < 0);
         
         // Delete
-        let deletePromises = imageNamesToDelete.map(name => this._functionEndpoint.post("commands/delete-image", {name: name}));
+        let deletePromises = imageNamesToDelete.map(name => this._functionEndpoint.destroy(`images/${name}`));
         await Promise.all(deletePromises);
 
         // Order remaining images
         if (orderedImageNames.length > 1) {
-            await this._functionEndpoint.post("commands/order-images", {orderedImageNames: orderedImageNames});
+            await this._functionEndpoint.post("image-ordering", {orderedImageNames: orderedImageNames});
         }
 
         // Remove this set from the results

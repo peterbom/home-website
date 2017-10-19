@@ -69,9 +69,7 @@ export class BlobService {
         });
 
         // Inform the API that a new image has been uploaded
-        // POST the name to: commands/register-new-image
-        let message = { name: blobName };
-
-        await this._endpoint.post("commands/register-new-image", message);
+        // POST to: image-registration/<image-name>
+        await this._endpoint.post(`commands/${blobName}`);
     };
 }
