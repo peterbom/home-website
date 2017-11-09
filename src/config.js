@@ -7,17 +7,17 @@ switch (window.env.NODE_ENV) {
     case "development":
     case "test":
         mainEndpoint = "http://localhost:8000/";
-        functionEndpoint = "https://home-image-processing-dev.azurewebsites.net/api/";
+        functionEndpoint = "https://image-processing-dev.azurewebsites.net/api/";
         packagingEndpoint = "http://localhost:37081/";
         break;
     case "staging":
         mainEndpoint = "https://testapi.bombers.space:8443/";
-        functionEndpoint = "https://home-image-processing-dev.azurewebsites.net/api/";
+        functionEndpoint = "https://image-processing-dev.azurewebsites.net/api/";
         packagingEndpoint = "http://localhost:37081/";  // Invalid hostname from IIS Express if we use IP address
         break;
     case "production":
         mainEndpoint = "https://api.bombers.space/";
-        functionEndpoint = "https://home-image-processing.azurewebsites.net/api/";
+        functionEndpoint = "https://image-processing.azurewebsites.net/api/";
         packagingEndpoint = "https://packagingapi.azurewebsites.net/";
         break;
     default:
