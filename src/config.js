@@ -17,7 +17,7 @@ switch (window.env.NODE_ENV) {
         break;
     case "production":
         mainEndpoint = "https://api.bombers.space/";
-        functionEndpoint = "https://image-processing.azurewebsites.net/api/";
+        functionEndpoint = "https://image-processing-prod.azurewebsites.net/api/";
         packagingEndpoint = "https://packagingapi.azurewebsites.net/";
         break;
     default:
