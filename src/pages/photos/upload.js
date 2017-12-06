@@ -59,9 +59,13 @@ export class Import {
         let fileCount = this.selectedFiles.length;
         let totalFileSize = this.selectedFiles.reduce((size, f) => size + f.size, 0);
 
+        // Avoid uploading several images in parallel, since it doesn't appear to
+        // improve performance, and it's better if a network error during a batch
+        // only stops a single upload rather than several.
+        let batchSize = 1;
         let batches = [];
         while (this.selectedFiles.length > 0) {
-            batches.push(this.selectedFiles.splice(0, 10));
+            batches.push(this.selectedFiles.splice(0, batchSize));
         }
 
         let controller = await this._dialogService.openAndYieldController({
