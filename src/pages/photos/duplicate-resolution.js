@@ -1,21 +1,21 @@
 import {inject, NewInstance} from "aurelia-framework";
 import {Endpoint} from "aurelia-api";
 
-@inject(Endpoint.of("function"))
+@inject("image-service")
 export class DuplicateResolution {
 
-    constructor (functionEndpoint) {
-        this._functionEndpoint = functionEndpoint;
-
+    constructor (imageService) {
+        this._imageService = imageService;
+        
         this.duplicateSets = [];
         this.resizedImageContainerUri = null;
     }
 
     async activate (params) {
-        let publicUris = await this._functionEndpoint.find("public-uris");
+        let publicUris = await this._imageService.getPublicUris();
         this.resizedImageContainerUri = publicUris.resizedImageContainerUri;
 
-        this.duplicateSets = await this._functionEndpoint.find("duplicate-sets");
+        this.duplicateSets = await this._imageService.getDuplicateSets();
         for (let set of this.duplicateSets) {
             set.imagesToDelete = [];
 
@@ -43,14 +43,10 @@ export class DuplicateResolution {
             .map(i => i.name)
             .filter(name => imageNamesToDelete.indexOf(name) < 0);
         
-        // Delete
-        let deletePromises = imageNamesToDelete.map(name => this._functionEndpoint.destroy(`images/${name}`));
+        // Submit changes
+        let deletePromises = imageNamesToDelete.map(name => this._imageService.delete(name));
         await Promise.all(deletePromises);
-
-        // Order remaining images
-        if (orderedImageNames.length > 1) {
-            await this._functionEndpoint.post("image-ordering", {orderedImageNames: orderedImageNames});
-        }
+        await this._imageService.setImageOrdering(orderedImageNames);
 
         // Remove this set from the results
         this.duplicateSets.splice(this.duplicateSets.indexOf(set), 1);

@@ -3,6 +3,14 @@ export class ImageService {
         this._endpoint = endpoint;
     }
 
+    async getPublicUris() {
+        return await this._endpoint.find("public-uris");
+    }
+
+    async getDuplicateSets() {
+        return await this._endpoint.find("duplicate-sets");
+    }
+
     async getStatistics() {
         // {totalCount, readableCount, requiringMovementCount}
     }
@@ -29,5 +37,15 @@ export class ImageService {
             await this._endpoint.post(`image-update/${image.name}`, change);
             image.commitChange();
         }
+    }
+
+    async setImageOrdering(orderedImageNames) {
+        if (orderedImageNames.length > 1) {
+            await this._endpoint.post("image-ordering", {orderedImageNames: orderedImageNames});
+        }
+    }
+
+    async delete(imageName) {
+        await this._endpoint.destroy(`images/${imageName}`);
     }
 }
