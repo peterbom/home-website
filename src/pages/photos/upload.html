@@ -48,4 +48,15 @@
         click.delegate="upload()">
         Upload
     </button>
+
+    <div show.bind="displayUploadResult">
+        <h3>Completed</h3>
+        <pre>${uploadResult.completedList}</pre>
+
+        <h3>Skipped</h3>
+        <pre>${uploadResult.skippedList}</pre>
+
+        <h3>Failed</h3>
+        <pre>${uploadResult.failedList}</pre>
+    </div>
 </template>

@@ -51,6 +51,7 @@ module.exports = {
                 "font-awesome",
                 "jquery",  // required by bootstrap
                 "jquery-datetimepicker",
+                "js-md5",
                 "jwt-decode",
                 "moment",
                 "select2",

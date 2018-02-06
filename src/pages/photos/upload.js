@@ -1,11 +1,12 @@
-import {inject, NewInstance} from "aurelia-framework";
+import {inject, NewInstance, computedFrom} from "aurelia-framework";
 import {Router} from "aurelia-router";
 import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import base64url from "base64-url";
 import moment from "moment";
+import {FileUtils} from "../../lib/file-utils";
 
-@inject(Router, "blob-service", DialogService, "page-manager", "authentication-manager")
+@inject(Router, "blob-service", "image-service", DialogService, "page-manager", "authentication-manager")
 export class Import {
 
     owner;
@@ -18,9 +19,10 @@ export class Import {
     pageSet;
     pageLinkGenerator;
 
-    constructor (router, blobService, dialogService, pageManager, authenticationManager) {
+    constructor (router, blobService, imageService, dialogService, pageManager, authenticationManager) {
         this._router = router;
         this._blobService = blobService;
+        this._imageService = imageService;
         this._dialogService = dialogService;
         this._pageManager = pageManager;
         this._auth = authenticationManager;
@@ -28,9 +30,11 @@ export class Import {
 
     activate() {
         this.owner = this._auth.profile && (this._auth.profile.name || this._auth.profile.email);
+        this.uploadResult = new UploadResult();
+        this.displayUploadResult = false;
     }
 
-    handleFileListChanged() {
+    async handleFileListChanged() {
         this.selectedFiles = [];
         for (let i = 0; i < this.fileList.length; i++) {
             this.selectedFiles.push(this.fileList.item(i));
@@ -44,6 +48,7 @@ export class Import {
         this.fileList = null;
         this.fileInputElem.type = "";
         this.fileInputElem.type = "file";
+        this.displayUploadResult = false;
     }
 
     clear() {
@@ -56,17 +61,16 @@ export class Import {
             return;
         }
 
+        this.uploadResult.clear();
+        this.displayUploadResult = true;
         let fileCount = this.selectedFiles.length;
         let totalFileSize = this.selectedFiles.reduce((size, f) => size + f.size, 0);
 
         // Avoid uploading several images in parallel, since it doesn't appear to
         // improve performance, and it's better if a network error during a batch
         // only stops a single upload rather than several.
-        let batchSize = 1;
-        let batches = [];
-        while (this.selectedFiles.length > 0) {
-            batches.push(this.selectedFiles.splice(0, batchSize));
-        }
+        let files = this.selectedFiles.slice();
+        this.selectedFiles.length = 0;
 
         let controller = await this._dialogService.openAndYieldController({
             viewModel: this.loadingModal,
@@ -85,18 +89,11 @@ export class Import {
             controller.viewModel.progressPercent = (completeSize / totalFileSize) * 100;
         }, 200);
 
-        // The function used to upload each individual file
-        let uploadImage = async file => {
-            let blobName = `${dateString}_${("00000" + imageIndex++).slice(-5)}`;
-            await this._blobService.uploadBlob(file, blobName, this.owner, ss => speedSummaries.push(ss));
-
-            console.info(`Completed uploading ${file.name} to blob ${blobName}`);
-        };
-
         try {
             console.info(`Processing ${fileCount} files`);
-            for (let batch of batches) {
-                await Promise.all(batch.map(uploadImage));
+            for (let file of files) {
+                let blobName = `${dateString}_${("00000" + imageIndex++).slice(-5)}`;
+                await this._uploadImage(file, speedSummaries, blobName);
             }
 
             this.clear();
@@ -107,5 +104,54 @@ export class Import {
             controller.viewModel.progressPercent = 100;
             controller.cancel();
         }
+    }
+
+    async _uploadImage(file, speedSummaries, blobName) {
+        let hashString = await FileUtils.getMd5Hash(file);
+        let isUsed = await this._imageService.isFileHashUsed(hashString);
+        if (isUsed) {
+            this.uploadResult.skipped.push(file.name);
+            speedSummaries.push({ completeSize: file.size });
+            return;
+        }
+
+        try {
+            await this._blobService.uploadBlob(file, blobName, this.owner, ss => speedSummaries.push(ss));
+            this.uploadResult.completed.push(file.name);
+    
+            console.info(`Completed uploading ${file.name} to blob ${blobName}`);
+        } catch (e) {
+            this.uploadResult.failed.push(file.name);
+            throw e;
+        }
+    }
+}
+
+class UploadResult {
+    constructor() {
+        this.completed = [];
+        this.skipped = [];
+        this.failed = [];
+    }
+
+    clear() {
+        this.completed.length = 0;
+        this.skipped.length = 0;
+        this.failed.length = 0;
+    }
+
+    @computedFrom("completed.length")
+    get completedList() {
+        return this.completed.join("\n");
+    }
+
+    @computedFrom("skipped.length")
+    get skippedList() {
+        return this.skipped.join("\n");
+    }
+
+    @computedFrom("failed.length")
+    get failedList() {
+        return this.failed.join("\n");
     }
 }

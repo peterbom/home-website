@@ -119,6 +119,7 @@
       "font-awesome": "npm:font-awesome@4.6.3",
       "jquery": "npm:jquery@2.2.4",
       "jquery-datetimepicker": "npm:jquery-datetimepicker@^2.5.4",
+      "js-md5": "npm:js-md5@^0.7.3",
       "jwt-decode": "npm:jwt-decode@^2.1.0",
       "moment": "npm:moment@^2.14.1",
       "select2": "npm:select2@^4.0.3",

@@ -11,6 +11,10 @@ export class ImageService {
         return await this._endpoint.find("duplicate-sets");
     }
 
+    async isFileHashUsed(base64EncodedMd5Hash) {
+        return await this._endpoint.find(`hash-usage/${encodeURIComponent(base64EncodedMd5Hash)}`);
+    }
+
     async getStatistics() {
         // {totalCount, readableCount, requiringMovementCount}
     }
