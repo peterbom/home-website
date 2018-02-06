@@ -12,7 +12,7 @@ export class ImageService {
     }
 
     async isFileHashUsed(base64EncodedMd5Hash) {
-        return await this._endpoint.find(`hash-usage/${encodeURIComponent(base64EncodedMd5Hash)}`);
+        return await this._endpoint.find(`hash-usage/${urlEncodeBase64(base64EncodedMd5Hash)}`);
     }
 
     async getStatistics() {
@@ -52,4 +52,16 @@ export class ImageService {
     async delete(imageName) {
         await this._endpoint.destroy(`images/${imageName}`);
     }
+}
+
+function urlEncodeBase64(base64String) {
+    // https://tools.ietf.org/html/rfc4648#section-5
+    // https://brockallen.com/2014/10/17/base64url-encoding
+    // Remove trailing '='
+    // Replace '+' with '-'
+    // Replace '/' with '_'
+    return base64String
+        .replace(/=+$/, "")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_");
 }
