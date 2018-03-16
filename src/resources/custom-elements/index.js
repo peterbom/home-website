@@ -3,5 +3,6 @@ export function configure(aurelia) {
         "./time-photo-filter",
         "./plant-select",
         "./companion-plant-view",
-        "./pagination-control");
+        "./pagination-control",
+        "./image-view");
 }

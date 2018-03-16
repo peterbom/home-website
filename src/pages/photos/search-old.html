@@ -1,0 +1,122 @@
+<template>
+    <loading-modal show.bind="false" view-model.ref="loadingModal"></loading-modal>
+
+    <h2 if.bind="!!path">${path}</h2>
+
+    <div if.bind="!!path" class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="action-nav" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Actions
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="action-nav">
+            <li>
+                <a route-href="route:move-from-dir; params.bind:{path:pathParam}">Move images</a>
+            </li>
+        </ul>
+    </div>
+
+    <time-photo-filter
+        from-date.bind="fromDateTime"
+        to-date.bind="toDateTime"
+        max-day-range="60"
+        change.delegate="applyFilters() & debounce:1000"
+        width="600"
+        height="500">
+    </time-photo-filter>
+
+    <section if.bind="images && images.length">
+        <div class="form-group col-sm-6">
+            <label for="operation-select">Operation</label>
+            <select id="operation-select" value.bind="selectedOperation" class="form-control">
+                <option repeat.for="option of operationOptions" value.bind="option.value">${option.name}</option>
+            </select>
+        </div>
+    
+        <button
+            class="btn btn-primary pull-right"
+            type="button"
+            disabled.bind="!selectedImages.length"
+            click.delegate="sendToPhotoFrame()">
+            Send to Photo Frame
+        </button>
+    
+        <div>
+            <pagination-control
+                page-set.bind="pageSet"
+                page-link-generator.bind="pageLinkGenerator">
+            </pagination-control>
+        </div>
+    
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-sm-2">Thumbnail</th>
+                    <th class="col-sm-3">Directory</th>
+                    <th class="col-sm-3">Filename</th>
+                    <th class="col-sm-1">
+                        <input type="checkbox" checked.bind="allSelected">
+                    </th>
+                    <th if.bind="selectedOperation === 'edit-date'" class="col-sm-3">Taken</th>
+                    <th if.bind="selectedOperation === 'edit-tags'" class="col-sm-3">Tags</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="image of pageSet.currentPage.items">
+                    <td>
+                        <span if.bind="thumbnailLookup[image.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
+                        <span if.bind="thumbnailLookup[image.id] === null" class="fa fa-image" aria-hidden="true"></span>
+                        <img if.bind="thumbnailLookup[image.id]" class="img-thumbnail" src.bind="thumbnailLookup[image.id] | dataUri:'image/jpeg'"/>
+                    </td>
+                    <td>
+                        <span if.bind="!!path">${image.directoryPath}</span>
+                        <a if.bind="!path" route-href="route:search; params.bind:{path:image.pathParam}" class="clickable-block">
+                            ${image.directoryPath}
+                        </a>
+                    </td>
+                    <td>
+                        <a route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
+                            ${image.filename}
+                        </a>
+                    </td>
+                    <td>
+                        <input
+                            type="checkbox"
+                            model.bind="image"
+                            checked.bind="$parent.selectedImages">
+                    </td>
+                    <td if.bind="selectedOperation === 'edit-date'">
+                        <input
+                            value.bind="image.takenDateTime | dateTimeFormat"
+                            datepicker>
+                    </td>
+                    <td if.bind="selectedOperation === 'edit-tags'">
+                        <input value.bind="image.tags">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <div>
+            <pagination-control
+                page-set.bind="pageSet"
+                page-link-generator.bind="pageLinkGenerator">
+            </pagination-control>
+        </div>
+    
+        <button
+            if.bind="selectedOperation === 'edit-date'"
+            class="btn btn-primary"
+            type="button"
+            click.delegate="saveTakenDates()">
+            Save
+        </button>
+    
+        <button
+            if.bind="selectedOperation === 'edit-tags'"
+            class="btn btn-primary"
+            type="button"
+            click.delegate="saveTags()">
+            Save
+        </button>
+    </section>
+</template>

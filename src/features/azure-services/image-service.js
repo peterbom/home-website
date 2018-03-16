@@ -27,12 +27,16 @@ export class ImageService {
         // [n0, n1, ...]
     }
 
-    async getImagesBetween(fromDateTime, toDateTime) {
+    async search(criteria) {
         // [Image0, Image1, ...]
+        return await this._endpoint.post("image-search", criteria);
     }
 
-    async getImages(ids) {
-        // [Image0, Image1, ...]
+    async retrieve(names, includes) {
+        return await this._endpoint.post("image-retrieval", {
+            names: names,
+            includes: includes
+        });
     }
 
     async saveChanges(image) {
