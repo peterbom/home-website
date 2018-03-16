@@ -13,7 +13,7 @@ export class ImageView {
     @computedFrom('isVideo')
     get thumbnailUrl() {
         return this.isVideo
-            ? `${this.videoUri}/200/${this.image.name}`
+            ? `${this.videoUri}/${this.image.name}`
             : `${this.imageUri}/200/${this.image.name}`;
     }
 }
