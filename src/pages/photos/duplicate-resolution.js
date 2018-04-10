@@ -12,8 +12,7 @@ export class DuplicateResolution {
     }
 
     async activate (params) {
-        let publicUris = await this._imageService.getPublicUris();
-        this.resizedImageContainerUri = publicUris.resizedImageContainerUri;
+        this.resizedImageContainerUri = await this._imageService.getResizedImageContainerUri();
 
         this.duplicateSets = await this._imageService.getDuplicateSets();
         for (let set of this.duplicateSets) {

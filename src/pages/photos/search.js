@@ -38,9 +38,8 @@ export class Search {
     }
 
     async activate (params) {
-        let publicUris = await this._imageService.getPublicUris();
-        this.resizedImageContainerUri = publicUris.resizedImageContainerUri;
-        this.videosForWebContainerUri = publicUris.videosForWebContainerUri;
+        this.resizedImageContainerUri = await this._imageService.getResizedImageContainerUri();
+        this.videosForWebContainerUri = await this._imageService.getVideosForWebContainerUri();
 
         this.fromDateTime = moment().subtract(30, "days").toDate();
         this.toDateTime = moment().endOf("day").toDate();

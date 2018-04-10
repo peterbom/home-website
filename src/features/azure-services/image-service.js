@@ -1,10 +1,30 @@
+import { Cache } from "../../lib/cache";
+
 export class ImageService {
     constructor(endpoint) {
         this._endpoint = endpoint;
+
+        // {
+        //   resizedImageContainerUri: "<uri>",
+        //   videosForWebContainerUri: "<uri>"
+        // }
+        this._uriCache = new Cache(() => endpoint.find("public-uris"));
+
+        // {
+        //   yearlyTotals: [{year: <year>, count: <count>}, ...],
+        //   tags: [{name: "<name>", count: <count>}, ...]
+        // }
+        this._summaryDataCache = new Cache(() => endpoint.find("image-summary"));
     }
 
-    async getPublicUris() {
-        return await this._endpoint.find("public-uris");
+    async getResizedImageContainerUri() {
+        let uris = await this._uriCache.getResult();
+        return uris.resizedImageContainerUri;
+    }
+
+    async getVideosForWebContainerUri() {
+        let uris = await this._uriCache.getResult();
+        return uris.videosForWebContainerUri;
     }
 
     async getDuplicateSets() {
@@ -20,7 +40,9 @@ export class ImageService {
     }
 
     async getYearlyTotals() {
-        // [{year: int, count: int}]
+        // [{year: int, count: int}, ...]
+        let summaryData = await this._summaryDataCache.getResult();
+        return summaryData.yearlyTotals
     }
 
     async getDailyTotals(fromDate, toDate) {
@@ -28,11 +50,45 @@ export class ImageService {
     }
 
     async search(criteria) {
-        // [Image0, Image1, ...]
+        // criteria: {
+        //   fromUtc: "YYYY-MM-DDTHH:mm:ss",
+        //   toUtc: "YYYY-MM-DDTHH:mm:ss",
+        //   fromLocal: "YYYY-MM-DD",
+        //   toLocal: "YYYY-MM-DD",
+        //   ianaTimeZoneIds: ["Asia/Bangkok", "Europe/London", ...],
+        //   locationWithin: {latitudeMin: y0, latitudeMax: y1, longitudeMin: x0, longitudeMax: x1},
+        //   ownerIds: ["5a17ac7830cad649300e1cfe", ...],
+        //   tags: ["computer", "landscape"],
+        //   cameraIds: ["5a1d238327ad84bb2c7ca4e9", ...]
+        // }
+        //
+        // result: [Image0, Image1, ...]
         return await this._endpoint.post("image-search", criteria);
     }
 
     async retrieve(names, includes) {
+        // includes: {
+        //   takenDateTime: true,
+        //   owner: true,
+        //   tags: true,
+        //   position: true,
+        //   sizes: true,
+        //   fileInfo: true,
+        //   exifData: true,
+        //   videoData: true
+        // }
+        //
+        // result: [
+        //   {name, mimeType,
+        //    takenUtc, takenLocal,
+        //    ownerId, cameraId,
+        //    tags,
+        //    location, altitude,
+        //    sizes,
+        //    pixelCount, fileSizeBytes, fileMd5Hash, originalFilename,
+        //    exifData,
+        //    videoData}
+        //]
         return await this._endpoint.post("image-retrieval", {
             names: names,
             includes: includes

@@ -3,7 +3,7 @@ import {Endpoint} from "aurelia-api";
 import moment from "moment";
 import * as d3 from "d3";
 
-@inject(Element, Endpoint.of("main"))
+@inject(Element, "image-service")
 export class TimePhotoFilter {
     @bindable width;
     @bindable height;
@@ -17,9 +17,9 @@ export class TimePhotoFilter {
     yearlyData;
     dataPoints;
 
-    constructor (element, endpoint) {
+    constructor (element, imageService) {
         this._element = element;
-        this._endpoint = endpoint;
+        this._imageService = imageService;
     }
 
     get isFiltered () {
@@ -57,29 +57,23 @@ export class TimePhotoFilter {
     }
 
     async refreshYearlyData () {
-        let response = await this._endpoint.find("photo-image", {
-            json: JSON.stringify({
-                summary: {yearlyTotals: true}
-            })
-        });
-
-        this.yearlyData = response.yearlyTotals;
+        this.yearlyData = await this._imageService.getYearlyTotals();
     }
 
     async refreshDataPoints () {
-        let response = await this._endpoint.find("photo-image", {
-            json: JSON.stringify({
-                criteria: {
-                    fromDateTime: this.displayFromDate,
-                    toDateTime: this.displayToDate
-                },
-                return: {id: true, takenDateTime: true}
-            })
-        });
+        let criteria = {
+            fromLocal: moment(this.displayFromDate).toISOString(),
+            toLocal: moment(this.displayToDate).toISOString()
+        };
 
-        this.dataPoints = response.map(d => ({
-            id: d.id,
-            date: new Date(d.takenDateTime)
+        let names = await this._imageService.search(criteria);
+
+        let includes = { takenDateTime: true };
+        let images = await this._imageService.retrieve(names, includes);
+
+        this.dataPoints = images.map(img => ({
+            id: img.id,
+            date: new Date(img.takenLocal)
         }));
 
         this.setFromDate(d3.min(this.dataPoints, d => d.date) || this.fromDate);
