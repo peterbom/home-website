@@ -1,4 +1,5 @@
 import {bindable, computedFrom} from "aurelia-framework";
+import { ImageUtils } from "../../lib/image-utils";
 
 export class ImageView {
     @bindable image;
@@ -7,7 +8,7 @@ export class ImageView {
 
     @computedFrom('image.mimeType')
     get isVideo() {
-        return /^video\/.+$/i.test(this.image.mimeType);
+        return ImageUtils.isVideo(this.image.mimeType);
     }
 
     @computedFrom('isVideo')

@@ -1,7 +1,7 @@
 <template>
     <span if.bind="!thumbnailUrl" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
     <img if.bind="thumbnailUrl && !isVideo" class="img-thumbnail" src.bind="thumbnailUrl"/>
-    <video if.bind="thumbnailUrl && isVideo" controls>
+    <video if.bind="thumbnailUrl && isVideo" controls class="img-thumbnail">
         <source src.bind="thumbnailUrl" type="video/webm">
         Your browser does not support the video tag.
     </video>

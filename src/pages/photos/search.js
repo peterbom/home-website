@@ -1,5 +1,4 @@
 import {inject, NewInstance} from "aurelia-framework";
-import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import moment from "moment";
 
@@ -20,8 +19,6 @@ export class Search {
 
     pageSet;
     pageLinkGenerator;
-
-    thumbnailLookup = {};
 
     set allSelected (val) {
         if (val) {

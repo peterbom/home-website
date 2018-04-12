@@ -12,7 +12,8 @@ export class ImageService {
 
         // {
         //   yearlyTotals: [{year: <year>, count: <count>}, ...],
-        //   tags: [{name: "<name>", count: <count>}, ...]
+        //   tags: [{name: "<name>", count: <count>}, ...],
+        //   cameras: [{id: "<id>", make: "<make>", model: "<model>", count: <count>}, ...]
         // }
         this._summaryDataCache = new Cache(() => endpoint.find("image-summary"));
     }
@@ -42,7 +43,19 @@ export class ImageService {
     async getYearlyTotals() {
         // [{year: int, count: int}, ...]
         let summaryData = await this._summaryDataCache.getResult();
-        return summaryData.yearlyTotals
+        return summaryData.yearlyTotals;
+    }
+
+    async getTags() {
+        // [{name: "<name>", count: <count>}, ...]
+        let summaryData = await this._summaryDataCache.getResult();
+        return summaryData.tags;
+    }
+
+    async getCameras() {
+        // [{id: "<id>", make: "<make>", model: "<model>", count: <count>}, ...]
+        let summaryData = await this._summaryDataCache.getResult();
+        return summaryData.cameras;
     }
 
     async getDailyTotals(fromDate, toDate) {
