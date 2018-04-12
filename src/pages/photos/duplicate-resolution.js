@@ -1,5 +1,5 @@
 import {inject, NewInstance} from "aurelia-framework";
-import {Endpoint} from "aurelia-api";
+import moment from "moment";
 
 @inject("image-service")
 export class DuplicateResolution {
@@ -9,18 +9,22 @@ export class DuplicateResolution {
         
         this.duplicateSets = [];
         this.resizedImageContainerUri = null;
+        this.videosForWebContainerUri = null;
     }
 
     async activate (params) {
         this.resizedImageContainerUri = await this._imageService.getResizedImageContainerUri();
+        this.videosForWebContainerUri = await this._imageService.getVideosForWebContainerUri();
 
         this.duplicateSets = await this._imageService.getDuplicateSets();
         for (let set of this.duplicateSets) {
             set.imagesToDelete = [];
 
             for (let image of set.images) {
-                image.thumbnailUrl = image.sizes && image.sizes["200"] ? `${this.resizedImageContainerUri}/200/${image.name}` : null;
-                image.takenDateTimeString = image.takenDateTime ? new Date(image.takenDateTime).toLocaleString() : "";
+                image.takenDateTime =
+                    image.takenDateTimeLocal ? moment(image.takenDateTimeLocal) :
+                    image.takenDateTimeUtc ? moment(image.takenDateTimeUtc) :
+                    null;
                 image.tagListString = Object
                     .keys(image.tags || {})
                     .filter(t => image.tags[t])

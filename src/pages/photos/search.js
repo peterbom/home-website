@@ -9,16 +9,17 @@ export class Search {
         this._imageService = imageService;
         this._dialogService = dialogService;
         this._pageManager = pageManager;
+
+        this.resizedImageContainerUri = null;
+        this.videosForWebContainerUri = null;
+
+        this.fromDateTime = null;
+        this.toDateTime = null;
+        this.images = null;
+        this.selectedImages = [];
+        this.pageSet = null;
+        this.pageLinkGenerator = null;
     }
-
-    fromDateTime;
-    toDateTime;
-
-    images;
-    selectedImages = [];
-
-    pageSet;
-    pageLinkGenerator;
 
     set allSelected (val) {
         if (val) {

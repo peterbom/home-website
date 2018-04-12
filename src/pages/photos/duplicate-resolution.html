@@ -18,14 +18,15 @@
                     </tr>
                     <tr repeat.for="image of set.images" css="background-color: ${image.backgroundColor}">
                         <td title="${image.name}">
-                            <img
-                                if.bind="image.thumbnailUrl"
-                                class="img-thumbnail"
-                                src.bind="image.thumbnailUrl"/>
+                            <image-view
+                                image.bind="image"
+                                image-uri.bind="resizedImageContainerUri"
+                                video-uri.bind="videosForWebContainerUri">
+                            </image-view>
                         </td>
                         <td title="${image.originalDirectory}">${image.originalFilename}</td>
                         <td>${image.pixelCount.toLocaleString()} pixels, ${image.fileSizeBytes.toLocaleString()} B</td>
-                        <td>${image.takenDateTimeString}</td>
+                        <td>${image.takenDateTime | dateTimeFormat}</td>
                         <td>${image.tagListString}</td>
                         <td>
                             <input
