@@ -1,58 +1,41 @@
 import {inject, NewInstance} from "aurelia-framework";
-import {Endpoint} from "aurelia-api";
 import {DialogService} from "aurelia-dialog";
 import moment from "moment";
-import base64url from "base64-url";
 
-@inject(Endpoint.of("main"), DialogService)
+@inject("image-service", DialogService)
 export class Undated {
 
-    images;
-
-    thumbnailLookup = {};
-
-    constructor (endpoint, dialogService) {
-        this._endpoint = endpoint;
+    constructor (imageService, dialogService) {
+        this._imageService = imageService;
         this._dialogService = dialogService;
+
+        this.resizedImageContainerUri = null;
+        this.videosForWebContainerUri = null;
+
+        this.images = null;
     }
 
     async activate () {
+        this.resizedImageContainerUri = await this._imageService.getResizedImageContainerUri();
+        this.videosForWebContainerUri = await this._imageService.getVideosForWebContainerUri();
+
         await this.refreshImages();
-
-        let initializeThumbnails = async () => {
-            let imageIds = this.images.map(i => i.id);
-
-            // Retrieve thumbnails in batches
-            while (imageIds.length > 0) {
-                let batch = imageIds.splice(0, 20);
-
-                let batchResults = await this._endpoint.find("photo-exif-data", {
-                    json: JSON.stringify({
-                        ids: batch,
-                        thumbnailsOnly: true
-                    })
-                });
-
-                for (let imageId in batchResults) {
-                    let imageString = batchResults[imageId].ThumbnailImage;
-                    this.thumbnailLookup[imageId] = imageString ? imageString.substring("base64:".length) : null;
-                }
-            }
-        };
-
-        // Call but don't await the initialize function. The view should handle this.thumbnailLookup
-        // being uninitialized.
-        window.setTimeout(initializeThumbnails, 100);
     }
 
     async refreshImages () {
-        this.images = await this._endpoint.find("photo-image", {
-            json: JSON.stringify({
-                preset: "missingTakenDate"
-            })
-        });
+        let criteria = {
+            missingAttributes: ["TakenUtc", "TakenLocal"]
+        };
 
-        this.images.forEach(i => i.pathParam = base64url.encode(i.directoryPath));
+        let names = await this._imageService.search(criteria);
+
+        let includes = {
+            takenDateTime: true,
+            owner: true,
+            position: true
+        };
+
+        this.images = await this._imageService.retrieve(names, includes);
     }
 
     async save () {

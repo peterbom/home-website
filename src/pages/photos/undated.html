@@ -4,30 +4,28 @@
     <table if.bind="images" class="table table-hover">
         <tr>
             <th class="col-sm-2">Thumbnail</th>
-            <th class="col-sm-4">Directory</th>
-            <th class="col-sm-3">Filename</th>
-            <th class="col-sm-3">Taken</th>
+            <th class="col-sm-3">Taken UTC</th>
+            <th class="col-sm-3">Taken Local</th>
+            <th class="col-sm-2">Time Zone</th>
         </tr>
         <tr repeat.for="image of images">
             <td>
-                <span if.bind="thumbnailLookup[image.id] === undefined" class="fa fa-spinner fa-spin" aria-hidden="true"></span>
-                <span if.bind="thumbnailLookup[image.id] === null" class="fa fa-image" aria-hidden="true"></span>
-                <img if.bind="thumbnailLookup[image.id]" class="img-thumbnail" src.bind="thumbnailLookup[image.id] | dataUri:'image/jpeg'"/>
-            </td>
-            <td>
-                <a route-href="route:search; params.bind:{path:image.pathParam}" class="clickable-block">
-                    ${image.directoryPath}
-                </a>
-            </td>
-            <td>
-                <a route-href="route:details; params.bind:{id:image.id}" class="clickable-block">
-                    ${image.filename}
-                </a>
+                <image-view
+                    image.bind="image"
+                    image-uri.bind="resizedImageContainerUri"
+                    video-uri.bind="videosForWebContainerUri">
+                </image-view>
             </td>
             <td>
                 <input
-                    value.bind="image.takenDateTime | dateTimeFormat"
+                    value.bind="image.takenUtc | dateTimeFormat"
                     datepicker>
+            </td>
+            <td>
+                ${image.takenUtc}
+            </td>
+            <td>
+                ${image.timeZone}
             </td>
         </tr>
     </table>
