@@ -8,7 +8,13 @@ export class BlobService {
             renewAt: null
         };
 
-        this._retryFilter = new AzureStorage.ExponentialRetryPolicyFilter();
+        // https://azure.github.io/azure-storage-node/ExponentialRetryPolicyFilter.html
+        let retryCount = 10;
+        let retryInterval = 5 * 1000; // 5s, 10s, 20s, 40s, ...
+        let minRetryInterval = 4 * 1000;
+        let maxRetryInterval = 10 * 60 * 1000; // 10 min
+        this._retryFilter = new AzureStorage.ExponentialRetryPolicyFilter(
+            retryCount, retryInterval, minRetryInterval, maxRetryInterval);
     }
 
     async _ensureService() {

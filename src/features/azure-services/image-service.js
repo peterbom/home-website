@@ -1,21 +1,23 @@
 import { Cache } from "../../lib/cache";
+import { RetryPolicy } from "../../lib/retry-policy";
 
 export class ImageService {
     constructor(endpoint) {
         this._endpoint = endpoint;
+        this._retryPolicy = new RetryPolicy(10, 3 * 1000, 2 * 60 * 1000);
 
         // {
         //   resizedImageContainerUri: "<uri>",
         //   videosForWebContainerUri: "<uri>"
         // }
-        this._uriCache = new Cache(() => endpoint.find("public-uris"));
+        this._uriCache = new Cache(() => this._retryPolicy.run(() => endpoint.find("public-uris")));
 
         // {
         //   yearlyTotals: [{year: <year>, count: <count>}, ...],
         //   tags: [{name: "<name>", count: <count>}, ...],
         //   cameras: [{id: "<id>", make: "<make>", model: "<model>", count: <count>}, ...]
         // }
-        this._summaryDataCache = new Cache(() => endpoint.find("image-summary"));
+        this._summaryDataCache = new Cache(() => this._retryPolicy.run(() => endpoint.find("image-summary")));
     }
 
     async getResizedImageContainerUri() {
@@ -29,11 +31,13 @@ export class ImageService {
     }
 
     async getDuplicateSets() {
-        return await this._endpoint.find("duplicate-sets");
+        return await this._retryPolicy.run(() =>
+            this._endpoint.find("duplicate-sets"));
     }
 
     async isFileHashUsed(base64EncodedMd5Hash) {
-        return await this._endpoint.find(`hash-usage/${urlEncodeBase64(base64EncodedMd5Hash)}`);
+        return await this._retryPolicy.run(() =>
+            this._endpoint.find(`hash-usage/${urlEncodeBase64(base64EncodedMd5Hash)}`));
     }
 
     async getStatistics() {
@@ -76,7 +80,8 @@ export class ImageService {
         // }
         //
         // result: [Image0, Image1, ...]
-        return await this._endpoint.post("image-search", criteria);
+        return await this._retryPolicy.run(() =>
+            this._endpoint.post("image-search", criteria));
     }
 
     async retrieve(names, includes) {
@@ -102,28 +107,32 @@ export class ImageService {
         //    exifData,
         //    videoData}
         //]
-        return await this._endpoint.post("image-retrieval", {
-            names: names,
-            includes: includes
-        });
+        return await this._retryPolicy.run(() => 
+            this._endpoint.post("image-retrieval", {
+                names: names,
+                includes: includes
+            }));
     }
 
     async saveChanges(image) {
         let change = image.getChange();
         if (change.isChanged) {
-            await this._endpoint.post(`image-update/${image.name}`, change);
+            await this._retryPolicy.run(() =>
+                this._endpoint.post(`image-update/${image.name}`, change));
             image.commitChange();
         }
     }
 
     async setImageOrdering(orderedImageNames) {
         if (orderedImageNames.length > 1) {
-            await this._endpoint.post("image-ordering", {orderedImageNames: orderedImageNames});
+            await this._retryPolicy.run(() =>
+                this._endpoint.post("image-ordering", {orderedImageNames: orderedImageNames}));
         }
     }
 
     async delete(imageName) {
-        await this._endpoint.destroy(`images/${imageName}`);
+        await this._retryPolicy.run(() =>
+            this._endpoint.destroy(`images/${imageName}`));
     }
 }
 
