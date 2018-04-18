@@ -141,10 +141,10 @@ class UploadResult {
     }
 
     clear() {
-        this.completed.length = 0;
-        this.skipped.length = 0;
-        this.unrecognized.length = 0;
-        this.failed.length = 0;
+        this.completed = [];
+        this.skipped = [];
+        this.unrecognized = [];
+        this.failed = [];
     }
 
     @computedFrom("completed.length")
