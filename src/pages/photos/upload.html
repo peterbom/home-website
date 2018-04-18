@@ -6,16 +6,11 @@
         <input type="text" id="owner-input" value.bind="owner" class="form-control">
     </div>
 
-    <!-- https://www.danyow.net/binding-to-file-inputs-with-aurelia/ -->
-    <label class="btn btn-default btn-file">
-        Browse
-        <input type="file"
-            ref="fileInputElem"
-            multiple accept="image/*,video/*,.thm"
-            files.bind="fileList"
-            change.delegate="handleFileListChanged()"
-            style="display: none;">
-    </label>
+    <image-file-selector
+        view-model.ref="imageSelector"
+        selected.delegate="addImagesFromSelector()"
+        accept-file-types="image/*,video/*,.thm">
+    </image-file-selector>
 
     <div>
         <pagination-control
@@ -53,7 +48,10 @@
         <h3>Completed</h3>
         <pre>${uploadResult.completedList}</pre>
 
-        <h3>Skipped</h3>
+        <h3>Skipped (unrecognized)</h3>
+        <pre>${uploadResult.unrecognizedList}</pre>
+
+        <h3>Skipped (already uploaded)</h3>
         <pre>${uploadResult.skippedList}</pre>
 
         <h3>Failed</h3>

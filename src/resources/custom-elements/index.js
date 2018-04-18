@@ -4,5 +4,6 @@ export function configure(aurelia) {
         "./plant-select",
         "./companion-plant-view",
         "./pagination-control",
-        "./image-view");
+        "./image-view",
+        "./image-file-selector");
 }

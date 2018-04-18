@@ -11,10 +11,9 @@ export class Import {
 
     owner;
 
-    fileInputElem; // From ref attribute
+    imageSelector; // From view-model.ref attribute
 
-    fileList;  // bound to file selector
-    selectedFiles = [];
+    selectedFiles;
 
     pageSet;
     pageLinkGenerator;
@@ -34,21 +33,11 @@ export class Import {
         this.displayUploadResult = false;
     }
 
-    async handleFileListChanged() {
-        this.selectedFiles = [];
-        for (let i = 0; i < this.fileList.length; i++) {
-            this.selectedFiles.push(this.fileList.item(i));
-        }
+    async addImagesFromSelector() {
+        this.selectedFiles = this.imageSelector.selectedFiles;
 
         this.pageSet = this._pageManager.getPageSet(this.selectedFiles);
         this.pageLinkGenerator = this._pageManager.getPageLinkGenerator(this.pageSet, 10);
-
-        // Release the file objects held by the file input element
-        // http://stackoverflow.com/a/35323290
-        this.fileList = null;
-        this.fileInputElem.type = "";
-        this.fileInputElem.type = "file";
-        this.displayUploadResult = false;
     }
 
     clear() {
@@ -107,6 +96,12 @@ export class Import {
     }
 
     async _uploadImage(file, speedSummaries, blobName) {
+        if (!isKnownFilename(file.name)) {
+            this.uploadResult.unrecognized.push(file.name);
+            speedSummaries.push({ completeSize: file.size });
+            return;
+        }
+
         let hashString = await FileUtils.getMd5Hash(file);
         let isUsed = await this._imageService.isFileHashUsed(hashString);
         if (isUsed) {
@@ -127,16 +122,28 @@ export class Import {
     }
 }
 
+const knownFilenameLookup = new Set([
+    "avi", "bmp", "gif", "jpg", "jpeg", "mov", "mpg", "mpeg", "mp4", "ogv", "png", "qt", "thm", "tif", "tiff", "webm", "webp", "3gp", "3g2"
+]);
+
+function isKnownFilename(filename) {
+    // https://stackoverflow.com/a/12900504
+    let extension = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    return knownFilenameLookup.has(extension);
+}
+
 class UploadResult {
     constructor() {
         this.completed = [];
         this.skipped = [];
+        this.unrecognized = [];
         this.failed = [];
     }
 
     clear() {
         this.completed.length = 0;
         this.skipped.length = 0;
+        this.unrecognized.length = 0;
         this.failed.length = 0;
     }
 
@@ -148,6 +155,11 @@ class UploadResult {
     @computedFrom("skipped.length")
     get skippedList() {
         return this.skipped.join("\n");
+    }
+
+    @computedFrom("unrecognized.length")
+    get unrecognizedList() {
+        return this.unrecognized.join("\n");
     }
 
     @computedFrom("failed.length")
