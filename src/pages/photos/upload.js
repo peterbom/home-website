@@ -128,7 +128,7 @@ const knownFilenameLookup = new Set([
 
 function isKnownFilename(filename) {
     // https://stackoverflow.com/a/12900504
-    let extension = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    let extension = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2).toLowerCase();
     return knownFilenameLookup.has(extension);
 }
 
