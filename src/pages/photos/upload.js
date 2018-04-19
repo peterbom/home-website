@@ -75,7 +75,11 @@ export class Import {
         // An interval for refreshing progress
         let intervalId = setInterval(() => {
             let completeSize = speedSummaries.reduce((total, ss) => total + ss.completeSize, 0);
-            controller.viewModel.progressPercent = (completeSize / totalFileSize) * 100;
+            let progressPercent = (completeSize / totalFileSize) * 100;
+            controller.viewModel.progressPercent = progressPercent;
+            controller.viewModel.message =
+                `Uploading (${Math.round(progressPercent * 100) / 100}%): Completed/Unrecognized/Duplicates: ` +
+                `${this.uploadResult.completed.length}/${this.uploadResult.unrecognized.length}/${this.uploadResult.skipped.length}`;
         }, 200);
 
         try {
@@ -92,6 +96,8 @@ export class Import {
 
             controller.viewModel.progressPercent = 100;
             controller.cancel();
+
+            this.uploadResult.updateLists();
         }
     }
 
@@ -138,6 +144,10 @@ class UploadResult {
         this.skipped = [];
         this.unrecognized = [];
         this.failed = [];
+        this.completedList = "";
+        this.skippedList = "";
+        this.unrecognizedList = "";
+        this.failedList = "";
     }
 
     clear() {
@@ -145,25 +155,16 @@ class UploadResult {
         this.skipped = [];
         this.unrecognized = [];
         this.failed = [];
+        this.completedList = "";
+        this.skippedList = "";
+        this.unrecognizedList = "";
+        this.failedList = "";
     }
 
-    @computedFrom("completed.length")
-    get completedList() {
-        return this.completed.join("\n");
-    }
-
-    @computedFrom("skipped.length")
-    get skippedList() {
-        return this.skipped.join("\n");
-    }
-
-    @computedFrom("unrecognized.length")
-    get unrecognizedList() {
-        return this.unrecognized.join("\n");
-    }
-
-    @computedFrom("failed.length")
-    get failedList() {
-        return this.failed.join("\n");
+    updateLists() {
+        this.completedList = this.completed.join("\n");
+        this.skippedList = this.skipped.join("\n");
+        this.unrecognizedList = this.unrecognized.join("\n");
+        this.failedList = this.failed.join("\n");
     }
 }
