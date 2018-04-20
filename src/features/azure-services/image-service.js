@@ -30,6 +30,27 @@ export class ImageService {
         return uris.videosForWebContainerUri;
     }
 
+    async getBlobContainerToken() {
+        // Response:
+        // {
+        //     "token": "<SAS token>",
+        //     "host": {
+        //         "primaryHost": "https://host1.net/",
+        //         "secondaryHost": "https://host2.net"
+        //     },
+        //     "container": "images",
+        //     "expiry": "2017-09-21T00:59:29.5506411+12:00"
+        // }
+        return await this._retryPolicy.run(() =>
+            this._endpoint.find("blob-container-token"));
+    }
+
+    async registerNewBlob(blobName) {
+        // POST to: image-registration/<image-name>
+        return await this._retryPolicy.run(() =>
+            this._endpoint.post(`image-registration/${blobName}`));
+    }
+
     async getDuplicateSets() {
         return await this._retryPolicy.run(() =>
             this._endpoint.find("duplicate-sets"));

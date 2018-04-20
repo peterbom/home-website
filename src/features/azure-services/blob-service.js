@@ -1,6 +1,8 @@
+import { RetryPolicy } from "../../lib/retry-policy";
+
 export class BlobService {
-    constructor(endpoint) {
-        this._endpoint = endpoint;
+    constructor(imageService) {
+        this._imageService = imageService;
 
         this._blobConnection = {
             service: null,
@@ -15,24 +17,18 @@ export class BlobService {
         let maxRetryInterval = 10 * 60 * 1000; // 10 min
         this._retryFilter = new AzureStorage.ExponentialRetryPolicyFilter(
             retryCount, retryInterval, minRetryInterval, maxRetryInterval);
+
+        // Retry policy for entire upload operations, including recreating
+        // the blob service.
+        this._retryPolicy = new RetryPolicy(3, 10 * 1000, 2 * 60 * 1000);
     }
 
-    async _ensureService() {
-        if (this._blobConnection && this._blobConnection.service && this._blobConnection.renewAt > new Date()) {
+    async _ensureService(forceReconnect) {
+        if (!forceReconnect && this._blobConnection && this._blobConnection.service && this._blobConnection.renewAt > new Date()) {
             return;
         }
 
-        let blobTokenInfo = await this._endpoint.find("blob-container-token");
-        // Response:
-        // {
-        //     "token": "<SAS token>",
-        //     "host": {
-        //         "primaryHost": "https://host1.net/",
-        //         "secondaryHost": "https://host2.net"
-        //     },
-        //     "container": "images",
-        //     "expiry": "2017-09-21T00:59:29.5506411+12:00"
-        // }
+        let blobTokenInfo = await this._imageService.getBlobContainerToken();
         this._blobConnection.service = AzureStorage
             .createBlobServiceWithSas(blobTokenInfo.host, blobTokenInfo.token)
             .withFilter(this._retryFilter);
@@ -46,7 +42,7 @@ export class BlobService {
         this._blobConnection.renewAt = renewAt;
     }
 
-    async uploadBlob(file, blobName, owner, speedSummaryHandler) {
+    async uploadBlob(file, blobName, owner, speedSummaries) {
         await this._ensureService();
 
         let customBlockSize = file.size > 1024 * 1024 * 32 // 32 MB
@@ -63,19 +59,35 @@ export class BlobService {
             }
         };
 
-        await new Promise((resolve, reject) => {
-            let speedSummary = this._blobConnection.service.createBlockBlobFromBrowserFile(
-                this._blobConnection.containerName,
-                blobName,
-                file,
-                options,
-                err => err ? reject(err) : resolve());
+        let upload = async () => {
+            try {
+                let speedSummary;
+                await new Promise((resolve, reject) => {
+                    speedSummary = this._blobConnection.service.createBlockBlobFromBrowserFile(
+                        this._blobConnection.containerName,
+                        blobName,
+                        file,
+                        options,
+                        err => err ? reject(err) : resolve());
 
-            speedSummaryHandler(speedSummary);
-        });
+                    speedSummaries.push(speedSummary);
+                });
+            } catch (exception) {
+                if (speedSummary) {
+                    let index = speedSummaries.indexOf(speedSummary);
+                    if (index > -1) {
+                        speedSummaries.splice(index, 1);
+                    }
+                }
+
+                await this._ensureService(true);
+                throw exception;
+            }
+        };
+
+        this._retryPolicy.run(upload);
 
         // Inform the API that a new image has been uploaded
-        // POST to: image-registration/<image-name>
-        await this._endpoint.post(`image-registration/${blobName}`);
+        await this._imageService.registerNewBlob(blobName);
     };
 }

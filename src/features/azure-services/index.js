@@ -15,8 +15,8 @@ export function configure(aurelia, settings) {
 
     // Create other dependencies according to configuration
     let functionEndpoint = apiConfig.getEndpoint("function");
-    let blobService = new BlobService(functionEndpoint);
     let imageService = new ImageService(functionEndpoint);
+    let blobService = new BlobService(imageService);
 
     // Register all new'ed up dependencies with the container so we always resolve
     // the same instances in future.

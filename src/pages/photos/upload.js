@@ -117,7 +117,7 @@ export class Import {
         }
 
         try {
-            await this._blobService.uploadBlob(file, blobName, this.owner, ss => speedSummaries.push(ss));
+            await this._blobService.uploadBlob(file, blobName, this.owner, speedSummaries);
             this.uploadResult.completed.push(file.name);
     
             console.info(`Completed uploading ${file.name} to blob ${blobName}`);
