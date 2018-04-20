@@ -60,8 +60,8 @@ export class BlobService {
         };
 
         let upload = async () => {
+            let speedSummary;
             try {
-                let speedSummary;
                 await new Promise((resolve, reject) => {
                     speedSummary = this._blobConnection.service.createBlockBlobFromBrowserFile(
                         this._blobConnection.containerName,
