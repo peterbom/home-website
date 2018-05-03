@@ -85,7 +85,7 @@ export class BlobService {
             }
         };
 
-        this._retryPolicy.run(upload);
+        await this._retryPolicy.run(upload);
 
         // Inform the API that a new image has been uploaded
         await this._imageService.registerNewBlob(blobName);
